@@ -1,4 +1,4 @@
-name: Maven CI
+name: Maven CI (Auto Detect)
 
 on:
   push:
@@ -12,23 +12,30 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed_projects: ${{ steps.filter.outputs.changed_projects }}
+      changed_projects: ${{ steps.detect.outputs.changed_projects }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Check changed files
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            ca1:
-              - 'ca1/**'
+      - name: Detect Changed Projects
+        id: detect
+        run: |
+          changed_dirs=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | awk -F/ '{print $1}' | sort -u | grep -E '^ca[0-9]+$' || echo "")
+          if [[ -z "$changed_dirs" ]]; then
+            changed_dirs="[]"
+          else
+            changed_dirs=$(echo "$changed_dirs" | jq -R -s -c 'split("\n")[:-1]')
+          fi
+          echo "changed_projects=$changed_dirs" >> $GITHUB_ENV
+          echo "::set-output name=changed_projects::$changed_dirs"
 
+      - name: Debug Changed Projects
+        run: |
+          echo "Detected changed projects: ${{ steps.detect.outputs.changed_projects }}"
 
   build-test:
     needs: detect-changes
-    if: needs.detect-changes.outputs.changed_projects != '[]'
+    if: needs.detect-changes.outputs.changed_projects != '[]' && needs.detect-changes.outputs.changed_projects != ''
     runs-on: ubuntu-latest
     strategy:
       matrix:
