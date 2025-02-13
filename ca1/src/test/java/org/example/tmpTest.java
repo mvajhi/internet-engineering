@@ -21,10 +21,4 @@ public class tmpTest {
         tmp tmp = new tmp();
         Assert.assertEquals(6, tmp.add(3, 4));
     }
-
-    @Test
-    public void t4() {
-        tmp tmp = new tmp();
-        Assert.assertEquals(7, tmp.add(3, 4));
-    }
 }
