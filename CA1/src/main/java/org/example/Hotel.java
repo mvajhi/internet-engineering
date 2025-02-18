@@ -69,8 +69,8 @@ public class Hotel {
             state.put("bookings", bookings.values().stream().map(booking -> {
                 Map<String, Object> bookingMap = new HashMap<>();
                 bookingMap.put("id", booking.getID());
-                bookingMap.put("room", booking.getRoom().Number);
-                bookingMap.put("customer", booking.getCustomer().NID);
+                bookingMap.put("room_id", booking.getRoom().Number);
+                bookingMap.put("customer_id", booking.getCustomer().NID);
                 bookingMap.put("check_in", booking.getCheckIn().format(formatter));
                 bookingMap.put("check_out", booking.getCheckOut().format(formatter));
                 return bookingMap;
