@@ -3,6 +3,7 @@ package org.example;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
@@ -120,7 +121,7 @@ public class HotelTest {
                 }
                 """;
         try {
-            Assertions.assertEquals(expectedJson, Json, String.valueOf(JSONCompareMode.LENIENT));
+            JSONAssert.assertEquals(expectedJson, Json, JSONCompareMode.LENIENT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,7 +144,7 @@ public class HotelTest {
                 }
                 """;
         try {
-            Assertions.assertEquals(expectedJson, Json, String.valueOf(JSONCompareMode.LENIENT));
+            JSONAssert.assertEquals(expectedJson, Json, JSONCompareMode.LENIENT);
         } catch (Exception e) {
             e.printStackTrace();
         }
