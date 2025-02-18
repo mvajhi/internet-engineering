@@ -1,6 +1,13 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Hotel {
@@ -12,6 +19,12 @@ public class Hotel {
         this.rooms = rooms;
         this.customers = customers;
         this.bookings = bookings;
+    }
+
+    public Hotel() {
+        rooms = new HashMap<>();
+        customers = new HashMap<>();
+        bookings = new HashMap<>();
     }
 
     public ArrayList<Room> getAllRooms() {
@@ -48,6 +61,51 @@ public class Hotel {
 //        TODO
         return null;
     }
+    
+    public void parseJson(String json) {
+        ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode rootNode = objectMapper.readTree(json);
+
+                JsonNode customersNode = rootNode.get("customers");
+                if (customersNode != null) {
+                    for (JsonNode customerNode : customersNode) {
+                        Customer customer = objectMapper.treeToValue(customerNode, Customer.class);
+                        customers.put(customer.NID, customer);
+                    }
+                }
+
+                JsonNode roomsNode = rootNode.get("rooms");
+                if (roomsNode != null) {
+                    for (JsonNode roomNode : roomsNode) {
+                        Room room = objectMapper.treeToValue(roomNode, Room.class);
+                        rooms.put(room.Number, room);
+                    }
+                }
+
+                JsonNode bookingsNode = rootNode.get("bookings");
+                if (bookingsNode != null) {
+                    for (JsonNode bookingNode : bookingsNode) {
+                        int roomId = bookingNode.get("room_id").asInt();
+                        int customerId = bookingNode.get("customer_id").asInt();
+                        Room room = rooms.get(roomId);
+                        Customer customer = customers.get(customerId);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        Booking booking = new Booking(
+                                bookingNode.get("id").asInt(),
+                                room,
+                                customer,
+                                LocalDateTime.parse(bookingNode.get("check_in").asText(), formatter),
+                                LocalDateTime.parse(bookingNode.get("check_out").asText(), formatter)
+                        );
+                        bookings.put(booking.getID(), booking);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+
     public Map<Integer, Room> getRooms() {
         return rooms;
     }

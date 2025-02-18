@@ -1,0 +1,69 @@
+package org.example;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.time.LocalDateTime;
+
+public class HotelTest {
+    @Test
+    public void GIVEN_Json_WHEN_parseJson_THEN_returnHotel() {
+        // Given
+        String Json = """
+                {
+                  "customers": [
+                    {
+                      "ssn": 1,
+                      "name": "John Doe",
+                      "phone": "+1234567890",
+                      "age": 25
+                    }
+                  ],
+                  "rooms": [
+                    {
+                      "id": 1,
+                      "capacity": 2
+                    }
+                  ],
+                  "bookings": [
+                    {
+                      "id": 1,
+                      "room_id": 1,
+                      "customer_id": 1,
+                      "check_in": "2021-01-01 12:00:00",
+                      "check_out": "2021-01-03 12:00:00"
+                    }
+                  ]
+                }
+                """;
+        Hotel hotel = new Hotel();
+
+        // When
+        hotel.parseJson(Json);
+
+        // Then
+        Assert.assertEquals(1, hotel.getCustomers().size());
+        Assert.assertEquals(1, hotel.getRooms().size());
+        Assert.assertEquals(1, hotel.getBookings().size());
+
+        Customer customer = hotel.getCustomers().get(1);
+        Assert.assertEquals(1, customer.NID);
+        Assert.assertEquals("John Doe", customer.name);
+        Assert.assertEquals("+1234567890", customer.phone);
+        Assert.assertEquals(25, customer.age);
+
+        Room room = hotel.getRooms().get(1);
+        Assert.assertEquals(1, room.Number);
+        Assert.assertEquals(2, room.Capacity);
+
+        Booking booking = hotel.getBookings().get(1);
+        Assert.assertEquals(1, booking.getID());
+        Assert.assertEquals(2, booking.getStayDurationDays());
+        Assert.assertEquals(1, booking.getRoom().Number);
+        Assert.assertEquals(2, booking.getRoom().Capacity);
+        Assert.assertEquals(1, booking.getCustomer().NID);
+        Assert.assertEquals("John Doe", booking.getCustomer().name);
+        Assert.assertEquals(LocalDateTime.of(2021, 1, 1, 12, 0), booking.getCheckIn());
+        Assert.assertEquals(LocalDateTime.of(2021, 1, 3, 12, 0), booking.getCheckOut());
+    }
+}
