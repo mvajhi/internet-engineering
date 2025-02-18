@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class Hotel {
 
     public String getOldestCustomerName() {
         return customers.values().stream()
-                .min((c1, c2) -> Integer.compare(c1.age, c2.age))
+                .max(Comparator.comparingInt(c -> c.age))
                 .map(customer -> customer.name)
                 .orElse(null);
     }
