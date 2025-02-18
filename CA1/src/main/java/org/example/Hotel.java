@@ -84,44 +84,65 @@ public class Hotel {
         }
     }
     
-    public void parseJson(String json) throws IOException {
+    public void parseJson(String json) throws IOException, IllegalArgumentException {
         ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode rootNode = objectMapper.readTree(json);
+        JsonNode rootNode = objectMapper.readTree(json);
 
-                JsonNode customersNode = rootNode.get("customers");
-                if (customersNode != null) {
-                    for (JsonNode customerNode : customersNode) {
-                        Customer customer = objectMapper.treeToValue(customerNode, Customer.class);
-                        customers.put(customer.NID, customer);
-                    }
-                }
+        JsonNode customersNode = rootNode.get("customers");
+        parseCustomer(customersNode, objectMapper);
 
-                JsonNode roomsNode = rootNode.get("rooms");
-                if (roomsNode != null) {
-                    for (JsonNode roomNode : roomsNode) {
-                        Room room = objectMapper.treeToValue(roomNode, Room.class);
-                        rooms.put(room.Number, room);
-                    }
-                }
+        JsonNode roomsNode = rootNode.get("rooms");
+        parseRoom(roomsNode, objectMapper);
 
-                JsonNode bookingsNode = rootNode.get("bookings");
-                if (bookingsNode != null) {
-                    for (JsonNode bookingNode : bookingsNode) {
-                        int roomId = bookingNode.get("room_id").asInt();
-                        int customerId = bookingNode.get("customer_id").asInt();
-                        Room room = rooms.get(roomId);
-                        Customer customer = customers.get(customerId);
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                        Booking booking = new Booking(
-                                bookingNode.get("id").asInt(),
-                                room,
-                                customer,
-                                LocalDateTime.parse(bookingNode.get("check_in").asText(), formatter),
-                                LocalDateTime.parse(bookingNode.get("check_out").asText(), formatter)
-                        );
-                        bookings.put(booking.getID(), booking);
-                    }
+        JsonNode bookingsNode = rootNode.get("bookings");
+        parseBooking(bookingsNode);
+    }
+
+    private void parseBooking(JsonNode bookingsNode) {
+        if (bookingsNode != null) {
+            for (JsonNode bookingNode : bookingsNode) {
+                int roomId = bookingNode.get("room_id").asInt();
+                int customerId = bookingNode.get("customer_id").asInt();
+                Room room = rooms.get(roomId);
+                Customer customer = customers.get(customerId);
+                if (customer == null || room == null) {
+                    throw new IllegalArgumentException("Invalid id in booking data");
                 }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                Booking booking = new Booking(
+                        bookingNode.get("id").asInt(),
+                        room,
+                        customer,
+                        LocalDateTime.parse(bookingNode.get("check_in").asText(), formatter),
+                        LocalDateTime.parse(bookingNode.get("check_out").asText(), formatter)
+                );
+                bookings.put(booking.getID(), booking);
+            }
+        }
+    }
+
+    private void parseRoom(JsonNode roomsNode, ObjectMapper objectMapper) throws JsonProcessingException {
+        if (roomsNode != null) {
+            for (JsonNode roomNode : roomsNode) {
+                Room room = objectMapper.treeToValue(roomNode, Room.class);
+                if (rooms.containsKey(room.Number)) {
+                    throw new IllegalArgumentException("Duplicate room id");
+                }
+                rooms.put(room.Number, room);
+            }
+        }
+    }
+
+    private void parseCustomer(JsonNode customersNode, ObjectMapper objectMapper) throws JsonProcessingException {
+        if (customersNode != null) {
+            for (JsonNode customerNode : customersNode) {
+                Customer customer = objectMapper.treeToValue(customerNode, Customer.class);
+                if (customers.containsKey(customer.NID)) {
+                    throw new IllegalArgumentException("Duplicate customer id");
+                }
+                customers.put(customer.NID, customer);
+            }
+        }
     }
 
     public Map<Integer, Room> getRooms() {

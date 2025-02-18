@@ -188,4 +188,93 @@ public class HotelTest {
             Assert.assertTrue(e instanceof IOException);
         }
     }
+
+    @Test
+    public void GIVEN_InvalidId_WHEN_parseJson_THEN_throwException() {
+        // Given
+        String Json = """
+                {
+                  "customers": [
+                    {
+                      "ssn": 1,
+                      "name": "John Doe",
+                      "phone": "+1234567890",
+                      "age": 25
+                    }
+                  ],
+                  "rooms": [
+                    {
+                      "id": 1,
+                      "capacity": 2
+                    }
+                  ],
+                  "bookings": [
+                    {
+                      "id": 1,
+                      "room_id": 1,
+                      "customer_id": 2,
+                      "check_in": "2021-01-01 12:00:00",
+                      "check_out": "2021-01-03 12:00:00"
+                    }
+                  ]
+                }
+                """;
+        Hotel hotel = new Hotel();
+
+        // When
+        try {
+            hotel.parseJson(Json);
+            Assert.fail();
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof IllegalArgumentException);
+        }
+    }
+
+    @Test
+    public void GIVEN_DuplicateId_WHEN_parseJson_THEN_throwException() {
+        // Given
+        String Json = """
+                {
+                  "customers": [
+                    {
+                      "ssn": 1,
+                      "name": "John Doe",
+                      "phone": "+1234567890",
+                      "age": 25
+                    },
+                    {
+                      "ssn": 1,
+                      "name": "Jane Doe",
+                      "phone": "+1234567890",
+                      "age": 25
+                    }
+                  ],
+                  "rooms": [
+                    {
+                      "id": 1,
+                      "capacity": 2
+                    }
+                  ],
+                  "bookings": [
+                    {
+                      "id": 1,
+                      "room_id": 1,
+                      "customer_id": 1,
+                      "check_in": "2021-01-01 12:00:00",
+                      "check_out": "2021-01-03 12:00:00"
+                    }
+                  ]
+                }
+                """;
+        Hotel hotel = new Hotel();
+
+        // When
+        try {
+            hotel.parseJson(Json);
+            Assert.fail();
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof IllegalArgumentException);
+        }
+    }
+
 }
