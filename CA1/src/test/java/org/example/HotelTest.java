@@ -1,5 +1,6 @@
 package org.example;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +11,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class HotelTest {
+
+    private Hotel hotel;
+    @BeforeEach
+    void setUp() {
+        hotel = new Hotel();
+    }
+
+    @AfterEach
+    void tearDown() {
+        hotel.getRooms().clear();
+        hotel.getCustomers().clear();
+        hotel.getBookings().clear();
+    }
 
     @Test
     public void GIVEN_Json_WHEN_parseJson_THEN_returnHotel() {
@@ -281,7 +295,6 @@ public class HotelTest {
     @Test
     public void GIVEN_Customers_WHEN_getOldestCustomerName_THEN_returnOldestCustomerName() {
         // Given
-        Hotel hotel = new Hotel();
         hotel.getCustomers().put(1, new Customer(1, "John Doe", "+1234567890", 25));
         hotel.getCustomers().put(2, new Customer(2, "Jane Doe", "+0987654321", 30));
         hotel.getCustomers().put(3, new Customer(3, "Alice", "+1122334455", 20));
@@ -296,7 +309,6 @@ public class HotelTest {
     @Test
     public void GIVEN_NoCustomers_WHEN_getOldestCustomerName_THEN_returnNull() {
         // Given
-        Hotel hotel = new Hotel();
 
         // When
         String oldestCustomerName = hotel.getOldestCustomerName();
@@ -308,7 +320,6 @@ public class HotelTest {
     @Test
     public void GIVEN_Bookings_WHEN_getCustomerPhonesByRoomNumber_THEN_returnCustomerPhones() {
         // Given
-        Hotel hotel = new Hotel();
         Room room1 = new Room(1, 2);
         Room room2 = new Room(2, 3);
         hotel.getRooms().put(1, room1);
@@ -336,7 +347,6 @@ public class HotelTest {
     @Test
     public void GIVEN_NoBookingsForRoom_WHEN_getCustomerPhonesByRoomNumber_THEN_returnEmptyList() {
         // Given
-        Hotel hotel = new Hotel();
         Room room1 = new Room(1, 2);
         hotel.getRooms().put(1, room1);
 
@@ -350,7 +360,6 @@ public class HotelTest {
     @Test
     public void GIVEN_Rooms_WHEN_getRoomsWithMinCapacity_THEN_returnFilteredRooms() {
         // Given
-        Hotel hotel = new Hotel();
         hotel.getRooms().put(1, new Room(1, 2));
         hotel.getRooms().put(2, new Room(2, 4));
         hotel.getRooms().put(3, new Room(3, 3));
@@ -367,7 +376,6 @@ public class HotelTest {
     @Test
     public void GIVEN_NoRoomsWithMinCapacity_WHEN_getRoomsWithMinCapacity_THEN_returnEmptyList() {
         // Given
-        Hotel hotel = new Hotel();
         hotel.getRooms().put(1, new Room(1, 2));
         hotel.getRooms().put(2, new Room(2, 3));
 
