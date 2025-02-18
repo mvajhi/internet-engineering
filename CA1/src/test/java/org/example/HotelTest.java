@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class HotelTest {
@@ -41,7 +42,11 @@ public class HotelTest {
         Hotel hotel = new Hotel();
 
         // When
-        hotel.parseJson(Json);
+        try {
+            hotel.parseJson(Json);
+        } catch (IOException e) {
+            Assert.fail();
+        }
 
         // Then
         Assert.assertEquals(1, hotel.getCustomers().size());
@@ -120,5 +125,67 @@ public class HotelTest {
         }
     }
 
+    @Test
+    public void GIVEN_EmptyHotel_WHEN_logState_THEN_returnEmptyJson() {
+        // Given
+        Hotel hotel=new Hotel();
 
+        // When
+        String Json=hotel.logState();
+
+        // Then
+        String expectedJson="""
+                {
+                  "customers": [],
+                  "rooms": [],
+                  "bookings": []
+                }
+                """;
+        try {
+            JSONAssert.assertEquals(expectedJson, Json, JSONCompareMode.LENIENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void GIVEN_BadJsonFormat_WHEN_parseJson_THEN_throwException() {
+        // Given
+        String Json = """
+                {
+                  "customers": [
+                    {
+                      "ssn": 1,
+                      "name": "John Doe",
+                      "phone": "+1234567890",
+                      "age": 25
+                    }
+                  ],
+                  "rooms": [
+                    {
+                      "id": 1,
+                      "capacity": 2
+                    }
+                  ],
+                  "bookings": [
+                    {
+                      "id": 1,
+                      "room_id": 1,
+                      "customer_id": 1,
+                      "check_in": "2021-01-01 12:00:00"
+                      "check_out": "2021-01-03 12:00:00"
+                    }
+                  ]
+                }
+                """;
+        Hotel hotel = new Hotel();
+
+        // When
+        try {
+            hotel.parseJson(Json);
+            Assert.fail();
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof IOException);
+        }
+    }
 }

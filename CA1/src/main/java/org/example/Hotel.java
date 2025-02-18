@@ -82,9 +82,8 @@ public class Hotel {
         }
     }
     
-    public void parseJson(String json) {
+    public void parseJson(String json) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-            try {
                 JsonNode rootNode = objectMapper.readTree(json);
 
                 JsonNode customersNode = rootNode.get("customers");
@@ -121,9 +120,6 @@ public class Hotel {
                         bookings.put(booking.getID(), booking);
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
     }
 
     public Map<Integer, Room> getRooms() {
