@@ -17,6 +17,26 @@ public class Booking {
         this.checkOut = checkOut;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public LocalDateTime getCheckIn() {
+        return checkIn;
+    }
+
+    public LocalDateTime getCheckOut() {
+        return checkOut;
+    }
+
     public int getStayDurationDays() {
         return (int) java.time.Duration.between(checkIn, checkOut).toDaysPart();
     }

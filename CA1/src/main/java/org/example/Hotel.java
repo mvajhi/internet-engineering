@@ -48,4 +48,15 @@ public class Hotel {
 //        TODO
         return null;
     }
+    public Map<Integer, Room> getRooms() {
+        return rooms;
+    }
+
+    public Map<Integer, Customer> getCustomers() {
+        return customers;
+    }
+
+    public Map<Integer, Booking> getBookings() {
+        return bookings;
+    }
 }
