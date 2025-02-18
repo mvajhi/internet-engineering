@@ -303,4 +303,46 @@ public class HotelTest {
         // Then
         Assert.assertNull(oldestCustomerName);
     }
+
+    @Test
+    public void GIVEN_Bookings_WHEN_getCustomerPhonesByRoomNumber_THEN_returnCustomerPhones() {
+        // Given
+        Hotel hotel = new Hotel();
+        Room room1 = new Room(1, 2);
+        Room room2 = new Room(2, 3);
+        hotel.getRooms().put(1, room1);
+        hotel.getRooms().put(2, room2);
+
+        Customer customer1 = new Customer(1, "John Doe", "+1234567890", 25);
+        Customer customer2 = new Customer(2, "Jane Doe", "+0987654321", 30);
+        hotel.getCustomers().put(1, customer1);
+        hotel.getCustomers().put(2, customer2);
+
+        LocalDateTime checkIn = LocalDateTime.of(2021, 1, 1, 12, 0);
+        LocalDateTime checkOut = LocalDateTime.of(2021, 1, 3, 12, 0);
+        hotel.getBookings().put(1, new Booking(1, room1, customer1, checkIn, checkOut));
+        hotel.getBookings().put(2, new Booking(2, room1, customer2, checkIn, checkOut));
+
+        // When
+        ArrayList<String> phones = hotel.getCustomerPhonesByRoomNumber(1);
+
+        // Then
+        Assert.assertEquals(2, phones.size());
+        Assert.assertTrue(phones.contains("+1234567890"));
+        Assert.assertTrue(phones.contains("+0987654321"));
+    }
+
+    @Test
+    public void GIVEN_NoBookingsForRoom_WHEN_getCustomerPhonesByRoomNumber_THEN_returnEmptyList() {
+        // Given
+        Hotel hotel = new Hotel();
+        Room room1 = new Room(1, 2);
+        hotel.getRooms().put(1, room1);
+
+        // When
+        ArrayList<String> phones = hotel.getCustomerPhonesByRoomNumber(1);
+
+        // Then
+        Assert.assertTrue(phones.isEmpty());
+    }
 }
