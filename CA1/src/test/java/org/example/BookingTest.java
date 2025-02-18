@@ -1,8 +1,8 @@
 package org.example;
 
-import org.junit.Assert;
-import org.junit.Test;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -19,11 +19,11 @@ public class BookingTest {
         Booking booking = new Booking(1, room, customer, checkIn, checkOut);
 
         // Then
-        Assert.assertEquals(1, booking.getID());
-        Assert.assertEquals(room, booking.getRoom());
-        Assert.assertEquals(customer, booking.getCustomer());
-        Assert.assertEquals(checkIn, booking.getCheckIn());
-        Assert.assertEquals(checkOut, booking.getCheckOut());
+        Assertions.assertEquals(1, booking.getID());
+        Assertions.assertEquals(room, booking.getRoom());
+        Assertions.assertEquals(customer, booking.getCustomer());
+        Assertions.assertEquals(checkIn, booking.getCheckIn());
+        Assertions.assertEquals(checkOut, booking.getCheckOut());
     }
 
     @Test
@@ -37,10 +37,10 @@ public class BookingTest {
         // When
         try {
             Booking booking = new Booking(1, room, customer, checkIn, checkOut);
-            Assert.fail();
+            Assertions.fail();
         } catch (Exception e) {
             // Then
-            Assert.assertTrue(e instanceof IllegalArgumentException);
+            Assertions.assertTrue(e instanceof IllegalArgumentException);
         }
     }
 
@@ -57,7 +57,7 @@ public class BookingTest {
         Duration stayDurationDays = booking.getStayDurationDays();
 
         // Then
-        Assert.assertEquals(Duration.ofDays(2), stayDurationDays);
+        Assertions.assertEquals(Duration.ofDays(2), stayDurationDays);
     }
 
     @Test
@@ -73,6 +73,6 @@ public class BookingTest {
         Duration stayDurationDays = booking.getStayDurationDays();
 
         // Then
-        Assert.assertEquals(Duration.ofHours((2*24 + 23) - (12)), stayDurationDays);
+        Assertions.assertEquals(Duration.ofHours((2*24 + 23) - (12)), stayDurationDays);
     }
 }

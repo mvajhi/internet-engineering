@@ -1,8 +1,8 @@
 package org.example;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class HotelTest {
+
     @Test
     public void GIVEN_Json_WHEN_parseJson_THEN_returnHotel() {
         // Given
@@ -46,32 +47,32 @@ public class HotelTest {
         try {
             hotel.parseJson(Json);
         } catch (IOException e) {
-            Assert.fail();
+            Assertions.fail();
         }
 
         // Then
-        Assert.assertEquals(1, hotel.getCustomers().size());
-        Assert.assertEquals(1, hotel.getRooms().size());
-        Assert.assertEquals(1, hotel.getBookings().size());
+        Assertions.assertEquals(1, hotel.getCustomers().size());
+        Assertions.assertEquals(1, hotel.getRooms().size());
+        Assertions.assertEquals(1, hotel.getBookings().size());
 
         Customer customer = hotel.getCustomers().get(1);
-        Assert.assertEquals(1, customer.NID);
-        Assert.assertEquals("John Doe", customer.name);
-        Assert.assertEquals("+1234567890", customer.phone);
-        Assert.assertEquals(25, customer.age);
+        Assertions.assertEquals(1, customer.NID);
+        Assertions.assertEquals("John Doe", customer.name);
+        Assertions.assertEquals("+1234567890", customer.phone);
+        Assertions.assertEquals(25, customer.age);
 
         Room room = hotel.getRooms().get(1);
-        Assert.assertEquals(1, room.Number);
-        Assert.assertEquals(2, room.Capacity);
+        Assertions.assertEquals(1, room.Number);
+        Assertions.assertEquals(2, room.Capacity);
 
         Booking booking = hotel.getBookings().get(1);
-        Assert.assertEquals(1, booking.getID());
-        Assert.assertEquals(1, booking.getRoom().Number);
-        Assert.assertEquals(2, booking.getRoom().Capacity);
-        Assert.assertEquals(1, booking.getCustomer().NID);
-        Assert.assertEquals("John Doe", booking.getCustomer().name);
-        Assert.assertEquals(LocalDateTime.of(2021, 1, 1, 12, 0), booking.getCheckIn());
-        Assert.assertEquals(LocalDateTime.of(2021, 1, 3, 12, 0), booking.getCheckOut());
+        Assertions.assertEquals(1, booking.getID());
+        Assertions.assertEquals(1, booking.getRoom().Number);
+        Assertions.assertEquals(2, booking.getRoom().Capacity);
+        Assertions.assertEquals(1, booking.getCustomer().NID);
+        Assertions.assertEquals("John Doe", booking.getCustomer().name);
+        Assertions.assertEquals(LocalDateTime.of(2021, 1, 1, 12, 0), booking.getCheckIn());
+        Assertions.assertEquals(LocalDateTime.of(2021, 1, 3, 12, 0), booking.getCheckOut());
     }
 
     @Test
@@ -119,7 +120,7 @@ public class HotelTest {
                 }
                 """;
         try {
-            JSONAssert.assertEquals(expectedJson, Json, JSONCompareMode.LENIENT);
+            Assertions.assertEquals(expectedJson, Json, String.valueOf(JSONCompareMode.LENIENT));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,7 +143,7 @@ public class HotelTest {
                 }
                 """;
         try {
-            JSONAssert.assertEquals(expectedJson, Json, JSONCompareMode.LENIENT);
+            Assertions.assertEquals(expectedJson, Json, String.valueOf(JSONCompareMode.LENIENT));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -183,9 +184,9 @@ public class HotelTest {
         // When
         try {
             hotel.parseJson(Json);
-            Assert.fail();
+            Assertions.fail();
         } catch (Exception e) {
-            Assert.assertTrue(e instanceof IOException);
+            Assertions.assertTrue(e instanceof IOException);
         }
     }
 
@@ -224,9 +225,9 @@ public class HotelTest {
         // When
         try {
             hotel.parseJson(Json);
-            Assert.fail();
+            Assertions.fail();
         } catch (Exception e) {
-            Assert.assertTrue(e instanceof IllegalArgumentException);
+            Assertions.assertTrue(e instanceof IllegalArgumentException);
         }
     }
 
@@ -271,9 +272,9 @@ public class HotelTest {
         // When
         try {
             hotel.parseJson(Json);
-            Assert.fail();
+            Assertions.fail();
         } catch (Exception e) {
-            Assert.assertTrue(e instanceof IllegalArgumentException);
+            Assertions.assertTrue(e instanceof IllegalArgumentException);
         }
     }
 
@@ -289,7 +290,7 @@ public class HotelTest {
         String oldestCustomerName = hotel.getOldestCustomerName();
 
         // Then
-        Assert.assertEquals("Jane Doe", oldestCustomerName);
+        Assertions.assertEquals("Jane Doe", oldestCustomerName);
     }
 
     @Test
@@ -301,7 +302,7 @@ public class HotelTest {
         String oldestCustomerName = hotel.getOldestCustomerName();
 
         // Then
-        Assert.assertNull(oldestCustomerName);
+        Assertions.assertNull(oldestCustomerName);
     }
 
     @Test
@@ -327,9 +328,9 @@ public class HotelTest {
         ArrayList<String> phones = hotel.getCustomerPhonesByRoomNumber(1);
 
         // Then
-        Assert.assertEquals(2, phones.size());
-        Assert.assertTrue(phones.contains("+1234567890"));
-        Assert.assertTrue(phones.contains("+0987654321"));
+        Assertions.assertEquals(2, phones.size());
+        Assertions.assertTrue(phones.contains("+1234567890"));
+        Assertions.assertTrue(phones.contains("+0987654321"));
     }
 
     @Test
@@ -343,7 +344,7 @@ public class HotelTest {
         ArrayList<String> phones = hotel.getCustomerPhonesByRoomNumber(1);
 
         // Then
-        Assert.assertTrue(phones.isEmpty());
+        Assertions.assertTrue(phones.isEmpty());
     }
 
     @Test
@@ -358,9 +359,9 @@ public class HotelTest {
         ArrayList<Room> filteredRooms = hotel.getRooms(3);
 
         // Then
-        Assert.assertEquals(2, filteredRooms.size());
-        Assert.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 2));
-        Assert.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 3));
+        Assertions.assertEquals(2, filteredRooms.size());
+        Assertions.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 2));
+        Assertions.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 3));
     }
 
     @Test
@@ -374,6 +375,6 @@ public class HotelTest {
         ArrayList<Room> filteredRooms = hotel.getRooms(4);
 
         // Then
-        Assert.assertTrue(filteredRooms.isEmpty());
+        Assertions.assertTrue(filteredRooms.isEmpty());
     }
 }
