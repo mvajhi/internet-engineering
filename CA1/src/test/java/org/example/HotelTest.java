@@ -2,6 +2,8 @@ package org.example;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.time.LocalDateTime;
 
@@ -66,4 +68,57 @@ public class HotelTest {
         Assert.assertEquals(LocalDateTime.of(2021, 1, 1, 12, 0), booking.getCheckIn());
         Assert.assertEquals(LocalDateTime.of(2021, 1, 3, 12, 0), booking.getCheckOut());
     }
+
+    @Test
+    public void GIVEN_Hotel_WHEN_logState_THEN_returnJson() {
+        // Given
+        Hotel hotel = new Hotel();
+        Customer customer = new Customer(1, "John Doe", "+1234567890", 25);
+        Room room = new Room(1, 2);
+        LocalDateTime checkIn = LocalDateTime.of(2021, 1, 1, 12, 0);
+        LocalDateTime checkOut = LocalDateTime.of(2021, 1, 3, 12, 0);
+        Booking booking = new Booking(1, room, customer, checkIn, checkOut);
+        hotel.getCustomers().put(1, customer);
+        hotel.getRooms().put(1, room);
+        hotel.getBookings().put(1, booking);
+
+        // When
+        String Json = hotel.logState();
+
+        // Then
+        String expectedJson = """
+                {
+                  "customers": [
+                    {
+                      "ssn": 1,
+                      "name": "John Doe",
+                      "phone": "+1234567890",
+                      "age": 25
+                    }
+                  ],
+                  "rooms": [
+                    {
+                      "id": 1,
+                      "capacity": 2
+                    }
+                  ],
+                  "bookings": [
+                    {
+                      "id": 1,
+                      "room_id": 1,
+                      "customer_id": 1,
+                      "check_in": "2021-01-01 12:00:00",
+                      "check_out": "2021-01-03 12:00:00"
+                    }
+                  ]
+                }
+                """;
+        try {
+            JSONAssert.assertEquals(expectedJson, Json, JSONCompareMode.LENIENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
