@@ -30,18 +30,6 @@ public class Hotel {
         bookings = new HashMap<>();
     }
 
-    public ArrayList<Room> getAllRooms() {
-        return new ArrayList<>(rooms.values());
-    }
-
-    public ArrayList<Customer> getAllCustomers() {
-        return new ArrayList<>(customers.values());
-    }
-
-    public ArrayList<Booking> getAllBookings() {
-        return new ArrayList<>(bookings.values());
-    }
-
     public ArrayList<Room> getRooms(int minCapacity) {
         return rooms.values().stream()
                 .filter(room -> room.Capacity >= minCapacity)
