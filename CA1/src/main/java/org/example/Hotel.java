@@ -98,7 +98,7 @@ public class Hotel {
         parseBooking(bookingsNode);
     }
 
-    private void parseBooking(JsonNode bookingsNode) {
+    private void parseBooking(JsonNode bookingsNode) throws IllegalArgumentException {
         if (bookingsNode != null) {
             for (JsonNode bookingNode : bookingsNode) {
                 int roomId = bookingNode.get("room_id").asInt();

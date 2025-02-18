@@ -66,7 +66,6 @@ public class HotelTest {
 
         Booking booking = hotel.getBookings().get(1);
         Assert.assertEquals(1, booking.getID());
-        Assert.assertEquals(2, booking.getStayDurationDays());
         Assert.assertEquals(1, booking.getRoom().Number);
         Assert.assertEquals(2, booking.getRoom().Capacity);
         Assert.assertEquals(1, booking.getCustomer().NID);

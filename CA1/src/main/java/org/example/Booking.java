@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Booking {
@@ -9,12 +10,15 @@ public class Booking {
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
 
-    public Booking(int ID, Room room, Customer customer, LocalDateTime checkIn, LocalDateTime checkOut) {
+    public Booking(int ID, Room room, Customer customer, LocalDateTime checkIn, LocalDateTime checkOut) throws IllegalArgumentException {
         this.ID = ID;
         this.room = room;
         this.customer = customer;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        if (checkOut.isBefore(checkIn)) {
+            throw new IllegalArgumentException("Check-out date must be after check-in date");
+        }
     }
 
     public int getID() {
@@ -37,7 +41,7 @@ public class Booking {
         return checkOut;
     }
 
-    public int getStayDurationDays() {
-        return (int) java.time.Duration.between(checkIn, checkOut).toDaysPart();
+    public Duration getStayDurationDays() {
+        return java.time.Duration.between(checkIn, checkOut);
     }
 }
