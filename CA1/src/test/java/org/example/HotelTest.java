@@ -7,6 +7,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class HotelTest {
     @Test
@@ -127,13 +128,13 @@ public class HotelTest {
     @Test
     public void GIVEN_EmptyHotel_WHEN_logState_THEN_returnEmptyJson() {
         // Given
-        Hotel hotel=new Hotel();
+        Hotel hotel = new Hotel();
 
         // When
-        String Json=hotel.logState();
+        String Json = hotel.logState();
 
         // Then
-        String expectedJson="""
+        String expectedJson = """
                 {
                   "customers": [],
                   "rooms": [],
@@ -276,4 +277,103 @@ public class HotelTest {
         }
     }
 
+    @Test
+    public void GIVEN_Customers_WHEN_getOldestCustomerName_THEN_returnOldestCustomerName() {
+        // Given
+        Hotel hotel = new Hotel();
+        hotel.getCustomers().put(1, new Customer(1, "John Doe", "+1234567890", 25));
+        hotel.getCustomers().put(2, new Customer(2, "Jane Doe", "+0987654321", 30));
+        hotel.getCustomers().put(3, new Customer(3, "Alice", "+1122334455", 20));
+
+        // When
+        String oldestCustomerName = hotel.getOldestCustomerName();
+
+        // Then
+        Assert.assertEquals("Jane Doe", oldestCustomerName);
+    }
+
+    @Test
+    public void GIVEN_NoCustomers_WHEN_getOldestCustomerName_THEN_returnNull() {
+        // Given
+        Hotel hotel = new Hotel();
+
+        // When
+        String oldestCustomerName = hotel.getOldestCustomerName();
+
+        // Then
+        Assert.assertNull(oldestCustomerName);
+    }
+
+    @Test
+    public void GIVEN_Bookings_WHEN_getCustomerPhonesByRoomNumber_THEN_returnCustomerPhones() {
+        // Given
+        Hotel hotel = new Hotel();
+        Room room1 = new Room(1, 2);
+        Room room2 = new Room(2, 3);
+        hotel.getRooms().put(1, room1);
+        hotel.getRooms().put(2, room2);
+
+        Customer customer1 = new Customer(1, "John Doe", "+1234567890", 25);
+        Customer customer2 = new Customer(2, "Jane Doe", "+0987654321", 30);
+        hotel.getCustomers().put(1, customer1);
+        hotel.getCustomers().put(2, customer2);
+
+        LocalDateTime checkIn = LocalDateTime.of(2021, 1, 1, 12, 0);
+        LocalDateTime checkOut = LocalDateTime.of(2021, 1, 3, 12, 0);
+        hotel.getBookings().put(1, new Booking(1, room1, customer1, checkIn, checkOut));
+        hotel.getBookings().put(2, new Booking(2, room1, customer2, checkIn, checkOut));
+
+        // When
+        ArrayList<String> phones = hotel.getCustomerPhonesByRoomNumber(1);
+
+        // Then
+        Assert.assertEquals(2, phones.size());
+        Assert.assertTrue(phones.contains("+1234567890"));
+        Assert.assertTrue(phones.contains("+0987654321"));
+    }
+
+    @Test
+    public void GIVEN_NoBookingsForRoom_WHEN_getCustomerPhonesByRoomNumber_THEN_returnEmptyList() {
+        // Given
+        Hotel hotel = new Hotel();
+        Room room1 = new Room(1, 2);
+        hotel.getRooms().put(1, room1);
+
+        // When
+        ArrayList<String> phones = hotel.getCustomerPhonesByRoomNumber(1);
+
+        // Then
+        Assert.assertTrue(phones.isEmpty());
+    }
+
+    @Test
+    public void GIVEN_Rooms_WHEN_getRoomsWithMinCapacity_THEN_returnFilteredRooms() {
+        // Given
+        Hotel hotel = new Hotel();
+        hotel.getRooms().put(1, new Room(1, 2));
+        hotel.getRooms().put(2, new Room(2, 4));
+        hotel.getRooms().put(3, new Room(3, 3));
+
+        // When
+        ArrayList<Room> filteredRooms = hotel.getRooms(3);
+
+        // Then
+        Assert.assertEquals(2, filteredRooms.size());
+        Assert.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 2));
+        Assert.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 3));
+    }
+
+    @Test
+    public void GIVEN_NoRoomsWithMinCapacity_WHEN_getRoomsWithMinCapacity_THEN_returnEmptyList() {
+        // Given
+        Hotel hotel = new Hotel();
+        hotel.getRooms().put(1, new Room(1, 2));
+        hotel.getRooms().put(2, new Room(2, 3));
+
+        // When
+        ArrayList<Room> filteredRooms = hotel.getRooms(4);
+
+        // Then
+        Assert.assertTrue(filteredRooms.isEmpty());
+    }
 }

@@ -44,5 +44,4 @@ public class Booking {
     public Duration getStayDurationDays() {
         return java.time.Duration.between(checkIn, checkOut);
     }
-
 }

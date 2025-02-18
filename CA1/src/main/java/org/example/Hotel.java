@@ -30,33 +30,35 @@ public class Hotel {
     }
 
     public ArrayList<Room> getAllRooms() {
-//        TODO
-        return null;
+        return new ArrayList<>(rooms.values());
     }
 
     public ArrayList<Customer> getAllCustomers() {
-//        TODO
-        return null;
+        return new ArrayList<>(customers.values());
     }
 
     public ArrayList<Booking> getAllBookings() {
-//        TODO
-        return null;
+        return new ArrayList<>(bookings.values());
     }
 
     public ArrayList<Room> getRooms(int minCapacity) {
-//        TODO
-        return null;
+        return rooms.values().stream()
+                .filter(room -> room.Capacity >= minCapacity)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String getOldestCustomerName() {
-//        TODO
-        return null;
+        return customers.values().stream()
+                .min((c1, c2) -> Integer.compare(c1.age, c2.age))
+                .map(customer -> customer.name)
+                .orElse(null);
     }
 
     public ArrayList<String> getCustomerPhonesByRoomNumber(int roomNumber) {
-//        TODO
-        return null;
+        return bookings.values().stream()
+                .filter(booking -> booking.getRoom().Number == roomNumber)
+                .map(booking -> booking.getCustomer().phone)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String logState() {
