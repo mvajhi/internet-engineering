@@ -345,4 +345,35 @@ public class HotelTest {
         // Then
         Assert.assertTrue(phones.isEmpty());
     }
+
+    @Test
+    public void GIVEN_Rooms_WHEN_getRoomsWithMinCapacity_THEN_returnFilteredRooms() {
+        // Given
+        Hotel hotel = new Hotel();
+        hotel.getRooms().put(1, new Room(1, 2));
+        hotel.getRooms().put(2, new Room(2, 4));
+        hotel.getRooms().put(3, new Room(3, 3));
+
+        // When
+        ArrayList<Room> filteredRooms = hotel.getRooms(3);
+
+        // Then
+        Assert.assertEquals(2, filteredRooms.size());
+        Assert.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 2));
+        Assert.assertTrue(filteredRooms.stream().anyMatch(room -> room.Number == 3));
+    }
+
+    @Test
+    public void GIVEN_NoRoomsWithMinCapacity_WHEN_getRoomsWithMinCapacity_THEN_returnEmptyList() {
+        // Given
+        Hotel hotel = new Hotel();
+        hotel.getRooms().put(1, new Room(1, 2));
+        hotel.getRooms().put(2, new Room(2, 3));
+
+        // When
+        ArrayList<Room> filteredRooms = hotel.getRooms(4);
+
+        // Then
+        Assert.assertTrue(filteredRooms.isEmpty());
+    }
 }
