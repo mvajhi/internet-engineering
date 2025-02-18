@@ -1,5 +1,6 @@
 package org.example;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Hotel {
     private Map<Integer, Room> rooms;
@@ -58,8 +60,26 @@ public class Hotel {
     }
 
     public String logState() {
-//        TODO
-        return null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Map<String, Object> state = new HashMap<>();
+            state.put("customers", customers.values());
+            state.put("rooms", rooms.values());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            state.put("bookings", bookings.values().stream().map(booking -> {
+                Map<String, Object> bookingMap = new HashMap<>();
+                bookingMap.put("id", booking.getID());
+                bookingMap.put("room", booking.getRoom().Number);
+                bookingMap.put("customer", booking.getCustomer().NID);
+                bookingMap.put("check_in", booking.getCheckIn().format(formatter));
+                bookingMap.put("check_out", booking.getCheckOut().format(formatter));
+                return bookingMap;
+            }).collect(Collectors.toList()));
+            return objectMapper.writeValueAsString(state);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     public void parseJson(String json) {
