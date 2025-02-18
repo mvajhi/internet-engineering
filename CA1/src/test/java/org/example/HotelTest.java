@@ -7,6 +7,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class HotelTest {
     @Test
@@ -128,13 +129,13 @@ public class HotelTest {
     @Test
     public void GIVEN_EmptyHotel_WHEN_logState_THEN_returnEmptyJson() {
         // Given
-        Hotel hotel=new Hotel();
+        Hotel hotel = new Hotel();
 
         // When
-        String Json=hotel.logState();
+        String Json = hotel.logState();
 
         // Then
-        String expectedJson="""
+        String expectedJson = """
                 {
                   "customers": [],
                   "rooms": [],
@@ -277,4 +278,30 @@ public class HotelTest {
         }
     }
 
+    @Test
+    public void GIVEN_Customers_WHEN_getOldestCustomerName_THEN_returnOldestCustomerName() {
+        // Given
+        Hotel hotel = new Hotel();
+        hotel.getCustomers().put(1, new Customer(1, "John Doe", "+1234567890", 25));
+        hotel.getCustomers().put(2, new Customer(2, "Jane Doe", "+0987654321", 30));
+        hotel.getCustomers().put(3, new Customer(3, "Alice", "+1122334455", 20));
+
+        // When
+        String oldestCustomerName = hotel.getOldestCustomerName();
+
+        // Then
+        Assert.assertEquals("Jane Doe", oldestCustomerName);
+    }
+
+    @Test
+    public void GIVEN_NoCustomers_WHEN_getOldestCustomerName_THEN_returnNull() {
+        // Given
+        Hotel hotel = new Hotel();
+
+        // When
+        String oldestCustomerName = hotel.getOldestCustomerName();
+
+        // Then
+        Assert.assertNull(oldestCustomerName);
+    }
 }
