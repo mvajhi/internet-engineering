@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Booking {
@@ -37,8 +38,8 @@ public class Booking {
         return checkOut;
     }
 
-    public int getStayDurationDays() {
-        return (int) java.time.Duration.between(checkIn, checkOut).toDaysPart();
+    public Duration getStayDurationDays() {
+        return java.time.Duration.between(checkIn, checkOut);
     }
 
 }
