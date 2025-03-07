@@ -17,4 +17,12 @@ public class Cart {
     public User getUser() {
         return user;
     }
+
+    public List<Book> getPurchasedBooks() {
+        return purchasedBooks;
+    }
+
+    public Map<Book, Integer> getBorrowedBooks() {
+        return borrowedBooks;
+    }
 }
