@@ -17,7 +17,6 @@ public class Author {
         this.died = died;
     }
 
-    // Getters
     public String getName() { return name; }
     public String getPenName() { return penName; }
     public String getNationality() { return nationality; }
