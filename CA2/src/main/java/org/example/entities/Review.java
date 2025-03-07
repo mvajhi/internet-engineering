@@ -22,4 +22,24 @@ public class Review {
     public int getRate() { return rate; }
     public String getComment() { return comment; }
     public LocalDateTime getDate() { return date; }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
 }

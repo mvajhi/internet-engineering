@@ -2,11 +2,13 @@ package org.example.services;
 
 import org.example.entities.*;
 import org.example.request.AddUserRequest;
+import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
+@Service
 public class UserService {
 
     public User createUser(AddUserRequest request) {
@@ -33,13 +35,13 @@ public class UserService {
             receipt.setMessage("User Credit Is Not Enough");
             return receipt;
         }
-        cart.getUser().reduceCredit(totalPrice);
         receipt.addBook(cart.getPurchasedBooks());
         receipt.addBorrowedBooks(cart.getBorrowedBooks());
         receipt.setUser(cart.getUser());
         receipt.setSuccess(true);
         receipt.setDate(LocalDateTime.now());
         receipt.setMessage("Purchase completed successfully");
+        cart.getUser().reduceCredit(totalPrice);
         return receipt;
 
     }
