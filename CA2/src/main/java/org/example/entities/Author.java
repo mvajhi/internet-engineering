@@ -17,9 +17,31 @@ public class Author {
         this.died = died;
     }
 
+    public Author() {}
+
     public String getName() { return name; }
     public String getPenName() { return penName; }
     public String getNationality() { return nationality; }
     public LocalDate getBorn() { return born; }
     public LocalDate getDied() { return died; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPenName(String penName) {
+        this.penName = penName;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public void setBorn(LocalDate born) {
+        this.born = born;
+    }
+
+    public void setDied(LocalDate died) {
+        this.died = died;
+    }
 }
