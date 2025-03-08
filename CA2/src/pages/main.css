@@ -72,3 +72,7 @@
      width: 13rem;
      background-color: #F7F3ED;
  }
+
+ .pagination .active .page-link {
+     background-color: rgba(0, 0, 0, 0.05) !important;
+ }
