@@ -1,8 +1,11 @@
 package org.example.entities;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class BookShop {
     private List<User> users = new ArrayList<>();
     private List<Author> authors = new ArrayList<>();
@@ -35,5 +38,34 @@ public class BookShop {
     }
     public List<PurchaseReceipt> getReceiptsByUsername(String username){
         return this.receipts.stream().filter(r -> r.getUser().getUsername().equals(username)).toList();
+    }
+
+    public boolean isEmailUnique(String email) {
+        return users.stream().noneMatch(e -> e.getEmail().equals(email));
+    }
+
+    public boolean isUserExist(String username) {
+        return users.stream().anyMatch(e -> e.getUsername().equals(username));
+
+    }
+
+    public boolean isUsernameUnique(String username) {
+        return users.stream().noneMatch(e -> e.getUsername().equals(username));
+    }
+
+    public boolean isAuthorNameUnique(String name) {
+        return authors.stream().noneMatch(e -> e.getName().equals(name));
+    }
+
+    public boolean isUserAdmin(String username) {
+        return users.stream().filter(e -> e.getUsername().equals(username)).toList().get(0).getRole() == Role.ADMIN;
+    }
+
+    public boolean isUserCustomer(String username) {
+        return users.stream().filter(e -> e.getUsername().equals(username)).toList().get(0).getRole() == Role.CUSTOMER;
+    }
+
+    public boolean isBookNameUnique(String key) {
+        return books.stream().noneMatch(e -> e.getTitle().equals(key));
     }
 }
