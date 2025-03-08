@@ -78,9 +78,27 @@
  }
 
  button {
-    background-color: #16423C;
+     background-color: #16423C;
+ }
+
+ .btn-green-custom {
+     background-color: #16423C;
+ }
+
+ .btn-green-custom:hover,
+ .btn-green-custom:active {
+     background-color: #1A4D45;
  }
 
  .border-brown {
-    border-color: #804900 !important;
+     border-color: #804900 !important;
+ }
+
+ .comment-date {
+     font-size: 0.75rem;
+     font-weight: 100;
+ }
+
+ .mw-60 {
+    max-width: 60rem;
  }
