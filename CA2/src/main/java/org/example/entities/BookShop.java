@@ -3,6 +3,7 @@ package org.example.entities;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -29,7 +30,7 @@ public class BookShop {
     public void addReview(Review review){
         this.reviews.add(review);
     }
-    public Cart getBasketByUsername(String username){
+    public Cart getCartByUsername(String username){
         List<Cart> list = this.baskets.stream().filter(e ->e.getUser().getUsername().equals(username)).toList();
         if(list.isEmpty())
             return null;
@@ -67,5 +68,30 @@ public class BookShop {
 
     public boolean isBookNameUnique(String key) {
         return books.stream().noneMatch(e -> e.getTitle().equals(key));
+    }
+
+    public Book findBook(String title) {
+        List<Book> list = books.stream().filter(e -> e.getTitle().equals(title)).toList();
+        if (list.isEmpty())
+            return null;
+        else return list.get(0);
+    }
+
+    public Author findAuther(String name) {
+        List<Author> list = authors.stream().filter(e -> e.getName().equals(name)).toList();
+        if (list.isEmpty())
+            return null;
+        else return list.get(0);
+    }
+
+    public User findUser(String name) {
+        List<User> list = users.stream().filter(e -> e.getUsername().equals(name)).toList();
+        if (list.isEmpty())
+            return null;
+        else return list.get(0);
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
     }
 }

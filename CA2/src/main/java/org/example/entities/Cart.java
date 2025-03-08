@@ -25,4 +25,16 @@ public class Cart {
     public Map<Book, Integer> getBorrowedBooks() {
         return borrowedBooks;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setPurchasedBooks(List<Book> purchasedBooks) {
+        this.purchasedBooks = purchasedBooks;
+    }
+
+    public void setBorrowedBooks(Map<Book, Integer> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
+    }
 }
