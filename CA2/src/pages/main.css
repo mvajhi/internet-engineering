@@ -53,7 +53,8 @@
  }
 
  .main-box {
-     max-width: 60vh;
+     /* max-width: max(60vh, 50vw); */
+     max-width: 45rem;
      padding: min(5vh, 10rem) min(10vw, 10rem) min(5vh, 10rem) min(10vw, 10rem);
  }
 
