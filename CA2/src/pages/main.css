@@ -68,11 +68,19 @@
      background-color: #F5EFE7;
  }
 
- .card {
+ .card-book {
      width: 13rem;
      background-color: #F7F3ED;
  }
 
  .pagination .active .page-link {
-     background-color: rgba(0, 0, 0, 0.05) !important;
+     background-color: rgba(0, 0, 0, 0.05);
+ }
+
+ button {
+    background-color: #16423C;
+ }
+
+ .border-brown {
+    border-color: #804900 !important;
  }
