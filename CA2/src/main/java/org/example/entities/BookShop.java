@@ -14,6 +14,51 @@ public class BookShop {
     private List<Review> reviews = new ArrayList<>();
     private List<Cart> baskets = new ArrayList<>();
     private List<PurchaseReceipt> receipts = new ArrayList<>();
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Cart> getBaskets() {
+        return baskets;
+    }
+
+    public void setBaskets(List<Cart> baskets) {
+        this.baskets = baskets;
+    }
+
+    public List<PurchaseReceipt> getReceipts() {
+        return receipts;
+    }
+
+    public void setReceipts(List<PurchaseReceipt> receipts) {
+        this.receipts = receipts;
+    }
+
     public void addUser(User user){
         this.users.add(user);
     }
