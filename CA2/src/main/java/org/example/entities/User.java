@@ -24,7 +24,29 @@ public class User {
     public Address getAddress() { return address; }
     public int getBalance() { return balance; }
 
-    public void setBalance(int balance) { this.balance = balance; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
 
     public void reduceCredit(int credit){
         this.balance -= credit;

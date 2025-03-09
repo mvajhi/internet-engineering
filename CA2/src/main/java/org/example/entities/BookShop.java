@@ -3,10 +3,8 @@ package org.example.entities;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-@Component
 public class BookShop {
     private List<User> users = new ArrayList<>();
     private List<Author> authors = new ArrayList<>();
@@ -104,36 +102,63 @@ public class BookShop {
     }
 
     public boolean isUserAdmin(String username) {
-        return users.stream().filter(e -> e.getUsername().equals(username)).toList().get(0).getRole() == Role.ADMIN;
+        if (users.isEmpty()) {
+            return false;
+        }
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return user.getRole() == Role.ADMIN;
+            }
+        }
+        return false;
     }
 
     public boolean isUserCustomer(String username) {
-        return users.stream().filter(e -> e.getUsername().equals(username)).toList().get(0).getRole() == Role.CUSTOMER;
+        if (users.isEmpty()) {
+            return false;
+        }
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return user.getRole() == Role.CUSTOMER;
+            }
+        }
+        return false;
     }
 
     public boolean isBookNameUnique(String key) {
-        return books.stream().noneMatch(e -> e.getTitle().equals(key));
+        for (Book book : books) {
+            if (book.getTitle().equals(key)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Book findBook(String title) {
-        List<Book> list = books.stream().filter(e -> e.getTitle().equals(title)).toList();
-        if (list.isEmpty())
-            return null;
-        else return list.get(0);
+        for (Book book : books) {
+            if (book.getTitle().equals(title)) {
+                return book;
+            }
+        }
+        return null;
     }
 
-    public Author findAuther(String name) {
-        List<Author> list = authors.stream().filter(e -> e.getName().equals(name)).toList();
-        if (list.isEmpty())
-            return null;
-        else return list.get(0);
+    public Author findAuthor(String name) {
+        for (Author author : authors) {
+            if (author.getName().equals(name)) {
+                return author;
+            }
+        }
+        return null;
     }
 
     public User findUser(String name) {
-        List<User> list = users.stream().filter(e -> e.getUsername().equals(name)).toList();
-        if (list.isEmpty())
-            return null;
-        else return list.get(0);
+        for (User user : users) {
+            if (user.getUsername().equals(name)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public List<Review> getReviews() {

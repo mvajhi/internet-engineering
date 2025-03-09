@@ -12,8 +12,9 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 public class BookShopService {
-    BookShop bookShop;
+    BookShop bookShop = new BookShop();
     UserService userService = new UserService();
     BookService bookService = new BookService();
     AuthorService authorService = new AuthorService();
@@ -21,7 +22,7 @@ public class BookShopService {
     ObjectMapper mapper = new ObjectMapper();
 
     public Response addUser(AddUserRequest request) {
-        Response response = new Response(true, "done", null);
+        Response response = new Response(true, "User added successfully.", null);
         User newUser = userService.createUser(request);
         if (newUser == null) {
             return new Response(false, "invalid user parameter", null);
@@ -58,7 +59,7 @@ public class BookShopService {
 
     public Response addBook(AddBookRequest request) {
         Book newBook = bookService.createBook(request);
-        Author author = bookShop.findAuther(request.getAuthor());
+        Author author = bookShop.findAuthor(request.getAuthor());
         if (author == null)
             return new Response(false, "invalid author name", null);
         newBook.setAuthor(author);
@@ -153,7 +154,7 @@ public class BookShopService {
 
     public Response showAuthorDetails(String name) {
         try {
-            Author author = bookShop.findAuther(name);
+            Author author = bookShop.findAuthor(name);
             if (author == null) {
                 throw new Exception();
             }
