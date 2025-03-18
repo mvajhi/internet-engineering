@@ -7,8 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Ca3Application {
 
     public static void main(String[] args) {
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.run();
+//        ConsoleHandler consoleHandler = new ConsoleHandler();
+//        consoleHandler.run();
         SpringApplication.run(Ca3Application.class, args);
     }
 
