@@ -25,6 +25,10 @@ public class BookShopService {
     ReviewService reviewService = new ReviewService();
     ObjectMapper mapper = new ObjectMapper();
 
+    public BookShopService(UserService userService) {
+        this.userService = userService;
+    }
+
     public Response addUser(AddUserRequest request) {
         Response response = new Response(true, "User added successfully.", null);
         User newUser = userService.createUser(request);

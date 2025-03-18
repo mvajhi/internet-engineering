@@ -13,7 +13,7 @@ import org.example.services.BookShopService;
 
 public class ConsoleHandler {
 
-    BookShopService bookShopService = new BookShopService();
+    BookShopService bookShopService;
     ObjectMapper mapper = new ObjectMapper();
     boolean isRunning = true;
 
