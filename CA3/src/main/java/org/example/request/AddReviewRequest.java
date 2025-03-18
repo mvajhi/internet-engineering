@@ -1,13 +1,13 @@
 package org.example.request;
 
 public class AddReviewRequest {
-    int rating;
+    int rate;
     String comment;
     String username;
-    String bookTitle;
+    String title;
 
-    public int getRating() {
-        return rating;
+    public int getRate() {
+        return rate;
     }
 
     public String getComment() {
@@ -18,12 +18,12 @@ public class AddReviewRequest {
         return username;
     }
 
-    public String getBookTitle() {
-        return bookTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setRate(int rate) {
+        this.rate=rate;
     }
 
     public void setComment(String comment) {
@@ -34,8 +34,8 @@ public class AddReviewRequest {
         this.username = username;
     }
 
-    public void setBookTitle(String bookTitle) {
-        this.bookTitle = bookTitle;
+    public void setTitle(String title) {
+        this.title=title;
     }
 }
 

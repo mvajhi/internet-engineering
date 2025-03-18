@@ -11,8 +11,15 @@ public class PurchaseReceipt {
     private LocalDateTime date;
     private boolean isSuccess;
     private String message;
-    public void addBook(List<Book> book){ this.books.addAll(book);}
-    public void addBorrowedBooks(Map<Book,Integer> borrowedBooks){this.borrowedBooks.putAll(borrowedBooks);}
+    private int totalPrice;
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice=totalPrice;
+    }
 
     public User getUser() {
         return user;

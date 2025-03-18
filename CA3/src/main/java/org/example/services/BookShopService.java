@@ -11,6 +11,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.utils.AuthenticationUtils;
@@ -117,11 +121,33 @@ public class BookShopService {
         if (buiedBook == null) {
             return new Response(false, "invalid book title", null);
         }
-        if (userCart.getPurchasedBooks().size() > 9) {
+        if (userCart.getPurchasedBooks().size() + userCart.getBorrowedBooks().size() > 9) {
             return new Response(false, "book limit exceedes", null);
         }
         userCart.addPurchasedBook(buiedBook);
         return new Response(true, "Added book to cart", null);
+    }
+
+    public Response removeShoppingCart(CartRequest request) {
+        if (!bookShop.isUserCustomer(request.getUsername())) {
+            return new Response(false, "user is admin", null);
+        }
+        Cart userCart = bookShop.getCartByUsername(request.getUsername());
+        if (userCart == null) {
+            User user = bookShop.findUser(request.getUsername());
+            if (user == null)
+                return new Response(false, "invalid username", null);
+            return new Response(false, "not in cart.", null);
+        }
+        Book buiedBook = bookShop.findBook(request.getTitle());
+        if (buiedBook == null) {
+            return new Response(false, "invalid book title", null);
+        }
+        if (!userCart.hasPurchasedBook(buiedBook))
+            return new Response(false, "not in cart.", null);
+
+        userCart.removePurchasedBook(buiedBook);
+        return new Response(true, "Remove book from cart", null);
     }
 
     public Response borrowBook(BorrowBookRequest request) {
@@ -145,13 +171,15 @@ public class BookShopService {
             return new Response(false, "borrow day exceedes", null);
         }
         userCart.addBorrowedBook(buiedBook, request.getDays());
-        return new Response(true, "Added book to cart", null);
+        return new Response(true, "Added borrow book to cart", null);
     }
 
     public Response addReview(AddReviewRequest request) {
         Review newReview = reviewService.createReview(request);
         User user = bookShop.findUser(AuthenticationUtils.getUsername());
         Book book = bookShop.findBook(request.getBookTitle());
+        User user = bookShop.findUser(request.getUsername());
+        Book book = bookShop.findBook(request.getTitle());
         if (user == null) {
             return new Response(false, "User not exist", null);
         }
@@ -208,6 +236,7 @@ public class BookShopService {
                 throw new Exception();
             }
 //            TODO : Add avg rating to book
+//            TODO : remove content
             return new Response(true, "Book details retrieved successfully", book);
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
@@ -220,8 +249,10 @@ public class BookShopService {
             if (book == null) {
                 throw new Exception();
             }
+//            TODO : Add avg rating to book
+//            TODO : remove date from comments
             List<Review> reviewsList = this.bookShop.getReviews().stream().filter(e -> e.getBookTitle().equals(title)).toList();
-            return new Response(true, "Book reviews retrieved successfully.", mapper.writeValueAsString(reviewsList));
+            return new Response(true, "Book reviews retrieved successfully.", reviewsList);
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
         }
@@ -229,7 +260,6 @@ public class BookShopService {
 
     public Response showBookContent(String username, String title) {
         try {
-
             User user = bookShop.findUser(username);
             if (user == null) {
                 return new Response(false, "User not exist", null);
@@ -283,20 +313,29 @@ public class BookShopService {
         return new Response(true, "Credit added succesfully", null);
     }
 
-    public Response purchaseCart(String username) {
-        Cart cart = this.bookShop.getCartByUsername(username);
-        if (cart == null) {
-            return new Response(false, "invalid username", null);
+    public Response purchaseCart(purchaseCartRequest request) {
+        if (!bookShop.isUserCustomer(request.getUsername())) {
+            return new Response(false, "user is admin", null);
         }
-        PurchaseReceipt receipt = userService.finishPurchase(cart);
+        Cart userCart = this.bookShop.getCartByUsername(request.getUsername());
+        if (userCart == null) {
+            User user = bookShop.findUser(request.getUsername());
+            if (user == null)
+                return new Response(false, "invalid username", null);
+            return new Response(false, "Empty Book List", null);
+        }
+        PurchaseReceipt receipt = userService.finishPurchase(userCart);
         if (!receipt.isSuccess()) {
             return new Response(false, receipt.getMessage(), null);
         }
         this.bookShop.addRecipt(receipt);
         PurchaseCartResponse purchaseCartResponse = new PurchaseCartResponse();
-        purchaseCartResponse.setBookCount(receipt.getBooks().size());
-        purchaseCartResponse.setTotalCost(receipt.getBooks().stream().map(a -> a.getPrice()).reduce(0, (a, b) -> a + b));
+        purchaseCartResponse.setBookCount(receipt.getBooks().size() + receipt.getBorrowedBooks().size());
+        purchaseCartResponse.setTotalCost(receipt.getTotalPrice());
         purchaseCartResponse.setDate(receipt.getDate());
+
+        bookShop.removeCart(userCart);
+
         return new Response(true, "Purchased completed Succesfully", purchaseCartResponse);
     }
 
@@ -383,5 +422,24 @@ public class BookShopService {
 
     private int calculateBorrowPrice(int originalPrice, int days) {
         return (int) (originalPrice * 0.1 * days);
+    }
+
+    public Response getBookContent(BookContentRequest request) {
+        User user = bookShop.findUser(request.getUsername());
+        Book book = bookShop.findBook(request.getTitle());
+        if (user == null) {
+            return new Response(false, "User not exist", null);
+        }
+        if (user.getRole() != Role.CUSTOMER) {
+            return new Response(false, "User is not customer", null);
+        }
+        if (book == null) {
+            return new Response(false, "Book not exist", null);
+        }
+        if (!bookShop.hasBook(user, book)) {
+            return new Response(false, "User has not purchased this book", null);
+        }
+        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
+        return new Response(true, "Book content retrieved successfully.", response);
     }
 }

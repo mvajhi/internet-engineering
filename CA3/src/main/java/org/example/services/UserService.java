@@ -51,7 +51,7 @@ public class UserService {
 
     public PurchaseReceipt finishPurchase(Cart cart) {
         PurchaseReceipt receipt = new PurchaseReceipt();
-        if (cart.getPurchasedBooks().isEmpty()) {
+        if (cart.getPurchasedBooks().isEmpty() && cart.getBorrowedBooks().isEmpty()) {
             receipt.setSuccess(false);
             receipt.setMessage("Empty Book List");
             return receipt;
@@ -63,12 +63,13 @@ public class UserService {
             receipt.setMessage("User Credit Is Not Enough");
             return receipt;
         }
-        receipt.addBook(cart.getPurchasedBooks());
-        receipt.addBorrowedBooks(cart.getBorrowedBooks());
+        receipt.setBooks(cart.getPurchasedBooks());
+        receipt.setBorrowedBooks(cart.getBorrowedBooks());
         receipt.setUser(cart.getUser());
         receipt.setSuccess(true);
         receipt.setDate(LocalDateTime.now());
         receipt.setMessage("Purchase completed successfully");
+        receipt.setTotalPrice(totalPrice);
         cart.getUser().reduceCredit(totalPrice);
         return receipt;
 

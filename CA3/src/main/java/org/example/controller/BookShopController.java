@@ -1,12 +1,8 @@
 package org.example.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.request.AddAuthorRequest;
-import org.example.request.AddBookRequest;
-import org.example.request.AddUserRequest;
+import org.example.request.*;
 import org.example.services.BookShopService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,7 +23,7 @@ public class BookShopController {
         return bookShopService.addAuthor(request).convertToString();
     }
 
-    @RequestMapping("/book")
+    @RequestMapping("/books")
     @PostMapping
     public String addBook(@RequestBody AddBookRequest request) {
         return bookShopService.addBook(request).convertToString();
@@ -45,9 +41,51 @@ public class BookShopController {
         return bookShopService.showAuthorDetails(authorName).convertToString();
     }
 
-    @RequestMapping("/book/{bookTitle}")
+    @RequestMapping("/books/{bookTitle}")
     @GetMapping
     public String getBook(@PathVariable String bookTitle) {
         return bookShopService.showBookDetails(bookTitle).convertToString();
+    }
+
+    @PostMapping("/cart")
+    public String addCart(@RequestBody CartRequest request) {
+        return bookShopService.addShoppingCart(request).convertToString();
+    }
+
+    @DeleteMapping("/cart")
+    public String removeCart(@RequestBody CartRequest request) {
+        return bookShopService.removeShoppingCart(request).convertToString();
+    }
+
+    @PostMapping("/credit")
+    public String addCredit(@RequestBody AddCreditRequest request) {
+        return bookShopService.addCredit(request).convertToString();
+    }
+
+    @PostMapping("/purchase")
+    public String finishPurchase(@RequestBody purchaseCartRequest request) {
+        return bookShopService.purchaseCart(request).convertToString();
+    }
+
+    @PostMapping("/borrow")
+    public String borrowBook(@RequestBody BorrowBookRequest request) {
+        return bookShopService.borrowBook(request).convertToString();
+    }
+
+    @PostMapping("/books/{bookTitle}/review")
+    public String addReview(@RequestBody AddReviewRequest request, @PathVariable String bookTitle) {
+        request.setTitle(bookTitle);
+        return bookShopService.addReview(request).convertToString();
+    }
+
+    @GetMapping("/books/{bookTitle}/review")
+    public String getReviews(@PathVariable String bookTitle) {
+        return bookShopService.showBookReviews(bookTitle).convertToString();
+    }
+
+    @GetMapping("/books/{bookTitle}/content")
+    public String getBookContent(@PathVariable String bookTitle, @RequestBody BookContentRequest request) {
+        request.setTitle(bookTitle);
+        return bookShopService.getBookContent(request).convertToString();
     }
 }

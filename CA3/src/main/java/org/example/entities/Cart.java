@@ -30,6 +30,14 @@ public class Cart {
         this.user = user;
     }
 
+    public void removePurchasedBook(Book book){
+        this.purchasedBooks.remove(book);
+    }
+
+    public boolean hasPurchasedBook(Book book){
+        return this.purchasedBooks.contains(book);
+    }
+
     public void setPurchasedBooks(List<Book> purchasedBooks) {
         this.purchasedBooks = purchasedBooks;
     }

@@ -1,6 +1,6 @@
 package org.example.request;
 
-public class AddCartRequest {
+public class BookContentRequest {
     String username;
     String title;
 
