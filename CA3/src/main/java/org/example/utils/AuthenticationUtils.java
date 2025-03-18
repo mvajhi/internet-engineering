@@ -1,7 +1,10 @@
 package org.example.utils;
 
+import org.example.entities.Role;
 import org.example.entities.User;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @Component
 public class AuthenticationUtils {
@@ -20,5 +23,21 @@ public class AuthenticationUtils {
             return true;
         }
         return false;
+    }
+
+    public static String getUsername(){
+        return loggedInUser.getUsername();
+    }
+
+    public static boolean hasAccess(String username) {
+        if (loggedInUser == null) return false;
+        if(Objects.equals(username, loggedInUser.getUsername())
+                || loggedInUser.getRole() == Role.ADMIN)
+            return true;
+        return false;
+    }
+
+    public static User getLoggedInUser() {
+        return loggedInUser;
     }
 }
