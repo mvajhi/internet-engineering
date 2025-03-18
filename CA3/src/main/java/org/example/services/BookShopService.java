@@ -218,6 +218,7 @@ public class BookShopService {
                 throw new Exception();
             }
 //            TODO : Add avg rating to book
+//            TODO : remove content
             return new Response(true, "Book details retrieved successfully", book);
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
