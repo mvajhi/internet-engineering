@@ -1,14 +1,11 @@
 package org.example.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.request.*;
 import org.example.response.*;
 import org.example.entities.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.utils.DataLoaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class BookShopService {
@@ -99,7 +95,7 @@ public class BookShopService {
 
     }
 
-    public Response addShoppingCart(AddCartRequest request) {
+    public Response addShoppingCart(CartRequest request) {
         if (!bookShop.isUserCustomer(request.getUsername())) {
             return new Response(false, "user is admin", null);
         }
@@ -124,6 +120,28 @@ public class BookShopService {
         return new Response(true, "Added book to cart", null);
     }
 
+    public Response removeShoppingCart(CartRequest request) {
+        if (!bookShop.isUserCustomer(request.getUsername())) {
+            return new Response(false, "user is admin", null);
+        }
+        Cart userCart = bookShop.getCartByUsername(request.getUsername());
+        if (userCart == null) {
+            User user = bookShop.findUser(request.getUsername());
+            if (user == null)
+                return new Response(false, "invalid username", null);
+            return new Response(false, "not in cart.", null);
+        }
+        Book buiedBook = bookShop.findBook(request.getTitle());
+        if (buiedBook == null) {
+            return new Response(false, "invalid book title", null);
+        }
+        if (!userCart.hasPurchasedBook(buiedBook))
+            return new Response(false, "not in cart.", null);
+
+        userCart.removePurchasedBook(buiedBook);
+        return new Response(true, "Remove book from cart", null);
+    }
+
     public Response borrowBook(BorrowBookRequest request) {
         if (!bookShop.isUserCustomer(request.getUsername())) {
             return new Response(false, "user is admin", null);
@@ -145,7 +163,7 @@ public class BookShopService {
             return new Response(false, "borrow day exceedes", null);
         }
         userCart.addBorrowedBook(buiedBook, request.getDays());
-        return new Response(true, "Added book to cart", null);
+        return new Response(true, "Added borrow book to cart", null);
     }
 
     public Response addReview(AddReviewRequest request) {
@@ -274,12 +292,18 @@ public class BookShopService {
         return new Response(true, "Credit added succesfully", null);
     }
 
-    public Response purchaseCart(String username) {
-        Cart cart = this.bookShop.getCartByUsername(username);
-        if (cart == null) {
-            return new Response(false, "invalid username", null);
+    public Response purchaseCart(purchaseCartRequest request) {
+        if (!bookShop.isUserCustomer(request.getUsername())) {
+            return new Response(false, "user is admin", null);
         }
-        PurchaseReceipt receipt = userService.finishPurchase(cart);
+        Cart userCart = this.bookShop.getCartByUsername(request.getUsername());
+        if (userCart == null) {
+            User user = bookShop.findUser(request.getUsername());
+            if (user == null)
+                return new Response(false, "invalid username", null);
+            return new Response(false, "Empty Book List", null);
+        }
+        PurchaseReceipt receipt = userService.finishPurchase(userCart);
         if (!receipt.isSuccess()) {
             return new Response(false, receipt.getMessage(), null);
         }
@@ -288,6 +312,9 @@ public class BookShopService {
         purchaseCartResponse.setBookCount(receipt.getBooks().size());
         purchaseCartResponse.setTotalCost(receipt.getBooks().stream().map(a -> a.getPrice()).reduce(0, (a, b) -> a + b));
         purchaseCartResponse.setDate(receipt.getDate());
+
+        bookShop.removeCart(userCart);
+
         return new Response(true, "Purchased completed Succesfully", purchaseCartResponse);
     }
 

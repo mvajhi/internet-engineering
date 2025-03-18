@@ -1,12 +1,8 @@
 package org.example.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.request.AddAuthorRequest;
-import org.example.request.AddBookRequest;
-import org.example.request.AddUserRequest;
+import org.example.request.*;
 import org.example.services.BookShopService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -49,5 +45,30 @@ public class BookShopController {
     @GetMapping
     public String getBook(@PathVariable String bookTitle) {
         return bookShopService.showBookDetails(bookTitle).convertToString();
+    }
+
+    @PostMapping("/cart")
+    public String addCart(@RequestBody CartRequest request) {
+        return bookShopService.addShoppingCart(request).convertToString();
+    }
+
+    @DeleteMapping("/cart")
+    public String removeCart(@RequestBody CartRequest request) {
+        return bookShopService.removeShoppingCart(request).convertToString();
+    }
+
+    @PostMapping("/credit")
+    public String addCredit(@RequestBody AddCreditRequest request) {
+        return bookShopService.addCredit(request).convertToString();
+    }
+
+    @PostMapping("/purchase")
+    public String finishPurchase(@RequestBody purchaseCartRequest request) {
+        return bookShopService.purchaseCart(request).convertToString();
+    }
+
+    @PostMapping("/borrow")
+    public String borrowBook(@RequestBody BorrowBookRequest request) {
+        return bookShopService.borrowBook(request).convertToString();
     }
 }

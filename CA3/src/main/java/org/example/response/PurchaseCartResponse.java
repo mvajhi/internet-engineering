@@ -1,11 +1,14 @@
 package org.example.response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class PurchaseCartResponse {
     int bookCount;
     int totalCost;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime date;
 
     public int getBookCount() {

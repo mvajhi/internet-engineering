@@ -63,8 +63,8 @@ public class UserService {
             receipt.setMessage("User Credit Is Not Enough");
             return receipt;
         }
-        receipt.addBook(cart.getPurchasedBooks());
-        receipt.addBorrowedBooks(cart.getBorrowedBooks());
+        receipt.setBooks(cart.getPurchasedBooks());
+        receipt.setBorrowedBooks(cart.getBorrowedBooks());
         receipt.setUser(cart.getUser());
         receipt.setSuccess(true);
         receipt.setDate(LocalDateTime.now());

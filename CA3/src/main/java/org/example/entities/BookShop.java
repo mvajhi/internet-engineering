@@ -83,6 +83,10 @@ public class BookShop {
         }
     }
 
+    public void removeCart(Cart cart){
+        this.baskets.remove(cart);
+    }
+
     public Cart getCartByUsername(String username){
         List<Cart> list = this.baskets.stream().filter(e ->e.getUser().getUsername().equals(username)).toList();
         if(list.isEmpty())

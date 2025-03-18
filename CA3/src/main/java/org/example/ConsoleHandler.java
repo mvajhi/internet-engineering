@@ -111,7 +111,7 @@ public class ConsoleHandler {
     }
     private Response addCart(String json){
         try{
-            AddCartRequest request = mapper.readValue(json, AddCartRequest.class);
+            CartRequest request = mapper.readValue(json, CartRequest.class);
             return bookShopService.addShoppingCart(request);
         } catch (JsonProcessingException e){
             return new Response(false, "invalid json argument",null);
