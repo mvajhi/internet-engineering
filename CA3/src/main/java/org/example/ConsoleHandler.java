@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.Scanner;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.request.*;
 import org.example.response.*;
 
@@ -18,6 +19,7 @@ public class ConsoleHandler {
 
     public void run(){
         Scanner console = new Scanner(System.in);
+        mapper.registerModule(new JavaTimeModule());
 
         while(isRunning){
             String line = console.nextLine();
