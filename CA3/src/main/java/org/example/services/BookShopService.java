@@ -11,11 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class BookShopService {
     BookShop bookShop = new BookShop();
-    UserService userService = new UserService();
+
+    @Autowired
+    UserService userService;
     BookService bookService = new BookService();
     AuthorService authorService = new AuthorService();
     ReviewService reviewService = new ReviewService();

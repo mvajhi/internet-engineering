@@ -1,7 +1,10 @@
 package org.example.services;
 
+import org.example.config.BookShopConfig;
 import org.example.entities.*;
 import org.example.request.AddUserRequest;
+import org.example.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -10,6 +13,31 @@ import java.util.regex.Pattern;
 
 @Service
 public class UserService {
+
+    @Autowired
+    BookShop bookShop;
+
+    public UserService(BookShop bookShop) {
+        this.bookShop = bookShop;
+    }
+
+    public Response addUser(AddUserRequest request) {
+        Response response = new Response(true, "User added successfully.", null);
+        User newUser = createUser(request);
+        if (newUser == null) {
+            return new Response(false, "invalid user parameter", null);
+        }
+        if (!bookShop.isEmailUnique(newUser.getEmail())) {
+            response.setSuccess(false);
+            response.setMessage("Email is not unique");
+        }
+        if (!bookShop.isUsernameUnique(newUser.getUsername())) {
+            response.setSuccess(false);
+            response.setMessage("username is not unique");
+        }
+        this.bookShop.addUser(newUser);
+        return response;
+    }
 
     public User createUser(AddUserRequest request) {
         User newUser = new User(request.getUsername(), request.getPassword(), request.getEmail(),
