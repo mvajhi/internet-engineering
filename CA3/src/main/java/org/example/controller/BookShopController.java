@@ -32,4 +32,22 @@ public class BookShopController {
     public String addBook(@RequestBody AddBookRequest request) {
         return bookShopService.addBook(request).convertToString();
     }
+
+    @RequestMapping("/user/{username}")
+    @GetMapping
+    public String getUser(@PathVariable String username) {
+        return bookShopService.showUserDetails(username).convertToString();
+    }
+
+    @RequestMapping("/author/{authorName}")
+    @GetMapping
+    public String getAuthor(@PathVariable String authorName) {
+        return bookShopService.showAuthorDetails(authorName).convertToString();
+    }
+
+    @RequestMapping("/book/{bookTitle}")
+    @GetMapping
+    public String getBook(@PathVariable String bookTitle) {
+        return bookShopService.showBookDetails(bookTitle).convertToString();
+    }
 }

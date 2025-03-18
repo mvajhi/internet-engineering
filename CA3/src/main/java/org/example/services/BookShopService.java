@@ -33,6 +33,7 @@ public class BookShopService {
 
     public BookShopService(UserService userService) {
         this.userService = userService;
+        mapper.registerModule(new JavaTimeModule());
         loadInitialData();
     }
 
@@ -173,7 +174,8 @@ public class BookShopService {
             if (user == null) {
                 throw new Exception();
             }
-            return new Response(true, "User details retrieved successfully.", mapper.writeValueAsString(user));
+//            TODO : admin does not have credit
+            return new Response(true, "User details retrieved successfully.", user);
         } catch (Exception e) {
             return new Response(false, "User not exist", null);
         }
@@ -185,7 +187,7 @@ public class BookShopService {
             if (author == null) {
                 throw new Exception();
             }
-            return new Response(true, "Author details retrieved successfully.", mapper.writeValueAsString(author));
+            return new Response(true, "Author details retrieved successfully.", author);
         } catch (Exception e) {
             return new Response(false, "Author not exist", null);
         }
@@ -198,7 +200,7 @@ public class BookShopService {
                 throw new Exception();
             }
 //            TODO : Add avg rating to book
-            return new Response(true, "Book details retrieved successfully", mapper.writeValueAsString(book));
+            return new Response(true, "Book details retrieved successfully", book);
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
         }
