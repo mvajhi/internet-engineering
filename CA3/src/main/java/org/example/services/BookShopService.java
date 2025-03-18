@@ -1,18 +1,24 @@
 package org.example.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.request.*;
 import org.example.response.*;
 import org.example.entities.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.utils.DataLoaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class BookShopService {
@@ -25,6 +31,21 @@ public class BookShopService {
     ReviewService reviewService = new ReviewService();
     ObjectMapper mapper = new ObjectMapper();
 
+    public BookShopService(UserService userService) {
+        this.userService = userService;
+        mapper.registerModule(new JavaTimeModule());
+        loadInitialData();
+    }
+
+    private void loadInitialData() {
+        try {
+            DataLoaderUtil dataLoader = new DataLoaderUtil(bookShop);
+            dataLoader.loadAllData();
+        } catch (Exception e) {
+            System.err.println("Error loading initial data: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     public Response addUser(AddUserRequest request) {
         Response response = new Response(true, "User added successfully.", null);
         User newUser = userService.createUser(request);
@@ -153,7 +174,8 @@ public class BookShopService {
             if (user == null) {
                 throw new Exception();
             }
-            return new Response(true, "User details retrieved successfully.", mapper.writeValueAsString(user));
+//            TODO : admin does not have credit
+            return new Response(true, "User details retrieved successfully.", user);
         } catch (Exception e) {
             return new Response(false, "User not exist", null);
         }
@@ -165,7 +187,7 @@ public class BookShopService {
             if (author == null) {
                 throw new Exception();
             }
-            return new Response(true, "Author details retrieved successfully.", mapper.writeValueAsString(author));
+            return new Response(true, "Author details retrieved successfully.", author);
         } catch (Exception e) {
             return new Response(false, "Author not exist", null);
         }
@@ -178,7 +200,7 @@ public class BookShopService {
                 throw new Exception();
             }
 //            TODO : Add avg rating to book
-            return new Response(true, "Book details retrieved successfully", mapper.writeValueAsString(book));
+            return new Response(true, "Book details retrieved successfully", book);
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
         }

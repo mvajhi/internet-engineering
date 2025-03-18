@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class Response {
     boolean success;
     String message;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime timeStamp = LocalDateTime.now();
     @JsonInclude(JsonInclude.Include.NON_NULL)
     Object data;

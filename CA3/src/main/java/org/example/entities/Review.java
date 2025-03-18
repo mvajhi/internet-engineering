@@ -17,6 +17,14 @@ public class Review {
         this.date = LocalDateTime.now();
     }
 
+    public Review(String username, String bookTitle, int rate, String comment, LocalDateTime date) {
+        this.username = username;
+        this.bookTitle = bookTitle;
+        this.rate = rate;
+        this.comment = comment;
+        this.date = date;
+    }
+
     public String getUsername() { return username; }
     public String getBookTitle() { return bookTitle; }
     public int getRate() { return rate; }
