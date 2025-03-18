@@ -37,6 +37,7 @@ public class BookShopService {
 
     public BookShopService(UserService userService) {
         this.userService = userService;
+        userService.setBookService(bookService);
         mapper.registerModule(new JavaTimeModule());
         loadInitialData();
     }
@@ -50,7 +51,6 @@ public class BookShopService {
             e.printStackTrace();
         }
     }
-
     public Response addUser(AddUserRequest request) {
         Response response = new Response(true, "User added successfully.", null);
         User newUser = userService.createUser(request);
@@ -258,50 +258,6 @@ public class BookShopService {
         }
     }
 
-    public Response showBookContent(String username, String title) {
-        try {
-            User user = bookShop.findUser(username);
-            if (user == null) {
-                return new Response(false, "User not exist", null);
-            }
-
-            Book book = bookShop.findBook(title);
-            if (book == null) {
-                return new Response(false, "Book not exist", null);
-            }
-
-            boolean hasAccess = false;
-            List<PurchaseReceipt> userReceipts = this.bookShop.getReceiptsByUsername(username);
-
-            for (int i = 0; i < userReceipts.size(); i++) {
-                var receipt = userReceipts.get(i);
-                if (receipt.getBooks() != null && receipt.getBooks().stream().anyMatch(b -> b.getTitle().equals(title))) {
-                    hasAccess = true;
-                    break;
-                }
-
-                Map<Book, Integer> borrowedBooks = receipt.getBorrowedBooks();
-                if (borrowedBooks.containsKey(book)) {
-                    if (receipt.getDate().plusDays(borrowedBooks.get(book)).isAfter(LocalDateTime.now())) {
-                        hasAccess = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!hasAccess) {
-                return new Response(false, "User does not have access to this book", null);
-            }
-
-            Map<String, String> content = new HashMap<>();
-            content.put("title", book.getTitle());
-            content.put("content", "Lorem ipsum..."); // محتوای واقعی کتاب در اینجا قرار می‌گیرد
-            return new Response(true, "Book content retrieved successfully.", mapper.writeValueAsString(content));
-        } catch (Exception e) {
-            return new Response(false, "Error retrieving book content", null);
-        }
-    }
-
     public Response addCredit(AddCreditRequest request) {
         if (!bookShop.isUserCustomer(AuthenticationUtils.getUsername())) {
             return new Response(false, "User Should Be Customer", null);
@@ -441,5 +397,22 @@ public class BookShopService {
         }
         BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
         return new Response(true, "Book content retrieved successfully.", response);
+    }
+
+    public Response showShoppingCart(ShowCartRequest request) {
+        if (!bookShop.isUserCustomer(request.getUsername())) {
+            return new Response(false, "user is admin", null);
+        }
+        Cart userCart = bookShop.getCartByUsername(request.getUsername());
+        if (userCart == null) {
+            User user = bookShop.findUser(request.getUsername());
+            if (user == null)
+                return new Response(false, "invalid username", null);
+            userCart = new Cart();
+            userCart.setUser(user);
+            userCart.setPurchasedBooks(new ArrayList<>());
+            this.bookShop.addBasket(userCart);
+        }
+        return new Response(true, "Buy cart retrieved successfully", userService.showShoppingCart(userCart));
     }
 }

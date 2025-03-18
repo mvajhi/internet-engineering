@@ -3,6 +3,7 @@ package org.example.services;
 import org.example.entities.Review;
 import org.example.request.AddBookRequest;
 import org.example.entities.Book;
+import org.example.response.BookResponses;
 
 import java.util.List;
 
@@ -35,6 +36,12 @@ public class BookService {
     public boolean isPublishedIn(Book book, int from, int to) {
         int publishedYear = book.getYear();
         return publishedYear >= from && publishedYear <= to;
+    }
+
+    public BookResponses createBookResponse(Book book) {
+        return new BookResponses(book.getTitle(),
+                book.getAuthor().getName(), book.getPublisher(),
+                book.getGenres(), book.getYear(), book.getPrice());
     }
 
     public int calculateAverageRating(Book book, List<Review> reviews){

@@ -3,12 +3,16 @@ package org.example.services;
 import org.example.config.BookShopConfig;
 import org.example.entities.*;
 import org.example.request.AddUserRequest;
+import org.example.response.BookResponses;
+import org.example.response.CartResponses;
 import org.example.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -16,6 +20,12 @@ public class UserService {
 
     @Autowired
     BookShop bookShop;
+
+    BookService bookService;
+
+    public void setBookService(BookService bookService) {
+        this.bookService=bookService;
+    }
 
     public UserService(BookShop bookShop) {
         this.bookShop = bookShop;
@@ -56,8 +66,7 @@ public class UserService {
             receipt.setMessage("Empty Book List");
             return receipt;
         }
-        int totalPrice = cart.getPurchasedBooks().stream().map(Book::getPrice).reduce(0, Integer::sum)
-                + cart.getBorrowedBooks().entrySet().stream().mapToInt(entry -> entry.getKey().getPrice() * entry.getValue() / 10).sum();
+        int totalPrice =getTotalPrice(cart);
         if (cart.getUser().getBalance() < totalPrice) {
             receipt.setSuccess(false);
             receipt.setMessage("User Credit Is Not Enough");
@@ -73,6 +82,33 @@ public class UserService {
         cart.getUser().reduceCredit(totalPrice);
         return receipt;
 
+    }
+
+    private static int getTotalPrice(Cart cart) {
+        return cart.getPurchasedBooks().stream().map(Book::getPrice).reduce(0, Integer::sum)
+               + cart.getBorrowedBooks().entrySet().stream().mapToInt(entry -> entry.getKey().getPrice() * entry.getValue() / 10).sum();
+    }
+
+    public CartResponses showShoppingCart(Cart cart) {
+        CartResponses cartResponses = new CartResponses();
+        cartResponses.setUsername(cart.getUser().getUsername());
+        cartResponses.setTotalCost(getTotalPrice(cart));
+        List<BookResponses> bookResponses = new ArrayList<>();
+        for (Book book : cart.getPurchasedBooks()) {
+            BookResponses bookResponse = bookService.createBookResponse(book);
+            bookResponse.setBorrowed(false);
+            bookResponse.setFinalPrice(bookResponse.getPrice());
+            bookResponses.add(bookResponse);
+        }
+        for (Book book : cart.getBorrowedBooks().keySet()) {
+            BookResponses bookResponse = bookService.createBookResponse(book);
+            bookResponse.setBorrowed(true);
+            bookResponse.setFinalPrice(bookResponse.getPrice() * cart.getBorrowedBooks().get(book) / 10);
+            bookResponse.setBorrowedDays(cart.getBorrowedBooks().get(book));
+            bookResponses.add(bookResponse);
+        }
+        cartResponses.setItems(bookResponses);
+        return cartResponses;
     }
 
     public void addCredit(User user, int credit) {
