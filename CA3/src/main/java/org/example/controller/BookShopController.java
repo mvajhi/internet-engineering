@@ -78,6 +78,11 @@ public class BookShopController {
         return bookShopService.addReview(request).convertToString();
     }
 
+    @GetMapping("/books/{bookTitle}/review")
+    public String getReviews(@PathVariable String bookTitle) {
+        return bookShopService.showBookReviews(bookTitle).convertToString();
+    }
+
     @GetMapping("/books/{bookTitle}/content")
     public String getBookContent(@PathVariable String bookTitle, @RequestBody BookContentRequest request) {
         request.setTitle(bookTitle);
