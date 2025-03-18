@@ -113,7 +113,7 @@ public class BookShopService {
         if (buiedBook == null) {
             return new Response(false, "invalid book title", null);
         }
-        if (userCart.getPurchasedBooks().size() > 9) {
+        if (userCart.getPurchasedBooks().size() + userCart.getBorrowedBooks().size() > 9) {
             return new Response(false, "book limit exceedes", null);
         }
         userCart.addPurchasedBook(buiedBook);
