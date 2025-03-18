@@ -403,4 +403,23 @@ public class BookShopService {
     private int calculateBorrowPrice(int originalPrice, int days) {
         return (int) (originalPrice * 0.1 * days);
     }
+
+    public Response getBookContent(BookContentRequest request) {
+        User user = bookShop.findUser(request.getUsername());
+        Book book = bookShop.findBook(request.getTitle());
+        if (user == null) {
+            return new Response(false, "User not exist", null);
+        }
+        if (user.getRole() != Role.CUSTOMER) {
+            return new Response(false, "User is not customer", null);
+        }
+        if (book == null) {
+            return new Response(false, "Book not exist", null);
+        }
+        if (!bookShop.hasBook(user, book)) {
+            return new Response(false, "User has not purchased this book", null);
+        }
+        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
+        return new Response(true, "Book content retrieved successfully.", response);
+    }
 }
