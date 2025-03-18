@@ -1,5 +1,8 @@
 package org.example.entities;
 
+import org.example.response.CartResponses;
+import org.example.response.Response;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

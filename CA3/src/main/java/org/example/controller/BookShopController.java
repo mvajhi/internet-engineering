@@ -57,6 +57,11 @@ public class BookShopController {
         return bookShopService.removeShoppingCart(request).convertToString();
     }
 
+    @GetMapping("/cart")
+    public String getCart(@RequestBody ShowCartRequest request) {
+        return bookShopService.showShoppingCart(request).convertToString();
+    }
+
     @PostMapping("/credit")
     public String addCredit(@RequestBody AddCreditRequest request) {
         return bookShopService.addCredit(request).convertToString();
