@@ -12,6 +12,8 @@ public class Book {
     private String content;
     private String publisher;
 
+    private int averageRating;
+
     public Book(String title, Author author, String publisher, int year, int price, String synopsis, String content, List<String> genres) {
         this.title = title;
         this.author = author;
@@ -65,5 +67,9 @@ public class Book {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public void setAverageRating(int averageRating) {
+        this.averageRating = averageRating;
     }
 }

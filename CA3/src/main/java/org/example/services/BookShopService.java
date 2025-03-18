@@ -50,6 +50,7 @@ public class BookShopService {
             e.printStackTrace();
         }
     }
+
     public Response addUser(AddUserRequest request) {
         Response response = new Response(true, "User added successfully.", null);
         User newUser = userService.createUser(request);
@@ -103,7 +104,7 @@ public class BookShopService {
 
     }
 
-    public Response addShoppingCart(AddCartRequest request) {
+    public Response addShoppingCart(CartRequest request) {
         if (!bookShop.isUserCustomer(AuthenticationUtils.getUsername())) {
             return new Response(false, "user is admin", null);
         }
@@ -177,8 +178,6 @@ public class BookShopService {
     public Response addReview(AddReviewRequest request) {
         Review newReview = reviewService.createReview(request);
         User user = bookShop.findUser(AuthenticationUtils.getUsername());
-        Book book = bookShop.findBook(request.getBookTitle());
-        User user = bookShop.findUser(request.getUsername());
         Book book = bookShop.findBook(request.getTitle());
         if (user == null) {
             return new Response(false, "User not exist", null);
@@ -203,11 +202,10 @@ public class BookShopService {
                 throw new Exception();
             }
 
-            if (!AuthenticationUtils.hasAccess(username)){
+            if (!AuthenticationUtils.hasAccess(username)) {
                 throw new NoPermissionException();
             }
 
-//            TODO : admin does not have credit
             return new Response(true, "User details retrieved successfully.", user);
         } catch (Exception e) {
             return new Response(false, "User not exist", null);
@@ -216,7 +214,7 @@ public class BookShopService {
 
     public Response showAuthorDetails(String name) {
         try {
-            if(!AuthenticationUtils.getLoggedInUser().isAdmin()) {
+            if (!AuthenticationUtils.getLoggedInUser().isAdmin()) {
                 throw new NoPermissionException();
             }
             Author author = bookShop.findAuthor(name);
@@ -235,9 +233,11 @@ public class BookShopService {
             if (book == null) {
                 throw new Exception();
             }
-//            TODO : Add avg rating to book
-//            TODO : remove content
-            return new Response(true, "Book details retrieved successfully", book);
+
+            int average = bookService.calculateAverageRating(book, bookShop.getReviews());
+            book.setAverageRating(average);
+            return new Response(true, "Book details retrieved successfully",
+                    BookDetailsResponse.makeDetailedFromBook(book, average));
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
         }

@@ -1,7 +1,10 @@
 package org.example.services;
 
+import org.example.entities.Review;
 import org.example.request.AddBookRequest;
 import org.example.entities.Book;
+
+import java.util.List;
 
 public class BookService {
 
@@ -32,6 +35,20 @@ public class BookService {
     public boolean isPublishedIn(Book book, int from, int to) {
         int publishedYear = book.getYear();
         return publishedYear >= from && publishedYear <= to;
+    }
+
+    public int calculateAverageRating(Book book, List<Review> reviews){
+        int number =0;
+        int ratingSum =0;
+        for (Review r : reviews) {
+            if (r.getBookTitle().equals(book.getTitle())) {
+                number++;
+                ratingSum += r.getRate();
+            }
+        }
+        if(number == 0)
+            return -1;
+        return ratingSum / number;
     }
 
     private boolean isBookValid(Book newBook){
