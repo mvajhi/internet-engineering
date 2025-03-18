@@ -23,7 +23,7 @@ public class BookShopController {
         return bookShopService.addAuthor(request).convertToString();
     }
 
-    @RequestMapping("/book")
+    @RequestMapping("/books")
     @PostMapping
     public String addBook(@RequestBody AddBookRequest request) {
         return bookShopService.addBook(request).convertToString();
@@ -41,7 +41,7 @@ public class BookShopController {
         return bookShopService.showAuthorDetails(authorName).convertToString();
     }
 
-    @RequestMapping("/book/{bookTitle}")
+    @RequestMapping("/books/{bookTitle}")
     @GetMapping
     public String getBook(@PathVariable String bookTitle) {
         return bookShopService.showBookDetails(bookTitle).convertToString();
@@ -72,8 +72,9 @@ public class BookShopController {
         return bookShopService.borrowBook(request).convertToString();
     }
 
-    @PostMapping("/review")
-    public String addReview(@RequestBody AddReviewRequest request) {
+    @PostMapping("/books/{bookTitle}/review")
+    public String addReview(@RequestBody AddReviewRequest request, @PathVariable String bookTitle) {
+        request.setTitle(bookTitle);
         return bookShopService.addReview(request).convertToString();
     }
 }
