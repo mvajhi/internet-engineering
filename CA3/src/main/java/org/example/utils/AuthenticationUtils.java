@@ -14,4 +14,11 @@ public class AuthenticationUtils {
     public static boolean loggedIn() {
         return loggedInUser != null;
     }
+
+    public static boolean loggedIn(User user) {
+        if(user != null && user == loggedInUser) {
+            return true;
+        }
+        return false;
+    }
 }

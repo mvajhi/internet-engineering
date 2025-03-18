@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import java.util.Objects;
+
 public class User {
     private String username;
     private String password;
@@ -50,6 +52,19 @@ public class User {
 
     public void reduceCredit(int credit){
         this.balance -= credit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return balance == user.balance && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && role == user.role && Objects.equals(address, user.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, email, role, address, balance);
     }
 }
 
