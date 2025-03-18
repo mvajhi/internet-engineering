@@ -66,5 +66,9 @@ public class User {
     public int hashCode() {
         return Objects.hash(username, password, email, role, address, balance);
     }
+
+    public boolean isAdmin(){
+        return Objects.equals(role, Role.ADMIN);
+    }
 }
 

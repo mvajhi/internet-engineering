@@ -6,19 +6,19 @@ import org.example.request.*;
 import org.example.response.*;
 import org.example.entities.*;
 
+import java.security.Permission;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.utils.AuthenticationUtils;
 import org.example.utils.DataLoaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.example.exeptions.*;
 
 @Service
 public class BookShopService {
@@ -74,7 +74,7 @@ public class BookShopService {
                 response = new Response(false, "user dont exist", null);
             }
         }
-        if (!bookShop.isUserAdmin(request.getUsername())) {
+        if (!bookShop.isUserAdmin(AuthenticationUtils.getUsername())) {
             response = new Response(false, "user is not admin", null);
         }
         this.bookShop.addAuthor(newAuthor);
@@ -91,7 +91,7 @@ public class BookShopService {
         if (!bookShop.isBookNameUnique(newBook.getTitle())) {
             return new Response(false, "book title is not unique", null);
         }
-        if (!bookShop.isUserAdmin(request.getUsername())) {
+        if (!bookShop.isUserAdmin(AuthenticationUtils.getUsername())) {
             return new Response(false, "user is not admin", null);
         }
         this.bookShop.addBook(newBook);
@@ -100,12 +100,12 @@ public class BookShopService {
     }
 
     public Response addShoppingCart(AddCartRequest request) {
-        if (!bookShop.isUserCustomer(request.getUsername())) {
+        if (!bookShop.isUserCustomer(AuthenticationUtils.getUsername())) {
             return new Response(false, "user is admin", null);
         }
-        Cart userCart = bookShop.getCartByUsername(request.getUsername());
+        Cart userCart = bookShop.getCartByUsername(AuthenticationUtils.getUsername());
         if (userCart == null) {
-            User user = bookShop.findUser(request.getUsername());
+            User user = bookShop.findUser(AuthenticationUtils.getUsername());
             if (user == null)
                 return new Response(false, "invalid username", null);
             userCart = new Cart();
@@ -125,12 +125,12 @@ public class BookShopService {
     }
 
     public Response borrowBook(BorrowBookRequest request) {
-        if (!bookShop.isUserCustomer(request.getUsername())) {
+        if (!bookShop.isUserCustomer(AuthenticationUtils.getUsername())) {
             return new Response(false, "user is admin", null);
         }
-        Cart userCart = bookShop.getCartByUsername(request.getUsername());
+        Cart userCart = bookShop.getCartByUsername(AuthenticationUtils.getUsername());
         if (userCart == null) {
-            User user = bookShop.findUser(request.getUsername());
+            User user = bookShop.findUser(AuthenticationUtils.getUsername());
             if (user == null)
                 return new Response(false, "invalid username", null);
             userCart = new Cart();
@@ -150,7 +150,7 @@ public class BookShopService {
 
     public Response addReview(AddReviewRequest request) {
         Review newReview = reviewService.createReview(request);
-        User user = bookShop.findUser(request.getUsername());
+        User user = bookShop.findUser(AuthenticationUtils.getUsername());
         Book book = bookShop.findBook(request.getBookTitle());
         if (user == null) {
             return new Response(false, "User not exist", null);
@@ -174,6 +174,11 @@ public class BookShopService {
             if (user == null) {
                 throw new Exception();
             }
+
+            if (!AuthenticationUtils.hasAccess(username)){
+                throw new NoPermissionException();
+            }
+
 //            TODO : admin does not have credit
             return new Response(true, "User details retrieved successfully.", user);
         } catch (Exception e) {
@@ -183,6 +188,9 @@ public class BookShopService {
 
     public Response showAuthorDetails(String name) {
         try {
+            if(!AuthenticationUtils.getLoggedInUser().isAdmin()) {
+                throw new NoPermissionException();
+            }
             Author author = bookShop.findAuthor(name);
             if (author == null) {
                 throw new Exception();
@@ -221,6 +229,7 @@ public class BookShopService {
 
     public Response showBookContent(String username, String title) {
         try {
+
             User user = bookShop.findUser(username);
             if (user == null) {
                 return new Response(false, "User not exist", null);
@@ -264,13 +273,13 @@ public class BookShopService {
     }
 
     public Response addCredit(AddCreditRequest request) {
-        if (!bookShop.isUserCustomer(request.getUsername())) {
+        if (!bookShop.isUserCustomer(AuthenticationUtils.getUsername())) {
             return new Response(false, "User Should Be Customer", null);
         }
         if (request.getCredit() < 1000) {
             return new Response(false, "Credit Should Be More Than 1000", null);
         }
-        userService.addCredit(bookShop.findUser(request.getUsername()), request.getCredit());
+        userService.addCredit(bookShop.findUser(AuthenticationUtils.getUsername()), request.getCredit());
         return new Response(true, "Credit added succesfully", null);
     }
 
