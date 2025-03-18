@@ -309,8 +309,8 @@ public class BookShopService {
         }
         this.bookShop.addRecipt(receipt);
         PurchaseCartResponse purchaseCartResponse = new PurchaseCartResponse();
-        purchaseCartResponse.setBookCount(receipt.getBooks().size());
-        purchaseCartResponse.setTotalCost(receipt.getBooks().stream().map(a -> a.getPrice()).reduce(0, (a, b) -> a + b));
+        purchaseCartResponse.setBookCount(receipt.getBooks().size() + receipt.getBorrowedBooks().size());
+        purchaseCartResponse.setTotalCost(receipt.getTotalPrice());
         purchaseCartResponse.setDate(receipt.getDate());
 
         bookShop.removeCart(userCart);

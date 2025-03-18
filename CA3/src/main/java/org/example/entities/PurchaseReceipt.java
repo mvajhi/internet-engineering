@@ -11,6 +11,15 @@ public class PurchaseReceipt {
     private LocalDateTime date;
     private boolean isSuccess;
     private String message;
+    private int totalPrice;
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice=totalPrice;
+    }
 
     public User getUser() {
         return user;
