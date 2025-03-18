@@ -1,18 +1,24 @@
 package org.example.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.request.*;
 import org.example.response.*;
 import org.example.entities.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.utils.DataLoaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class BookShopService {
@@ -27,8 +33,18 @@ public class BookShopService {
 
     public BookShopService(UserService userService) {
         this.userService = userService;
+        loadInitialData();
     }
 
+    private void loadInitialData() {
+        try {
+            DataLoaderUtil dataLoader = new DataLoaderUtil(bookShop);
+            dataLoader.loadAllData();
+        } catch (Exception e) {
+            System.err.println("Error loading initial data: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     public Response addUser(AddUserRequest request) {
         Response response = new Response(true, "User added successfully.", null);
         User newUser = userService.createUser(request);
