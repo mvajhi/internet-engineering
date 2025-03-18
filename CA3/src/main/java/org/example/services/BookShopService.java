@@ -104,7 +104,7 @@ public class BookShopService {
 
     }
 
-    public Response addShoppingCart(AddCartRequest request) {
+    public Response addShoppingCart(CartRequest request) {
         if (!bookShop.isUserCustomer(AuthenticationUtils.getUsername())) {
             return new Response(false, "user is admin", null);
         }
@@ -177,8 +177,6 @@ public class BookShopService {
 
     public Response addReview(AddReviewRequest request) {
         Review newReview = reviewService.createReview(request);
-        User user = bookShop.findUser(AuthenticationUtils.getUsername());
-        Book book = bookShop.findBook(request.getBookTitle());
         User user = bookShop.findUser(request.getUsername());
         Book book = bookShop.findBook(request.getTitle());
         if (user == null) {
