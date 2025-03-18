@@ -71,4 +71,9 @@ public class BookShopController {
     public String borrowBook(@RequestBody BorrowBookRequest request) {
         return bookShopService.borrowBook(request).convertToString();
     }
+
+    @PostMapping("/review")
+    public String addReview(@RequestBody AddReviewRequest request) {
+        return bookShopService.addReview(request).convertToString();
+    }
 }

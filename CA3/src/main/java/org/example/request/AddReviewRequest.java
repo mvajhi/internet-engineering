@@ -4,7 +4,7 @@ public class AddReviewRequest {
     int rating;
     String comment;
     String username;
-    String bookTitle;
+    String title;
 
     public int getRating() {
         return rating;
@@ -18,8 +18,8 @@ public class AddReviewRequest {
         return username;
     }
 
-    public String getBookTitle() {
-        return bookTitle;
+    public String getTitle() {
+        return title;
     }
 
     public void setRating(int rating) {
@@ -34,8 +34,8 @@ public class AddReviewRequest {
         this.username = username;
     }
 
-    public void setBookTitle(String bookTitle) {
-        this.bookTitle = bookTitle;
+    public void setTitle(String title) {
+        this.title=title;
     }
 }
 

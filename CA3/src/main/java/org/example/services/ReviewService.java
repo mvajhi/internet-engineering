@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReviewService {
     public Review createReview(AddReviewRequest request){
-        Review review = new Review(request.getUsername(), request.getBookTitle(),
+        Review review = new Review(request.getUsername(), request.getTitle(),
                 ratingIsValid(request.getRating()) ? request.getRating() : -1,
                 request.getComment());
         review.setDate(LocalDateTime.now());
