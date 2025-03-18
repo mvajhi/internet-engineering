@@ -108,4 +108,8 @@ public class UserService {
         }
         return isValid;
     }
+
+    public User findUser(String username) {
+        return bookShop.findUser(username);
+    }
 }

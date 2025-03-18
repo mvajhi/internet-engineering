@@ -22,36 +22,48 @@ public class Response {
         this.data = data;
     }
 
+    public static Response successful() {
+        return new Response(true, "successful", null);
+    }
+
+    public static Response fail() {
+        return new Response(false, "Bad request", null);
+    }
+
     public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(boolean success) {
+    public Response setSuccess(boolean success) {
         this.success = success;
+        return this;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public Response setMessage(String message) {
         this.message = message;
+        return this;
     }
 
     public Object getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public Response setData(Object data) {
         this.data = data;
+        return this;
     }
 
     public LocalDateTime getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(LocalDateTime timeStamp) {
+    public Response setTimeStamp(LocalDateTime timeStamp) {
         this.timeStamp=timeStamp;
+        return this;
     }
 
     public String convertToString() {
