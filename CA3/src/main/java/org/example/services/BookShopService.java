@@ -251,7 +251,7 @@ public class BookShopService {
             }
 //            TODO : Add avg rating to book
 //            TODO : remove date from comments
-            List<Review> reviewsList = this.bookShop.getReviews().stream().filter(e -> e.getBookTitle().equals(title)).toList();
+            List<Review> reviewsList = bookShop.findReviews(title);
             return new Response(true, "Book reviews retrieved successfully.", reviewsList);
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
