@@ -222,10 +222,10 @@ public class BookShopService {
             if (book == null) {
                 throw new Exception();
             }
-//            TODO : Add avg rating to book
-//            TODO : remove date from comments
             List<Review> reviewsList = bookShop.findReviews(title);
-            return new Response(true, "Book reviews retrieved successfully.", reviewsList);
+            float average = bookService.calculateAverageRating(book, bookShop.getReviews());
+            ShowReviewResponse showReviewResponse = new ShowReviewResponse(reviewsList, average);
+            return new Response(true, "Book reviews retrieved successfully.", showReviewResponse);
         } catch (Exception e) {
             return new Response(false, "Book not exist", null);
         }
