@@ -26,7 +26,8 @@ import org.example.exeptions.*;
 
 @Service
 public class BookShopService {
-    BookShop bookShop = new BookShop();
+    @Autowired
+    private BookShop bookShop;
 
     @Autowired
     UserService userService;
@@ -35,8 +36,9 @@ public class BookShopService {
     ReviewService reviewService = new ReviewService();
     ObjectMapper mapper = new ObjectMapper();
 
-    public BookShopService(UserService userService) {
+    public BookShopService(UserService userService, BookShop bookShop) {
         this.userService = userService;
+        this.bookShop = bookShop;
         userService.setBookService(bookService);
         mapper.registerModule(new JavaTimeModule());
         loadInitialData();
@@ -70,7 +72,7 @@ public class BookShopService {
     }
 
     public Response addAuthor(AddAuthorRequest request) {
-        Response response = new Response(true, "done", null);
+        Response response = new Response(true, "Author added successfully", null);
         Author newAuthor = authorService.createAuthor(request);
         if (!bookShop.isAuthorNameUnique(newAuthor.getName())) {
             try {
