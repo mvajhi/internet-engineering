@@ -1,19 +1,25 @@
 package org.example.services;
 
-import org.example.entities.BookShop;
-import org.example.entities.Review;
+import org.example.entities.*;
 import org.example.request.AddBookRequest;
-import org.example.entities.Book;
+import org.example.request.BookContentRequest;
+import org.example.response.BookContentResponse;
 import org.example.response.BookResponses;
+import org.example.response.Response;
 import org.example.utils.AuthenticationUtils;
 import org.example.utils.BookFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
+
+import static org.example.utils.TimeUtils.isStillInBorrowInterval;
 
 @Service
 public class BookService {
 
+    @Autowired
     private BookShop bookShop;
 
     public BookService(BookShop bookShop){
@@ -91,12 +97,12 @@ public class BookService {
                 result.add(book);
             }
         }
-        if (Objects.equals(bookFilter.getOrder(), "reviewNumber")) {
+        if (Objects.equals(bookFilter.getOrder(), "rating")) {
             result.forEach(book ->
                     book.setAverageRating(calculateAverageRating(book, bookShop.getReviews())));
             result.sort(Comparator.comparingDouble(Book::getAverageRating));
 
-        } else if(Objects.equals(bookFilter.getOrder(), "rating")){
+        } else if(Objects.equals(bookFilter.getOrder(), "reviewNumber")){
             result.forEach(book ->
                     book.setReviewNumber(getReviewNumber(book.getTitle())));
             result.sort(Comparator.comparingInt(Book::getReviewNumber));
@@ -111,11 +117,11 @@ public class BookService {
     }
 
     private boolean hasFilterCondition(Book book, BookFilter bookFilter) {
-        List<String> authors  = Optional.of(bookFilter.getAuthor())
+        List<String> authors  = Optional.ofNullable(bookFilter.getAuthor())
                 .orElse(List.of(book.getAuthor().getName()));
-        List<String> titles  = Optional.of(bookFilter.getTitle())
+        List<String> titles  = Optional.ofNullable(bookFilter.getTitle())
                 .orElse(List.of(book.getTitle()));
-        List<String> genres  = Optional.of(bookFilter.getGenre())
+        List<String> genres  = Optional.ofNullable(bookFilter.getGenre())
                 .orElse(book.getGenres());
 
         if (titles.contains(book.getTitle()) && authors.contains(book.getAuthor().getName())) {

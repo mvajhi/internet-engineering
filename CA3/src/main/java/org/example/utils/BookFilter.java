@@ -18,6 +18,10 @@ public class BookFilter {
         return inverse;
     }
 
+    public void setInverse(boolean inverse) {
+        this.inverse = inverse;
+    }
+
     public String getOrder() {
         return order;
     }
@@ -65,5 +69,13 @@ public class BookFilter {
 
     public int getPageSize() {
         return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }

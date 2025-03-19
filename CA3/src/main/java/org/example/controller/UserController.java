@@ -9,6 +9,8 @@ import org.example.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -22,8 +24,12 @@ public class UserController {
         if (user == null || AuthenticationUtils.loggedIn()) {
             return Response.fail();
         }
-        AuthenticationUtils.login(user);
-        return Response.successful();
+        if(Objects.equals(request.getPassword(), user.getPassword())) {
+            AuthenticationUtils.login(user);
+            return Response.successful();
+        } else {
+            return new Response(false, "password incorrect", null);
+        }
     }
 
     @PostMapping("/logout")

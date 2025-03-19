@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.example.exeptions.*;
 
+import static org.example.utils.TimeUtils.isStillInBorrowInterval;
+
 @Service
 public class BookShopService {
     @Autowired
@@ -35,34 +37,6 @@ public class BookShopService {
         userService.setBookService(bookService);
         mapper.registerModule(new JavaTimeModule());
         loadInitialData();
-    }
-
-    public boolean hasBook(User user, Book book)
-    {
-        for (PurchaseReceipt receipt : bookShop.getReceipts()) {
-            if(!receipt.isSuccess())
-                continue;
-            if(!receipt.getUser().getUsername().equals(user.getUsername()))
-                continue;
-            if(receipt.getBooks().contains(book))
-                return true;
-            if(receipt.getBorrowedBooks().containsKey(book))
-            {
-                LocalDateTime date = receipt.getDate();
-                int borrowedDays = receipt.getBorrowedBooks().get(book);
-
-                if (isInBorrow(date, borrowedDays)) return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean isInBorrow(LocalDateTime date, int borrowedDays) {
-        LocalDateTime now = LocalDateTime.now();
-        long diff = java.time.Duration.between(date, now).toDays();
-        if(diff <= borrowedDays)
-            return true;
-        return false;
     }
 
     private void loadInitialData() {
@@ -202,7 +176,7 @@ public class BookShopService {
             return auth;
         if (book == null)
             return new Response(false, "Book not exist", null);
-        if (!hasBook(user, book))
+        if (!bookService.hasBook(user, book))
             return new Response(false, "User has not purchased this book", null);
         if (newReview.getRate() < 1 || newReview.getRate() > 5)
             return new Response(false, "invalid rate", null);
@@ -429,7 +403,7 @@ public class BookShopService {
         for (PurchaseReceipt receipt : bookShop.getReceiptsByUsername(user.getUsername())) {
             books.addAll(userService.getBookResponsesList(receipt.getBooks()));
             for (Map.Entry<Book, Integer> entry : receipt.getBorrowedBooks().entrySet()) {
-                if (isInBorrow(receipt.getDate(), entry.getValue())) {
+                if (isStillInBorrowInterval(receipt.getDate(), entry.getValue())) {
                     books.add(userService.getBookResponse(entry));
                 }
             }
