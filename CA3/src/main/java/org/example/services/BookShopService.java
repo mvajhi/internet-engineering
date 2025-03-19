@@ -1,18 +1,12 @@
 package org.example.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.request.*;
 import org.example.response.*;
 import org.example.entities.*;
 
-import java.security.Permission;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +15,6 @@ import org.example.utils.AuthenticationUtils;
 import org.example.utils.DataLoaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.example.exeptions.*;
 
 @Service
@@ -42,6 +35,34 @@ public class BookShopService {
         userService.setBookService(bookService);
         mapper.registerModule(new JavaTimeModule());
         loadInitialData();
+    }
+
+    public boolean hasBook(User user, Book book)
+    {
+        for (PurchaseReceipt receipt : bookShop.getReceipts()) {
+            if(!receipt.isSuccess())
+                continue;
+            if(!receipt.getUser().getUsername().equals(user.getUsername()))
+                continue;
+            if(receipt.getBooks().contains(book))
+                return true;
+            if(receipt.getBorrowedBooks().containsKey(book))
+            {
+                LocalDateTime date = receipt.getDate();
+                int borrowedDays = receipt.getBorrowedBooks().get(book);
+
+                if (isInBorrow(date, borrowedDays)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isInBorrow(LocalDateTime date, int borrowedDays) {
+        LocalDateTime now = LocalDateTime.now();
+        long diff = java.time.Duration.between(date, now).toDays();
+        if(diff <= borrowedDays)
+            return true;
+        return false;
     }
 
     private void loadInitialData() {

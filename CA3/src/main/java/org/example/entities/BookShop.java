@@ -148,28 +148,6 @@ public class BookShop {
         return true;
     }
 
-    public boolean hasBook(User user, Book book)
-    {
-        for (PurchaseReceipt receipt : receipts) {
-            if(!receipt.isSuccess())
-                continue;
-            if(!receipt.getUser().getUsername().equals(user.getUsername()))
-                continue;
-            if(receipt.getBooks().contains(book))
-                return true;
-            if(receipt.getBorrowedBooks().containsKey(book))
-            {
-                LocalDateTime now = LocalDateTime.now();
-                LocalDateTime date = receipt.getDate();
-                long diff = java.time.Duration.between(date, now).toDays();
-                int borrowedDays = receipt.getBorrowedBooks().get(book);
-                if(diff <= borrowedDays)
-                    return true;
-            }
-        }
-        return false;
-    }
-
     public Book findBook(String title) {
         for (Book book : books) {
             if (book.getTitle().equals(title)) {
