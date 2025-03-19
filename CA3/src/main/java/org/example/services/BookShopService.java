@@ -211,7 +211,7 @@ public class BookShopService {
         if (book == null) {
             return new Response(false, "Book not exist", null);
         }
-        if (!bookShop.hasBook(user, book)) {
+        if (!hasBook(user, book)) {
             return new Response(false, "User has not purchased this book", null);
         }
         this.bookShop.addReview(newReview);
@@ -415,7 +415,7 @@ public class BookShopService {
         if (book == null) {
             return new Response(false, "Book not exist", null);
         }
-        if (!bookShop.hasBook(user, book)) {
+        if (!hasBook(user, book)) {
             return new Response(false, "User has not purchased this book", null);
         }
         BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
@@ -437,5 +437,46 @@ public class BookShopService {
             this.bookShop.addBasket(userCart);
         }
         return new Response(true, "Buy cart retrieved successfully", userService.showShoppingCart(userCart));
+    }
+
+    public Response showShoppingCartHistory(ShowHistoryRequest request) {
+        if (!bookShop.isUserCustomer(request.getUsername()))
+            return new Response(false, "user is admin", null);
+        User user = bookShop.findUser(request.getUsername());
+        if (user == null)
+            return new Response(false, "invalid username", null);
+
+        BuyHistoryResponse buyHistoryResponse = new BuyHistoryResponse();
+        buyHistoryResponse.setUsername(user.getUsername());
+        List<PurchaseHistoryResponse> purchaseHistoryResponses = new ArrayList<>();
+
+        for (PurchaseReceipt receipt : bookShop.getReceiptsByUsername(user.getUsername())) {
+            List<BookResponses> books=userService.getBookResponsesList(receipt.getBooks(), receipt.getBorrowedBooks());
+            purchaseHistoryResponses.add(new PurchaseHistoryResponse(receipt.getDate(), receipt.getTotalPrice(), books));
+        }
+
+        buyHistoryResponse.setPurchasesHistory(purchaseHistoryResponses);
+        return new Response(true, "Buy cart retrieved successfully", buyHistoryResponse);
+    }
+
+    public Response showBooks(ShowHistoryRequest request) {
+        if (!bookShop.isUserCustomer(request.getUsername()))
+            return new Response(false, "user is admin", null);
+        User user = bookShop.findUser(request.getUsername());
+        if (user == null)
+            return new Response(false, "invalid username", null);
+
+        List<BookResponses> books = new ArrayList<>();
+        for (PurchaseReceipt receipt : bookShop.getReceiptsByUsername(user.getUsername())) {
+            books.addAll(userService.getBookResponsesList(receipt.getBooks()));
+            for (Map.Entry<Book, Integer> entry : receipt.getBorrowedBooks().entrySet()) {
+                if (isInBorrow(receipt.getDate(), entry.getValue())) {
+                    books.add(userService.getBookResponse(entry));
+                }
+            }
+        }
+
+        UserBookResponse userBookResponse = new UserBookResponse(user.getUsername(), books);
+        return new Response(true, "Books retrieved successfully", userBookResponse);
     }
 }
