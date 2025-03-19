@@ -73,6 +73,10 @@ public class BookService {
         return ratingSum / number;
     }
 
+    private int getReviewNumber(String bookTitle) {
+        return (int) bookShop.getReviews().stream().filter(r -> r.getBookTitle().equals(bookTitle)).count();
+    }
+
     private boolean isBookValid(Book newBook){
         return newBook.getGenres().size() <= 1;
     }
@@ -87,6 +91,19 @@ public class BookService {
                 result.add(book);
             }
         }
+        if (Objects.equals(bookFilter.getOrder(), "reviewNumber")) {
+            result.forEach(book ->
+                    book.setAverageRating(calculateAverageRating(book, bookShop.getReviews())));
+            result.sort(Comparator.comparingInt(Book::getAverageRating));
+
+        } else if(Objects.equals(bookFilter.getOrder(), "rating")){
+            result.forEach(book ->
+                    book.setReviewNumber(getReviewNumber(book.getTitle())));
+            result.sort(Comparator.comparingInt(Book::getReviewNumber));
+        }
+
+        if(bookFilter.isInverse())
+            result = result.reversed();
         int pageSize = bookFilter.getPageSize() <= 0 ? 10 : bookFilter.getPageSize();
         int start = pageSize * bookFilter.getPage();
         int end = Integer.min(result.size(), pageSize * (bookFilter.getPage() + 1));

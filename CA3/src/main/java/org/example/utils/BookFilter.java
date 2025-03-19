@@ -10,6 +10,18 @@ public class BookFilter {
     int page;
     int pageSize;
 
+    String order;
+
+    boolean inverse;
+
+    public boolean isInverse() {
+        return inverse;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
     public List<String> getTitle() {
         return title;
     }

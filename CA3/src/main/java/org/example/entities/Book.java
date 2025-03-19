@@ -13,6 +13,7 @@ public class Book {
     private String publisher;
 
     private int averageRating;
+    private int reviewNumber;
 
     public Book(String title, Author author, String publisher, int year, int price, String synopsis, String content, List<String> genres) {
         this.title = title;
@@ -71,5 +72,17 @@ public class Book {
 
     public void setAverageRating(int averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public int getAverageRating() {
+        return averageRating;
+    }
+
+    public int getReviewNumber() {
+        return reviewNumber;
+    }
+
+    public void setReviewNumber(int reviewNumber) {
+        this.reviewNumber = reviewNumber;
     }
 }
