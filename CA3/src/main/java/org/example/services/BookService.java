@@ -53,7 +53,7 @@ public class BookService {
         return publishedYear >= from && publishedYear <= to;
     }
 
-    public BookResponses createBookResponse(Book book) {
+    public BookResponses createTmpBookResponse(Book book) {
         return new BookResponses(book.getTitle(),
                 book.getAuthor().getName(), book.getPublisher(),
                 book.getGenres(), book.getYear(), book.getPrice());

@@ -1,6 +1,5 @@
 package org.example.services;
 
-import org.example.config.BookShopConfig;
 import org.example.entities.*;
 import org.example.request.AddUserRequest;
 import org.example.response.BookResponses;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
@@ -93,22 +93,49 @@ public class UserService {
         CartResponses cartResponses = new CartResponses();
         cartResponses.setUsername(cart.getUser().getUsername());
         cartResponses.setTotalCost(getTotalPrice(cart));
-        List<BookResponses> bookResponses = new ArrayList<>();
-        for (Book book : cart.getPurchasedBooks()) {
-            BookResponses bookResponse = bookService.createBookResponse(book);
-            bookResponse.setBorrowed(false);
-            bookResponse.setFinalPrice(bookResponse.getPrice());
-            bookResponses.add(bookResponse);
-        }
-        for (Book book : cart.getBorrowedBooks().keySet()) {
-            BookResponses bookResponse = bookService.createBookResponse(book);
-            bookResponse.setBorrowed(true);
-            bookResponse.setFinalPrice(bookResponse.getPrice() * cart.getBorrowedBooks().get(book) / 10);
-            bookResponse.setBorrowedDays(cart.getBorrowedBooks().get(book));
-            bookResponses.add(bookResponse);
-        }
-        cartResponses.setItems(bookResponses);
+        cartResponses.setItems(getBookResponsesList(cart.getPurchasedBooks(), cart.getBorrowedBooks()));
         return cartResponses;
+    }
+
+    public List<BookResponses> getBookResponsesList(List<Book> purchasedBooks, Map<Book, Integer> borrowedBooks) {
+        List<BookResponses> bookResponses=getBookResponsesList(purchasedBooks);
+        bookResponses.addAll(getBookResponsesList(borrowedBooks));
+        return bookResponses;
+    }
+
+    public List<BookResponses> getBookResponsesList(Map<Book, Integer> borrowedBooks) {
+        List<BookResponses> bookResponses = new ArrayList<>();
+        for (Map.Entry<Book, Integer> entry : borrowedBooks.entrySet()) {
+            BookResponses bookResponse=getBookResponse(entry);
+            bookResponses.add(bookResponse);
+        }
+        return bookResponses;
+    }
+
+    public BookResponses getBookResponse(Map.Entry<Book, Integer> entry) {
+        Book book = entry.getKey();
+        Integer borrowedDays = entry.getValue();
+        BookResponses bookResponse = bookService.createTmpBookResponse(book);
+        bookResponse.setBorrowed(true);
+        bookResponse.setFinalPrice(bookResponse.getPrice() * borrowedDays / 10);
+        bookResponse.setBorrowedDays(borrowedDays);
+        return bookResponse;
+    }
+
+    public List<BookResponses> getBookResponsesList(List<Book> purchasedBooks) {
+        List<BookResponses> bookResponses = new ArrayList<>();
+        for (Book book : purchasedBooks) {
+            BookResponses bookResponse=getBookResponse(book);
+            bookResponses.add(bookResponse);
+        }
+        return bookResponses;
+    }
+
+    public BookResponses getBookResponse(Book book) {
+        BookResponses bookResponse = bookService.createTmpBookResponse(book);
+        bookResponse.setBorrowed(false);
+        bookResponse.setFinalPrice(bookResponse.getPrice());
+        return bookResponse;
     }
 
     public void addCredit(User user, int credit) {
