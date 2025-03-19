@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.response.Response;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +127,22 @@ public class BookShop {
             }
         }
         return false;
+    }
+
+    public Response checkUser(String username, Role role)
+    {
+        if (username == null)
+            return new Response(false, "No users logged in.", null);
+
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                if (role == null || user.getRole().equals(role))
+                    return new Response(true, "", null);
+                return new Response(false, "user is " + (role.equals(Role.ADMIN) ? "not " : "") + "admin", null);
+            }
+        }
+
+        return new Response(false, "invalid username", null);
     }
 
     public boolean isUserCustomer(String username) {

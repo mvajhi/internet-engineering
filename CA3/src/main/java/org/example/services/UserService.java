@@ -32,31 +32,27 @@ public class UserService {
     }
 
     public Response addUser(AddUserRequest request) {
-        Response response = new Response(true, "User added successfully.", null);
         User newUser = createUser(request);
-        if (newUser == null) {
-            return new Response(false, "invalid user parameter", null);
-        }
-        if (!bookShop.isEmailUnique(newUser.getEmail())) {
-            response.setSuccess(false);
-            response.setMessage("Email is not unique");
-        }
-        if (!bookShop.isUsernameUnique(newUser.getUsername())) {
-            response.setSuccess(false);
-            response.setMessage("username is not unique");
-        }
+        Response validate = validateUser(newUser);
+        if (!validate.isSuccess())
+            return validate;
+        if (!bookShop.isEmailUnique(newUser.getEmail()))
+            return new Response(false, "email is not unique", null);
+        if (!bookShop.isUsernameUnique(newUser.getUsername()))
+            return new Response(false, "username is not unique", null);
         this.bookShop.addUser(newUser);
-        return response;
+        return new Response(true, "User added successfully.", null);
     }
 
     public User createUser(AddUserRequest request) {
-        User newUser = new User(request.getUsername(), request.getPassword(), request.getEmail(),
-                getRoleByString(request.getRole()),
-                getAddressByString(request.getAddress().getCountry(), request.getAddress().getCity()));
-        boolean isUserValid = isUserValid(newUser);
-        if (!isUserValid)
-            return null;
-        return newUser;
+        String username = request.getUsername() != null ? request.getUsername() : "";
+        String password = request.getPassword() != null ? request.getPassword() : "";
+        String email = request.getEmail() != null ? request.getEmail() : "";
+        Role role = request.getRole() != null ? getRoleByString(request.getRole()) : null;
+        String country = request.getAddress() != null && request.getAddress().getCountry() != null ? request.getAddress().getCountry() : "";
+        String city = request.getAddress() != null && request.getAddress().getCity() != null ? request.getAddress().getCity() : "";
+
+        return new User(username, password, email, role, getAddressByString(country, city));
     }
 
     public PurchaseReceipt finishPurchase(Cart cart) {
@@ -66,7 +62,7 @@ public class UserService {
             receipt.setMessage("Empty Book List");
             return receipt;
         }
-        int totalPrice =getTotalPrice(cart);
+        int totalPrice = getTotalPrice(cart);
         if (cart.getUser().getBalance() < totalPrice) {
             receipt.setSuccess(false);
             receipt.setMessage("User Credit Is Not Enough");
@@ -154,23 +150,24 @@ public class UserService {
         return new Address(country, city);
     }
 
-    private boolean isUserValid(User newUser) {
-        boolean isValid = true;
+    private Response validateUser(User newUser) {
+        boolean isValid = false;
+        String error = "";
         Pattern usernamePattern = Pattern.compile("^[0-9a-z_-]+$", Pattern.CASE_INSENSITIVE);
-        Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$", Pattern.CASE_INSENSITIVE);
-        if (!usernamePattern.matcher(newUser.getUsername()).matches()) {
-            isValid = false;
-        }
-        if (newUser.getPassword().length() < 4) {
-            isValid = false;
-        }
-        if (!emailPattern.matcher(newUser.getEmail()).matches()) {
-            isValid = false;
-        }
-        if (newUser.getRole() == null) {
-            isValid = false;
-        }
-        return isValid;
+        Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", Pattern.CASE_INSENSITIVE);
+        if (!usernamePattern.matcher(newUser.getUsername()).matches())
+            error = "invalid username";
+        else if (newUser.getPassword().length() < 4)
+            error = "password is too short, less than 4";
+        else if (!emailPattern.matcher(newUser.getEmail()).matches())
+            error = "invalid email";
+        else if (newUser.getRole() == null)
+            error = "invalid role";
+        else if (newUser.getAddress().getCity().isEmpty() || newUser.getAddress().getCountry().isEmpty())
+            error = "invalid address";
+        else
+            isValid = true;
+        return new Response(isValid, error, null);
     }
 
     public User findUser(String username) {

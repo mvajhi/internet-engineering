@@ -7,13 +7,21 @@ import java.util.List;
 
 public class BookDetailsResponse {
     private String title;
-    private Author author;
+    private String author;
     private int year;
     private List<String> genres;
     private int price;
     private String synopsis;
-    private int averageRating;
+    private float averageRating;
     private String publisher;
+
+    public float getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(float averageRating) {
+        this.averageRating=averageRating;
+    }
 
     public String getTitle() {
         return title;
@@ -23,11 +31,11 @@ public class BookDetailsResponse {
         this.title = title;
     }
 
-    public Author getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
@@ -63,13 +71,6 @@ public class BookDetailsResponse {
         this.synopsis = synopsis;
     }
 
-    public int getContent() {
-        return averageRating;
-    }
-
-    public void setContent(int content) {
-        this.averageRating = content;
-    }
 
     public String getPublisher() {
         return publisher;
@@ -79,11 +80,11 @@ public class BookDetailsResponse {
         this.publisher = publisher;
     }
 
-    public static BookDetailsResponse makeDetailedFromBook(Book book, int averageRating) {
+    public static BookDetailsResponse makeDetailedFromBook(Book book, float averageRating) {
         var b = new BookDetailsResponse();
         b.averageRating = averageRating;
         b.title = book.getTitle();
-        b.author = book.getAuthor();
+        b.author = book.getAuthor().getName();
         b.year = book.getYear();
         b.genres = book.getGenres();
         b.price = book.getPrice();

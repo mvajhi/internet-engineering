@@ -59,9 +59,9 @@ public class BookService {
                 book.getGenres(), book.getYear(), book.getPrice());
     }
 
-    public int calculateAverageRating(Book book, List<Review> reviews){
-        int number =0;
-        int ratingSum =0;
+    public float calculateAverageRating(Book book, List<Review> reviews){
+        float number =0;
+        float ratingSum =0;
         for (Review r : reviews) {
             if (r.getBookTitle().equals(book.getTitle())) {
                 number++;
@@ -69,7 +69,7 @@ public class BookService {
             }
         }
         if(number == 0)
-            return -1;
+            return 0;
         return ratingSum / number;
     }
 
@@ -94,7 +94,7 @@ public class BookService {
         if (Objects.equals(bookFilter.getOrder(), "reviewNumber")) {
             result.forEach(book ->
                     book.setAverageRating(calculateAverageRating(book, bookShop.getReviews())));
-            result.sort(Comparator.comparingInt(Book::getAverageRating));
+            result.sort(Comparator.comparingDouble(Book::getAverageRating));
 
         } else if(Objects.equals(bookFilter.getOrder(), "rating")){
             result.forEach(book ->

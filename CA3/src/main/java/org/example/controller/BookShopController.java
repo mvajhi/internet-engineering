@@ -57,6 +57,11 @@ public class BookShopController {
         return bookShopService.showShoppingCart(request).convertToString();
     }
 
+    @PostMapping("/cart/borrow")
+    public String borrowBook(@RequestBody BorrowBookRequest request) {
+        return bookShopService.borrowBook(request).convertToString();
+    }
+
     @PostMapping("/credit")
     public String addCredit(@RequestBody AddCreditRequest request) {
         return bookShopService.addCredit(request).convertToString();
@@ -75,11 +80,6 @@ public class BookShopController {
     @GetMapping("/purchase/history")
     public String getCartHistory(@RequestBody ShowHistoryRequest request) {
         return bookShopService.showShoppingCartHistory(request).convertToString();
-    }
-
-    @PostMapping("/borrow")
-    public String borrowBook(@RequestBody BorrowBookRequest request) {
-        return bookShopService.borrowBook(request).convertToString();
     }
 
     @PostMapping("/books/{bookTitle}/review")

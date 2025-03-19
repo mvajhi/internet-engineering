@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Objects;
 
 public class User {
@@ -8,7 +10,8 @@ public class User {
     private String email;
     private Role role;
     private Address address;
-    private int balance;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer balance;
 
     public User(String username, String password, String email, Role role, Address address) {
         this.username = username;
@@ -16,7 +19,10 @@ public class User {
         this.email = email;
         this.role = role;
         this.address = address;
-        this.balance = 0;
+        if (role == Role.ADMIN)
+            this.balance = null;
+        else
+            this.balance = 0;
     }
 
     public User() {
@@ -27,7 +33,7 @@ public class User {
     public String getEmail() { return email; }
     public Role getRole() { return role; }
     public Address getAddress() { return address; }
-    public int getBalance() { return balance; }
+    public Integer getBalance() { return balance; }
 
     public void setUsername(String username) {
         this.username = username;

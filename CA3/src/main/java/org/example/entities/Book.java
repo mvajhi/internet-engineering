@@ -12,7 +12,7 @@ public class Book {
     private String content;
     private String publisher;
 
-    private int averageRating;
+    private float averageRating;
     private int reviewNumber;
 
     public Book(String title, Author author, String publisher, int year, int price, String synopsis, String content, List<String> genres) {
@@ -70,11 +70,11 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public void setAverageRating(int averageRating) {
+    public void setAverageRating(float averageRating) {
         this.averageRating = averageRating;
     }
 
-    public int getAverageRating() {
+    public float getAverageRating() {
         return averageRating;
     }
 
