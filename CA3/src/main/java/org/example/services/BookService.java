@@ -1,16 +1,20 @@
 package org.example.services;
 
-import org.example.entities.BookShop;
-import org.example.entities.Review;
+import org.example.entities.*;
 import org.example.request.AddBookRequest;
-import org.example.entities.Book;
+import org.example.request.BookContentRequest;
+import org.example.response.BookContentResponse;
 import org.example.response.BookResponses;
+import org.example.response.Response;
 import org.example.utils.AuthenticationUtils;
 import org.example.utils.BookFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
+
+import static org.example.utils.TimeUtils.isStillInBorrowInterval;
 
 @Service
 public class BookService {
@@ -59,6 +63,45 @@ public class BookService {
         return new BookResponses(book.getTitle(),
                 book.getAuthor().getName(), book.getPublisher(),
                 book.getGenres(), book.getYear(), book.getPrice());
+    }
+
+    public Response getBookContent(BookContentRequest request) {
+        User user = bookShop.findUser(request.getUsername());
+        Book book = bookShop.findBook(request.getTitle());
+        if (user == null) {
+            return new Response(false, "User not exist", null);
+        }
+        if (user.getRole() != Role.CUSTOMER) {
+            return new Response(false, "User is not customer", null);
+        }
+        if (book == null) {
+            return new Response(false, "Book not exist", null);
+        }
+        if (!hasBook(user, book)) {
+            return new Response(false, "User has not purchased this book", null);
+        }
+        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
+        return new Response(true, "Book content retrieved successfully.", response);
+    }
+
+    public boolean hasBook(User user, Book book)
+    {
+        for (PurchaseReceipt receipt : bookShop.getReceipts()) {
+            if(!receipt.isSuccess())
+                continue;
+            if(!receipt.getUser().getUsername().equals(user.getUsername()))
+                continue;
+            if(receipt.getBooks().contains(book))
+                return true;
+            if(receipt.getBorrowedBooks().containsKey(book))
+            {
+                LocalDateTime date = receipt.getDate();
+                int borrowedDays = receipt.getBorrowedBooks().get(book);
+
+                if (isStillInBorrowInterval(date, borrowedDays)) return true;
+            }
+        }
+        return false;
     }
 
     public int calculateAverageRating(Book book, List<Review> reviews){
