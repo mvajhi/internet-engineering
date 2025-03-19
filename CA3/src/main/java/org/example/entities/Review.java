@@ -1,5 +1,8 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
 
 public class Review {
@@ -7,6 +10,7 @@ public class Review {
     private String bookTitle;
     private int rate;
     private String comment;
+    @JsonIgnore
     private LocalDateTime date;
 
     public Review(String username, String bookTitle, int rate, String comment) {
