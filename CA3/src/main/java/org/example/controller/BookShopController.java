@@ -6,16 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 public class BookShopController {
 
     @Autowired
     BookShopService bookShopService;
-
-    @RequestMapping("/user")
-    @PostMapping
-    public String addUser(@RequestBody AddUserRequest request) {
-        return bookShopService.addUser(request).convertToString();
-    }
 
     @RequestMapping("/author")
     @PostMapping
