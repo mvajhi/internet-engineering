@@ -200,4 +200,8 @@ public class BookShop {
     public List<Review> getReviews() {
         return reviews;
     }
+
+    public List<Review> findReviews(String title) {
+        return reviews.stream().filter(e -> e.getBookTitle().equals(title)).toList();
+    }
 }
