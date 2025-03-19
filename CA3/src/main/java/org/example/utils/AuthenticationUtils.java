@@ -11,7 +11,11 @@ public class AuthenticationUtils {
     public static User loggedInUser;
 
     public static void login(User user) {
-        loggedInUser = user;
+        loggedInUser = user.copy();
+    }
+
+    public static void logout() {
+        loggedInUser = null;
     }
 
     public static boolean loggedIn() {

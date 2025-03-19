@@ -19,6 +19,9 @@ public class User {
         this.balance = 0;
     }
 
+    public User() {
+    }
+
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public String getEmail() { return email; }
@@ -69,6 +72,14 @@ public class User {
 
     public boolean isAdmin(){
         return Objects.equals(role, Role.ADMIN);
+    }
+
+    public User copy() {
+        User userCopy = new User();
+        userCopy.username = username;
+        userCopy.role = role;
+        userCopy.email = email;
+        return userCopy;
     }
 }
 

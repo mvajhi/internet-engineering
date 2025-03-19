@@ -1,13 +1,28 @@
 package org.example.services;
 
+import org.example.entities.BookShop;
 import org.example.entities.Review;
 import org.example.request.AddBookRequest;
 import org.example.entities.Book;
 import org.example.response.BookResponses;
+import org.example.utils.AuthenticationUtils;
+import org.example.utils.BookFilter;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
+@Service
 public class BookService {
+
+    private BookShop bookShop;
+
+    public BookService(BookShop bookShop){
+        this.bookShop = bookShop;
+    }
+
+    public BookService(){
+
+    }
 
     public Book createBook(AddBookRequest request) {
         Book newBook = new Book();
@@ -60,5 +75,39 @@ public class BookService {
 
     private boolean isBookValid(Book newBook){
         return newBook.getGenres().size() <= 1;
+    }
+
+    public List<Book> paginatedSearch(BookFilter bookFilter) {
+        if (!AuthenticationUtils.loggedIn()){
+            return null;
+        }
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookShop.getBooks()) {
+            if(hasFilterCondition(book, bookFilter)) {
+                result.add(book);
+            }
+        }
+        int pageSize = bookFilter.getPageSize() <= 0 ? 10 : bookFilter.getPageSize();
+        int start = pageSize * bookFilter.getPage();
+        int end = Integer.min(result.size(), pageSize * (bookFilter.getPage() + 1));
+        return result.subList(start, end);
+    }
+
+    private boolean hasFilterCondition(Book book, BookFilter bookFilter) {
+        List<String> authors  = Optional.of(bookFilter.getAuthor())
+                .orElse(List.of(book.getAuthor().getName()));
+        List<String> titles  = Optional.of(bookFilter.getTitle())
+                .orElse(List.of(book.getTitle()));
+        List<String> genres  = Optional.of(bookFilter.getGenre())
+                .orElse(book.getGenres());
+
+        if (titles.contains(book.getTitle()) && authors.contains(book.getAuthor().getName())) {
+            if (bookFilter.getYear() == 0 || bookFilter.getYear() == book.getYear()) {
+                if (new HashSet<>(book.getGenres()).containsAll(genres)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
