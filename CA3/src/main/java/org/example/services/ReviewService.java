@@ -6,11 +6,13 @@ import java.util.List;
 import org.example.entities.BookShop;
 import org.example.request.AddReviewRequest;
 import org.example.entities.Review;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReviewService {
 
+    @Autowired
     BookShop bookShop;
 
     public ReviewService(BookShop bookShop){
@@ -19,9 +21,15 @@ public class ReviewService {
 
     public ReviewService(){}
 
-    public List<Review> paginatedSearch(String title, int page, int pageSize) {
+    public List<Review> paginatedSearch(String title, Integer page, Integer pageSize) {
         List<Review> reviews = bookShop.findReviews(title);
-        return reviews.subList(page * pageSize, (page + 1) * (pageSize));
+        if (page == null)
+            page =0;
+        if (pageSize == null)
+            pageSize = 10;
+        int start = page * pageSize;
+        int end = Integer.min(reviews.size(), pageSize * (page +1));
+        return reviews.subList(start, end);
     }
 
     public Review createReview(AddReviewRequest request){

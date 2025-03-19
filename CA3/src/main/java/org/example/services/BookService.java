@@ -7,6 +7,7 @@ import org.example.entities.Book;
 import org.example.response.BookResponses;
 import org.example.utils.AuthenticationUtils;
 import org.example.utils.BookFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,6 +15,7 @@ import java.util.*;
 @Service
 public class BookService {
 
+    @Autowired
     private BookShop bookShop;
 
     public BookService(BookShop bookShop){
@@ -91,12 +93,12 @@ public class BookService {
                 result.add(book);
             }
         }
-        if (Objects.equals(bookFilter.getOrder(), "reviewNumber")) {
+        if (Objects.equals(bookFilter.getOrder(), "rating")) {
             result.forEach(book ->
                     book.setAverageRating(calculateAverageRating(book, bookShop.getReviews())));
             result.sort(Comparator.comparingInt(Book::getAverageRating));
 
-        } else if(Objects.equals(bookFilter.getOrder(), "rating")){
+        } else if(Objects.equals(bookFilter.getOrder(), "reviewNumber")){
             result.forEach(book ->
                     book.setReviewNumber(getReviewNumber(book.getTitle())));
             result.sort(Comparator.comparingInt(Book::getReviewNumber));
@@ -111,11 +113,11 @@ public class BookService {
     }
 
     private boolean hasFilterCondition(Book book, BookFilter bookFilter) {
-        List<String> authors  = Optional.of(bookFilter.getAuthor())
+        List<String> authors  = Optional.ofNullable(bookFilter.getAuthor())
                 .orElse(List.of(book.getAuthor().getName()));
-        List<String> titles  = Optional.of(bookFilter.getTitle())
+        List<String> titles  = Optional.ofNullable(bookFilter.getTitle())
                 .orElse(List.of(book.getTitle()));
-        List<String> genres  = Optional.of(bookFilter.getGenre())
+        List<String> genres  = Optional.ofNullable(bookFilter.getGenre())
                 .orElse(book.getGenres());
 
         if (titles.contains(book.getTitle()) && authors.contains(book.getAuthor().getName())) {

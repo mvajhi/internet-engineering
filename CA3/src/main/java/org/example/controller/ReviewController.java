@@ -11,15 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/api/reviews")
 public class ReviewController {
 
     @Autowired
     ReviewService reviewService;
 
-    @PostMapping("/search")
+    @GetMapping ("/search")
     @Description("search review base on book title")
-    public List<Review> search(@RequestParam String title, @RequestParam int page, @RequestParam int pageSize){
+    public List<Review> search(@RequestParam String title, @RequestParam(required = false) Integer page,
+                               @RequestParam(required = false) Integer pageSize){
         return reviewService.paginatedSearch(title, page, pageSize);
     }
 }

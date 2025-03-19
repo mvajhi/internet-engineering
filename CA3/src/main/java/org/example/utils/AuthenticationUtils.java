@@ -30,6 +30,9 @@ public class AuthenticationUtils {
     }
 
     public static String getUsername(){
+        if (loggedInUser == null) {
+            return null;
+        }
         return loggedInUser.getUsername();
     }
 
