@@ -35,6 +35,7 @@ public class BookShopService {
         this.userService = userService;
         this.bookShop = bookShop;
         userService.setBookService(bookService);
+        bookService.setBookShop(bookShop);
         mapper.registerModule(new JavaTimeModule());
         loadInitialData();
     }
@@ -343,22 +344,6 @@ public class BookShopService {
 
     private int calculateBorrowPrice(int originalPrice, int days) {
         return (int) (originalPrice * 0.1 * days);
-    }
-
-    public Response getBookContent(BookContentRequest request) {
-        User user = bookShop.findUser(request.getUsername());
-        Book book = bookShop.findBook(request.getTitle());
-        Response auth = bookShop.checkUser(AuthenticationUtils.getUsername(), Role.CUSTOMER);
-        if (!auth.isSuccess())
-            return auth;
-        if (book == null) {
-            return new Response(false, "Book not exist", null);
-        }
-        if (!hasBook(user, book)) {
-            return new Response(false, "User has not purchased this book", null);
-        }
-        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
-        return new Response(true, "Book content retrieved successfully.", response);
     }
 
     public Response showShoppingCart(ShowCartRequest request) {

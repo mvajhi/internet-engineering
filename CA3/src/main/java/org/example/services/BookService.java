@@ -22,6 +22,10 @@ public class BookService {
     @Autowired
     private BookShop bookShop;
 
+    public void setBookShop(BookShop bookShop) {
+        this.bookShop=bookShop;
+    }
+
     public BookService(BookShop bookShop){
         this.bookShop = bookShop;
     }
@@ -40,6 +44,42 @@ public class BookService {
         newBook.setSynopsis(request.getSynopsis());
         newBook.setPublisher(request.getPublisher());
         return newBook;
+    }
+
+    public Response getBookContent(BookContentRequest request) {
+        User user = bookShop.findUser(request.getUsername());
+        Book book = bookShop.findBook(request.getTitle());
+        Response auth = bookShop.checkUser(AuthenticationUtils.getUsername(), Role.CUSTOMER);
+        if (!auth.isSuccess())
+            return auth;
+        if (book == null) {
+            return new Response(false, "Book not exist", null);
+        }
+        if (!hasBook(user, book)) {
+            return new Response(false, "User has not purchased this book", null);
+        }
+        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
+        return new Response(true, "Book content retrieved successfully.", response);
+    }
+
+    public boolean hasBook(User user, Book book)
+    {
+        for (PurchaseReceipt receipt : bookShop.getReceipts()) {
+            if(!receipt.isSuccess())
+                continue;
+            if(!receipt.getUser().getUsername().equals(user.getUsername()))
+                continue;
+            if(receipt.getBooks().contains(book))
+                return true;
+            if(receipt.getBorrowedBooks().containsKey(book))
+            {
+                LocalDateTime date = receipt.getDate();
+                int borrowedDays = receipt.getBorrowedBooks().get(book);
+
+                if (isStillInBorrowInterval(date, borrowedDays)) return true;
+            }
+        }
+        return false;
     }
 
     public boolean isTitleHas(Book book,String title) {
