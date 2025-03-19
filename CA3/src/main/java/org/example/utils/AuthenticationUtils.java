@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-@Component
 public class AuthenticationUtils {
     public static User loggedInUser;
 
