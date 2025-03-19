@@ -25,6 +25,16 @@ public class UserController {
         AuthenticationUtils.login(user);
         return Response.successful();
     }
+
+    @PostMapping("/logout")
+    public Response logout() {
+        if (!AuthenticationUtils.loggedIn()) {
+            return Response.fail();
+        }
+        AuthenticationUtils.logout();
+        return Response.successful();
+    }
+
     @PostMapping("/add")
     public Response addUser(@RequestBody AddUserRequest addUserRequest) {
         return userService.addUser(addUserRequest);
