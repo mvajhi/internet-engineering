@@ -1,0 +1,120 @@
+:root {
+    --primary-color: #16423C;
+    --secondary-bg: #F5EFE7;
+    --light-bg: #F7F9FB;
+    --card-bg: #F7F3ED;
+    --border-brown: #804900;
+    --disabled-bg: rgba(0, 0, 0, 0.05);
+    --disabled-text: rgba(0, 0, 0, 0.15);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.radio-label {
+    background-color: var(--light-bg);
+}
+
+input[type="radio"]:checked+.radio-label {
+    background-color: var(--secondary-bg);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.form-control::placeholder,
+::placeholder {
+    opacity: 0.6;
+}
+
+.text-secondary {
+    opacity: 0.8;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+footer {
+    background-color: var(--primary-color);
+}
+
+.btn.btn-secondary[disabled] {
+    border: 0;
+    background-color: var(--disabled-bg);
+    color: var(--disabled-text);
+}
+
+.login-title {
+    font-weight: 600;
+    font-size: 150%;
+}
+
+.login-subtitle {
+    font-weight: 400;
+    font-size: 80%;
+    opacity: 0.4;
+}
+
+.main-box {
+    max-width: 45rem;
+    padding: min(5vh, 10rem) min(10vw, 10rem);
+}
+
+.field-icon {
+    float: right;
+    margin-top: -30px;
+    opacity: 0.4;
+}
+
+.hello-box {
+    background-color: var(--secondary-bg);
+}
+
+.card-book {
+    width: 13rem;
+    background-color: var(--card-bg);
+}
+
+.pagination .active .page-link {
+    background-color: var(--disabled-bg);
+}
+
+button {
+    background-color: var(--primary-color);
+}
+
+.btn-green-custom {
+    background-color: var(--primary-color);
+}
+
+.btn-green-custom:hover,
+.btn-green-custom:active {
+    background-color: #1A4D45;
+}
+
+.border-brown {
+    border-color: var(--border-brown) !important;
+}
+
+.comment-date {
+    font-size: 0.75rem;
+    font-weight: 100;
+}
+
+.mw-60 {
+    max-width: 60rem;
+}
+
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}

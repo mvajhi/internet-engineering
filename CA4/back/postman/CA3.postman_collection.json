@@ -1,0 +1,2760 @@
+{
+	"info": {
+		"_postman_id": "4d046230-09c9-4c4b-b073-730c1c62390c",
+		"name": "CA3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43173154"
+	},
+	"item": [
+		{
+			"name": "addUser (a1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"password\": \"mahdi\",\n    \"email\": \"mahdi@mail.com\",\n    \"role\": \"admin\",\n    \"address\": {\n        \"country\": \"Iran\",\n        \"city\": \"Tehran\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser (u1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali\",\n    \"password\": \"ali_pass\",\n    \"email\": \"ali@mail.com\",\n    \"role\": \"customer\",\n    \"address\": {\n        \"country\": \"Iran\",\n        \"city\": \"Karaj\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser-not unique user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check username not unique\", function () {",
+							"    pm.expect(pm.response.json().message).to.include(\"not unique\");",
+							"    pm.expect(pm.response.json().message).to.include(\"username\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali\",\n    \"password\": \"ali2_pass\",\n    \"email\": \"ali2@mail.com\",\n    \"role\": \"customer\",\n    \"address\": {\n        \"country\": \"Iran2\",\n        \"city\": \"Karaj2\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser-not unique email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check email not unique\", function () {",
+							"    pm.expect(pm.response.json().message).to.include(\"not unique\");",
+							"    pm.expect(pm.response.json().message).to.include(\"email\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali2\",\n    \"password\": \"ali2_pass\",\n    \"email\": \"ali@mail.com\",\n    \"role\": \"customer\",\n    \"address\": {\n        \"country\": \"Iran2\",\n        \"city\": \"Karaj2\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser-invalid name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid name\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"name\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali2?\",\n    \"password\": \"ali2_pass\",\n    \"email\": \"ali2@mail.com\",\n    \"role\": \"customer\",\n    \"address\": {\n        \"country\": \"Iran2\",\n        \"city\": \"Karaj2\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser-less pass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid pass\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"pass\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali2\",\n    \"password\": \"a\",\n    \"email\": \"ali2@mail.com\",\n    \"role\": \"customer\",\n    \"address\": {\n        \"country\": \"Iran\",\n        \"city\": \"Karaj\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser-invalid mail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid email\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"email\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali2\",\n    \"password\": \"ali_pass\",\n    \"email\": \"ali2@.com\",\n    \"role\": \"customer\",\n    \"address\": {\n        \"country\": \"Iran\",\n        \"city\": \"Karaj\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser-invalid address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid addr\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"addr\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali2\",\n    \"password\": \"ali_pass\",\n    \"email\": \"ali2@mail.com\",\n    \"role\": \"customer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser-invalid role",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid role\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"role\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali2\",\n    \"password\": \"ali_pass\",\n    \"email\": \"ali2@mail.com\",\n    \"role\": \"king\",\n    \"address\": {\n        \"country\": \"Iran\",\n        \"city\": \"Karaj\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login (a1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"password\": \"mahdi\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAuthor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"name\": \"Mahdi Vajhi\",\n    \"penName\": \"M.V.\",\n    \"born\": \"1975-06-23\",\n    \"nationality\": \"American\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/author",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAuthor-died",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"name\": \"Mahdi Vajhi die\",\n    \"penName\": \"M.V.\",\n    \"born\": \"1975-06-23\",\n    \"died\": \"1975-09-23\",\n    \"nationality\": \"American\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/author",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAuthor-not unique name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid pass\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"redundant\");",
+							"    pm.expect(pm.response.json().message).to.include(\"name\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"name\": \"Mahdi Vajhi\",\n    \"penName\": \"M.V.\",\n    \"born\": \"1975-06-23\",\n    \"nationality\": \"American\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/author",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Shadow Ali\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2025,\n    \"price\": 1100,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook-not unique",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not unique name\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"unique\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Shadow Ali\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2025,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook-invalid author",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid author\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"author\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Shadow abass\",\n    \"author\": \"Abass\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2025,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook-invalid genres",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid genres\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"genre\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Shadow abass bu\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2025,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCart-admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check cart no login\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"admin\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"mahdi\",\n    \"title\" : \"The Shadow Ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCart-logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check cart no login\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"logged\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"\",\n    \"title\" : \"The Shadow Ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login (u1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali\",\n    \"password\": \"ali_pass\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAuthor-admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check just admin\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"admin\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali\",\n    \"name\": \"Mahdi Vajhi2\",\n    \"penName\": \"M.V.\",\n    \"born\": \"1975-06-23\",\n    \"nationality\": \"American\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/author",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook-admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check just admin\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"admin\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Shadow Ali6\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2025,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "purchase-without credit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check no Credit\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"Credit\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/purchase",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCart-invalid book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check just admin\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"book\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali invalid\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeCart-invalid book name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check just admin\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"book\");",
+							"    pm.expect(pm.response.json().message).to.include(\"title\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali invalid2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeCart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeCart-not in cart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check just admin\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"cart\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Hour\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCredit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"credit\" : 10000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/credit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"credit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCredit-low credit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check just admin\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"1000\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"credit\" : 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/credit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"credit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "borrow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali\",\n    \"days\" : 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart/borrow",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart",
+						"borrow"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "borrow-invalid day",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check invalid day\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"day\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali\",\n    \"days\" : 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart/borrow",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart",
+						"borrow"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBookContent-not purchased",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"purchased\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/content",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"content"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "purchase",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/purchase",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "purchase-Empty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"Empty\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/purchase",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addReview",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"rate\" : 4,\n    \"comment\" : \"Good is a good\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addReview-rate range",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"rate\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"rate\" : 9,\n    \"comment\" : \"Good is a good\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addReview-invalid book name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"exist\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"rate\" : 4,\n    \"comment\" : \"Good is a good\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali invalid/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali invalid",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addReview-not in collection",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"purchased\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"rate\" : 4,\n    \"comment\" : \"Good is a good\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Hour/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Hour",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/ali",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"ali"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details user-admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/mahdi",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"mahdi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details user-invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"exist\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/abass",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"abass"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details author",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/author/Mahdi Vajhi",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author",
+						"Mahdi Vajhi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details author-died",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/author/Mahdi Vajhi die",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author",
+						"Mahdi Vajhi die"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details author-invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"exist\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/author/abass",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author",
+						"abass"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details book-invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"exist\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali invalid",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali invalid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBookContent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/content",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"content"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBookReview",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBookReview-invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not Empty\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.false;",
+							"    pm.expect(pm.response.json().message).to.include(\"exist\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali invalid/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali invalid",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPurchaseHist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/purchase/history",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"purchase",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllOwnBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/purchase/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"purchase",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details user Copy",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/ali",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"ali"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
