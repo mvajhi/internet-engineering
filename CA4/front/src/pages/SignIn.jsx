@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Footer } from "../components/Footer";
 import FormInput from "../components/FormInput";
 import FormHeader from "../components/FormHeader";
-
+import { useNavigate } from 'react-router-dom';
 
 
 const SignIn = () => {
@@ -51,26 +51,61 @@ const SignIn = () => {
     setPasswordVisible(!passwordVisible);
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setApiError('');
+
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setApiError('');
+        navigate('/');
+      } else {
+        setApiError(data.message || 'Login failed');
+        console.log(apiError);
+      }
+    } catch (error) {
+      setApiError('Network error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="bg-light d-flex align-items-center justify-content-center vh-100">
       <div className="bg-white rounded-4 w-100 main-box">
-        <FormHeader 
-          title="Sign in" 
-          subtitle="MioBook" 
+        <FormHeader
+          title="Sign in"
+          subtitle="MioBook"
         />
-        <form>
-          <FormInput 
+        <form onSubmit={handleSubmit}>
+          <FormInput
             name="username"
-            type="text" 
+            type="text"
             placeholder="Username"
             value={formData.username}
             onChange={handleChange}
             error={errors.username}
           />
-          
-          <FormInput 
+
+          <FormInput
             name="password"
-            type={passwordVisible ? "text" : "password"} 
+            type={passwordVisible ? "text" : "password"}
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
@@ -79,17 +114,19 @@ const SignIn = () => {
             passwordVisible={passwordVisible}
             togglePasswordVisibility={togglePasswordVisibility}
           />
-          
+
+
           <div className="mb-3">
-            <button 
-              type="submit" 
+            {apiError == "" ? "" : <p className='text-center text-danger'>Username or password is incorrect.</p>}
+            <button
+              type="submit"
               className={`btn w-100 rounded ${isFormValid() ? 'btn-green-custom text-white' : 'btn-secondary'}`}
               disabled={!isFormValid()}
             >
               <strong>Sign in</strong>
             </button>
           </div>
-          
+
           <p className="text-center text-secondary">
             <small>
               Not a member yet?{' '}
