@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Footer } from "../components/Footer";
 import FormInput from "../components/FormInput";
 import FormHeader from "../components/FormHeader";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 
 const SignIn = () => {
@@ -130,9 +130,9 @@ const SignIn = () => {
           <p className="text-center text-secondary">
             <small>
               Not a member yet?{' '}
-              <a href="/signup" className="">
+              <Link to="/signup" className="">
                 <strong>Sign Up</strong>
-              </a>
+              </Link>
             </small>
           </p>
         </form>

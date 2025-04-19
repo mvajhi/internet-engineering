@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LocationInputs from './LocationInputs';
 import RoleSelection from './RoleSelection';
 import FormInput from './FormInput';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link } from 'react-router-dom';
 
 const UserForm = () => {
 
@@ -201,9 +201,9 @@ const UserForm = () => {
       <p className="text-center text-secondary">
         <small>
           Already have an account?{' '}
-          <a href="/signin" className="">
-            <strong>Sign in</strong>
-          </a>
+          <Link to="/signin" className="">
+            <strong>Sign In</strong>
+          </Link>
         </small>
       </p>
     </form>
