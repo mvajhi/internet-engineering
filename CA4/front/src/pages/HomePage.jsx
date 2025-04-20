@@ -1,6 +1,12 @@
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import Header from '../components/Header';
 import BookCard from '../components/BookCard';
+import TopRatedBooks from "../components/GetTopRated.jsx";
+import getTopRated from "../components/GetTopRated.jsx";
+
+function getNewReleases() {
+    return undefined;
+}
 
 const HomePage = () => {
     const [newReleases, setNewReleases] = useState([]);
@@ -77,7 +83,7 @@ const HomePage = () => {
 
             <div className="container py-5">
 
-                {/* New Releases */}
+                <NewReleases />
                 <section className="mt-5">
                     <h2 className="fw-light fs-3 mb-4">New Releases</h2>
                     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
@@ -86,16 +92,7 @@ const HomePage = () => {
                         ))}
                     </div>
                 </section>
-
-                {/* Top Rated */}
-                <section className="mt-5">
-                    <h2 className="fw-light fs-3 mb-4">Top Rated</h2>
-                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                        {topRated.map(book => (
-                            <BookCard key={book.id} book={book} />
-                        ))}
-                    </div>
-                </section>
+                <TopRatedBooks />
             </div>
 
             <footer className="bg-dark text-white text-center py-3">
