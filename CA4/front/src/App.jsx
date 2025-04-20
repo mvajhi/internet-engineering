@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import HomePage from "./pages/HomePage.jsx";
+import Search from "./pages/Search.jsx";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/homepage" element={<HomePage />} />
+        <Route path="/search-books" element={<Search />} />
         <Route path="/" element={<SignIn />} />
       </Routes>
     </BrowserRouter>
