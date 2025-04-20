@@ -46,7 +46,7 @@ const tempBooksData = [
 ];
 
 
-async function getTopRated() {
+async function topRated() {
 
     try {
         const filter = {
@@ -82,7 +82,7 @@ const TopRatedBooks = () => {
         const fetchTopRatedBooks = async () => {
             try {
                 setLoading(true);
-                const topRatedBooks = await getTopRated();
+                const topRatedBooks = await topRated();
                 setBooks(topRatedBooks);
             } catch (err) {
                 setError(err.message);

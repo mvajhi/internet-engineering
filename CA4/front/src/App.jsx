@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp';
 import User from './pages/User';
 import Logout from './pages/Logout';
 import HomePage from "./pages/HomePage.jsx";
+import Search from "./pages/Search.jsx";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/user" element={<User />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/search-books" element={<Search />} />
       </Routes>
     </BrowserRouter>
   );

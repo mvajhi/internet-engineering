@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import Header from '../components/Header';
 import BookCard from '../components/BookCard';
-import TopRatedBooks from "../components/GetTopRated.jsx";
-import getTopRated from "../components/GetTopRated.jsx";
+import TopRatedBooks from "../components/TopRated.jsx";
+import getTopRated from "../components/TopRated.jsx";
 import NewReleases from "../components/NewReleases.jsx";
 
 function getNewReleases() {
