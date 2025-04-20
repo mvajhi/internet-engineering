@@ -379,11 +379,11 @@ public class BookShopService {
         return new Response(true, "Buy cart retrieved successfully", buyHistoryResponse);
     }
 
-    public Response showBooks(ShowHistoryRequest request) {
+    public Response showBooks() {
         Response auth = bookShop.checkUser(AuthenticationUtils.getUsername(), Role.CUSTOMER);
         if (!auth.isSuccess())
             return auth;
-        User user = bookShop.findUser(request.getUsername());
+        User user = bookShop.findUser(AuthenticationUtils.getUsername());
         List<BookResponses> books = new ArrayList<>();
         for (PurchaseReceipt receipt : bookShop.getReceiptsByUsername(user.getUsername())) {
             books.addAll(userService.getBookResponsesList(receipt.getBooks()));
