@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import BookCard from '../components/BookCard';
 import TopRatedBooks from "../components/GetTopRated.jsx";
 import getTopRated from "../components/GetTopRated.jsx";
+import NewReleases from "../components/NewReleases.jsx";
 
 function getNewReleases() {
     return undefined;
@@ -84,14 +85,14 @@ const HomePage = () => {
             <div className="container py-5">
 
                 <NewReleases />
-                <section className="mt-5">
-                    <h2 className="fw-light fs-3 mb-4">New Releases</h2>
-                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                        {newReleases.map(book => (
-                            <BookCard key={book.id} book={book} />
-                        ))}
-                    </div>
-                </section>
+                {/*<section className="mt-5">*/}
+                {/*    <h2 className="fw-light fs-3 mb-4">New Releases</h2>*/}
+                {/*    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">*/}
+                {/*        {newReleases.map(book => (*/}
+                {/*            <BookCard key={book.id} book={book} />*/}
+                {/*        ))}*/}
+                {/*    </div>*/}
+                {/*</section>*/}
                 <TopRatedBooks />
             </div>
 

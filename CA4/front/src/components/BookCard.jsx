@@ -22,7 +22,7 @@ const BookCard = ({ title, author, price, rating = 0, imageUrl, link }) => {
     };
 
     return (
-        <div className="col-md-4 col-lg-3 mb-4">
+        <div className="">
             <div className="card card-book border-0 shadow-sm rounded-4 h-100">
                 <a href={link}>
                     <img
