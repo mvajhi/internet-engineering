@@ -21,7 +21,7 @@ const FormInput = ({
         />
         {hasIcon && (
           <i 
-            className={`bi ${passwordVisible ? 'bi-eye' : 'bi-eye-slash'} field-icon`} 
+            className={`bi ${passwordVisible ? 'bi-eye' : 'bi-eye-slash'} field-icon user-select-none`} 
             onClick={togglePasswordVisibility}
           >
             &nbsp;&nbsp;
