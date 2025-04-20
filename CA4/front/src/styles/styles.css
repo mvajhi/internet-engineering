@@ -118,3 +118,7 @@ button {
 .is-invalid {
     border-color: #dc3545;
 }
+
+.bg-light-custom {
+    background-color: #ebebeb;
+}
