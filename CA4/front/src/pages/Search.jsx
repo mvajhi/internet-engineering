@@ -52,8 +52,18 @@ const SearchPage = () => {
     const [searchType, setSearchType] = useState('Title');
     const [books, setBooks] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [showFilters, setShowFilters] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const booksPerPage = 2;
+
+    const [filters, setFilters] = useState({
+        bookName: '',
+        authorName: '',
+        genre: '',
+        publishedYear: '',
+        sortBy: '',
+        order: ''
+    });
 
     // Mock data - replace with actual API call
     const mockBooks = Array(15).fill().map((_, i) => ({
@@ -103,40 +113,138 @@ const SearchPage = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     let hghgg = 0;
+
+    function applyFilters() {
+
+    }
+
     return (
         <>
             <Header />
 
             <main className="container pt-5 px-2 mt-4">
-                {/* Search Controls */}
-                {/*<div className="row mb-4">*/}
-                {/*    <div className="col-md-8 mx-auto">*/}
-                {/*        <div className="input-group">*/}
-                {/*            <select*/}
-                {/*                className="form-select w-auto"*/}
-                {/*                value={searchType}*/}
-                {/*                onChange={(e) => setSearchType(e.target.value)}*/}
-                {/*            >*/}
-                {/*                <option value="Title">Title</option>*/}
-                {/*                <option value="Author">Author</option>*/}
-                {/*                <option value="Genre">Genre</option>*/}
-                {/*            </select>*/}
-                {/*            <input*/}
-                {/*                type="text"*/}
-                {/*                className="form-control"*/}
-                {/*                placeholder={`Search by ${searchType}...`}*/}
-                {/*                value={searchTerm}*/}
-                {/*                onChange={(e) => setSearchTerm(e.target.value)}*/}
-                {/*            />*/}
-                {/*            <button*/}
-                {/*                className="btn btn-green-custom text-white"*/}
-                {/*                onClick={searchBooks}*/}
-                {/*            >*/}
-                {/*                <i className="fas fa-search me-2"></i>Search*/}
-                {/*            </button>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+
+                {/* Filter */}
+                <div className="d-flex justify-content-end mb-4">
+                    <button
+                        className="btn btn btn-green-custom text-white"
+                        onClick={() => setShowFilters(!showFilters)}
+                    >
+                        <i className={`fas fa-${showFilters ? 'times' : 'filter'} me-2`}></i>
+                        {showFilters ? 'Close Filters' : 'Filters'}
+                    </button>
+                </div>
+                {/* Filters Panel */}
+                {showFilters && (
+                    <div className="card mb-4 shadow-sm mx-auto" style={{ maxWidth: '500px'}}>
+                        <div className="card-body">
+                            <h5 className="card-title mb-3 pb-2 border-bottom border-dark text-center">Filters</h5>
+
+                            <div className="d-flex flex-column gap-3">
+                                {/* Book Name */}
+                                <div className="d-flex align-items-center">
+                                    <label className="form-label me-3" style={{ minWidth: '120px' }}>Book Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="bookName"
+                                        value={filters.bookName}
+                                        // onChange={handleFilterChange}
+                                        placeholder="Sample"
+                                        style={{ flex: 1 }}
+                                    />
+                                </div>
+
+                                {/* Author Name */}
+                                <div className="d-flex align-items-center">
+                                    <label className="form-label me-3" style={{ minWidth: '120px' }}>Author Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="authorName"
+                                        value={filters.authorName}
+                                        // onChange={handleFilterChange}
+                                        placeholder="Sample"
+                                        style={{ flex: 1 }}
+                                    />
+                                </div>
+
+                                {/* Genre */}
+                                <div className="d-flex align-items-center">
+                                    <label className="form-label me-3" style={{ minWidth: '120px' }}>Genre</label>
+                                    <select
+                                        className="form-select"
+                                        name="genre"
+                                        value={filters.genre}
+                                        // onChange={handleFilterChange}
+                                        style={{ flex: 1 }}
+                                    >
+                                        <option value="">All Genres</option>
+                                        <option value="Fiction">Fiction</option>
+                                        <option value="Non-Fiction">Non-Fiction</option>
+                                        <option value="Science">Science</option>
+                                        <option value="Biography">Biography</option>
+                                    </select>
+                                </div>
+
+                                {/* Published Year */}
+                                <div className="d-flex align-items-center">
+                                    <label className="form-label me-3" style={{ minWidth: '120px' }}>Published Year</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        name="publishedYear"
+                                        value={filters.publishedYear}
+                                        // onChange={handleFilterChange}
+                                        placeholder="2015"
+                                        min="1900"
+                                        max={new Date().getFullYear()}
+                                        style={{ flex: 1 }}
+                                    />
+                                </div>
+
+                                {/* Sort By */}
+                                <div className="d-flex align-items-center">
+                                    <label className="form-label me-3" style={{ minWidth: '120px' }}>Sort By</label>
+                                    <select
+                                        className="form-select"
+                                        name="sortBy"
+                                        value={filters.sortBy}
+                                        // onChange={handleFilterChange}
+                                        style={{ flex: 1 }}
+                                    >
+                                        <option value="Rating">Rating</option>
+                                        <option value="Reviews">Reviews</option>
+                                    </select>
+                                </div>
+
+                                {/* Order */}
+                                <div className="d-flex align-items-center">
+                                    <label className="form-label me-3" style={{ minWidth: '120px' }}>Order</label>
+                                    <select
+                                        className="form-select"
+                                        name="order"
+                                        value={filters.order}
+                                        // onChange={handleFilterChange}
+                                        style={{ flex: 1 }}
+                                    >
+                                        <option value="Descending">Descending</option>
+                                        <option value="Ascending">Ascending</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="d-flex justify-content-center mt-4">
+                                <button
+                                    className="btn btn-green-custom text-white w-50 py-2"
+                                    onClick={applyFilters}
+                                >
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Results Header */}
                 <h2 className="fw-light fs-3 lh-sm px-3 pb-4">
