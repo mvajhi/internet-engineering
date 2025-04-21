@@ -34,11 +34,15 @@ public class Cart {
     }
 
     public void removePurchasedBook(Book book){
-        this.purchasedBooks.remove(book);
+        if (this.borrowedBooks.containsKey(book)){
+            this.borrowedBooks.remove(book);
+        } else {
+            this.purchasedBooks.remove(book);
+        }
     }
 
     public boolean hasPurchasedBook(Book book){
-        return this.purchasedBooks.contains(book);
+        return this.purchasedBooks.contains(book) || this.borrowedBooks.containsKey(book);
     }
 
     public void setPurchasedBooks(List<Book> purchasedBooks) {

@@ -59,7 +59,9 @@ public class BookShopController {
     }
 
     @GetMapping("/cart")
-    public String getCart(@RequestBody ShowCartRequest request) {
+    public String getCart() {
+        ShowCartRequest request= new ShowCartRequest();
+        request.setUsername(AuthenticationUtils.getUsername());
         return bookShopService.showShoppingCart(request).convertToString();
     }
 

@@ -65,7 +65,7 @@ const ProfileIcon = () => {
                 </li>
                 <DropdownItem to="/user" iconSrc="/assets/profile_menu/person.svg" text="Profile" />
                 <DropdownItem to="#my-books" iconSrc="/assets/profile_menu/book.svg" text="My Books" />
-                <DropdownItem to="#buy-cart" iconSrc="/assets/profile_menu/cart.svg" text="Buy Cart" />
+                <DropdownItem to="/cart" iconSrc="/assets/profile_menu/cart.svg" text="Buy Cart" />
                 <DropdownItem to="#purchase-history" iconSrc="/assets/profile_menu/history.svg" text="Purchase History" />
                 <li>
                     <hr className="dropdown-divider mx-3" />

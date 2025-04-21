@@ -5,6 +5,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import User from './pages/User';
 import Logout from './pages/Logout';
+import Cart from "./pages/Cart";
 import HomePage from "./pages/HomePage.jsx";
 import Search from "./pages/Search.jsx";
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/user" element={<User />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/search-books" element={<Search />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   );
