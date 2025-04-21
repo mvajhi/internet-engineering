@@ -26,8 +26,8 @@ function App() {
         <Route path="/search-books" element={<Search />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/history" element={<History />} />
-        <Route path="/not-found" element={<NotFound />} />
         <Route path="/books/:bookTitle/content" element={<BookContent />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
