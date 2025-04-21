@@ -72,52 +72,52 @@ const BookTable = (books) => {
 
 const AccordionItem = ({ id, purchaseDate, totalCost, books }) => {
     return (
-      <div className="accordion-item">
-        <h2 className="accordion-header" id={`flush-heading${id}`}>
-          <button
-            className="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target={`#flush-collapse${id}`}
-            aria-expanded="false"
-            aria-controls={`flush-collapse${id}`}
-          >
-            {purchaseDate} | ${totalCost}
-          </button>
-        </h2>
-        <div
-          id={`flush-collapse${id}`}
-          className="accordion-collapse collapse"
-          aria-labelledby={`flush-heading${id}`}
-          data-bs-parent="#accordionFlushExample"
-        >
-          <div className="accordion-body">
-            <BookTable books={books} />
-          </div>
+        <div className="accordion-item">
+            <h2 className="accordion-header" id={`flush-heading${id}`}>
+                <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#flush-collapse${id}`}
+                    aria-expanded="false"
+                    aria-controls={`flush-collapse${id}`}
+                >
+                    {purchaseDate} | ${totalCost}
+                </button>
+            </h2>
+            <div
+                id={`flush-collapse${id}`}
+                className="accordion-collapse collapse"
+                aria-labelledby={`flush-heading${id}`}
+                data-bs-parent="#accordionFlushExample"
+            >
+                <div className="accordion-body">
+                    <BookTable books={books} />
+                </div>
+            </div>
         </div>
-      </div>
     );
-  };
-  
-  const HistoryAccordion = ({ orders }) => {
+};
+
+const HistoryAccordion = ({ orders }) => {
     console.log(orders)
     return (
-      <div className="accordion accordion-flush" id="accordionFlushExample">
-        {orders.slice().reverse().map((order, index) => (
-          <AccordionItem
-            key={index}
-            id={index + 1}
-            purchaseDate={order.purchaseDate}
-            totalCost={order.totalCost}
-            books={order.items}
-          />
-        ))}
-      </div>
+        <div className="accordion accordion-flush" id="accordionFlushExample">
+            {orders.slice().reverse().map((order, index) => (
+                <AccordionItem
+                    key={index}
+                    id={index + 1}
+                    purchaseDate={order.purchaseDate}
+                    totalCost={order.totalCost}
+                    books={order.items}
+                />
+            ))}
+        </div>
     );
-  };
+};
 
 
-const CartTable = () => {
+const HistoryTable = () => {
     const [username, setUsername] = useState("");
     const [orders, setOrders] = useState([]);
 
@@ -145,17 +145,17 @@ const CartTable = () => {
         }
     }, [username]);
 
-
-
     return (
         <div className="card p-4 pb-0 border-0 rounded-4 pb-3">
             <div className="d-flex align-items-center mb-3">
                 <img src="assets/history.svg" className="me-2" alt="cart" />
                 <div className="fs-3 fw-bold">History</div>
             </div>
-            <div className="table-responsive rounded-4 border">
-            <HistoryAccordion orders={orders} />
-            </div>
+            {orders.length ?
+                <div className="table-responsive rounded-4 border">
+                    <HistoryAccordion orders={orders} />
+                </div>
+                : TmpTable("assets/no_history.svg")}
         </div>
     );
 };
@@ -169,49 +169,13 @@ const History = () => {
             console.log('Searching for:', searchQuery);
         }
     };
-    const orders = [
-        {
-            date: "2025-03-24 16:04",
-            totalPrice: 21.6,
-            items: [
-                {
-                    image: "assets/book1.png",
-                    name: "The Design of Books",
-                    author: "Debbie Berne",
-                    originalPrice: "$18.00",
-                    discountedPrice: "$3.6",
-                    borrowed: true,
-                    borrowDays: 2,
-                },
-                {
-                    image: "assets/book2.png",
-                    name: "Another Book",
-                    author: "Author Name",
-                    originalPrice: "$18.00",
-                    borrowed: false,
-                },
-            ],
-        },
-        {
-            date: "2025-03-24 14:50",
-            totalPrice: 12.99,
-            items: [
-                {
-                    image: "assets/book3.png",
-                    name: "A Third Book",
-                    author: "Jane Doe",
-                    originalPrice: "$12.99",
-                    borrowed: false,
-                },
-            ],
-        },
-    ];
+
     return (
         <div className='bg-light d-flex flex-column vh-100'>
             <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onSearchSubmit={handleSearch} />
             <br /><br />
-            <div className="container w-75 pt-4 flex-grow-1">
-                <CartTable />
+            <div className="container w-100 w-sm-75 pt-4 flex-grow-1 mb-3">
+                <HistoryTable />
             </div>
             <Footer />
         </div>

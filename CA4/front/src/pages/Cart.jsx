@@ -135,7 +135,7 @@ const Cart = () => {
         <div className='bg-light d-flex flex-column vh-100'>
             <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onSearchSubmit={handleSearch} />
             <br /><br />
-            <div className="container w-75 pt-4 flex-grow-1">
+            <div className="container w-100 w-sm-75 pt-4 flex-grow-1">
                 <CartTable />
             </div>
             <Footer />
