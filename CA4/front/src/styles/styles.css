@@ -130,3 +130,13 @@ button {
 .small-text {
     font-size: 0.75rem;
 }
+
+.accordion-button {
+    color: black;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.accordion-button:not(.collapsed) {
+    color: black;
+    background-color: rgba(212, 212, 212, 1);
+}

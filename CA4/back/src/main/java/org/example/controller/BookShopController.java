@@ -86,7 +86,9 @@ public class BookShopController {
     }
 
     @GetMapping("/purchase/history")
-    public String getCartHistory(@RequestBody ShowHistoryRequest request) {
+    public String getCartHistory() {
+        ShowHistoryRequest request= new ShowHistoryRequest();
+        request.setUsername(AuthenticationUtils.getUsername());
         return bookShopService.showShoppingCartHistory(request).convertToString();
     }
 
