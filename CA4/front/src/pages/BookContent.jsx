@@ -1,17 +1,24 @@
 import Header from '../components/Header';
 import { Footer } from "../components/Footer";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const BookContent = () => {
     const { bookTitle } = useParams();
     const [data, setData] = useState("");
 
+    const navigator = useNavigate();
     useEffect(() => {
         const fetchBookContent = async () => {
             try {
                 const response = await axios.get(`/api/books/${bookTitle}/content`);
+                if (!response.data.success) {
+                    if (response.data.message.includes("purchased")) {
+                        navigator(`/books/${bookTitle}`);
+                    }
+                    navigator("/notfound");
+                }
                 setData(response.data.data);
             } catch (err) {
                 console.error("Error fetching book content:", err);
