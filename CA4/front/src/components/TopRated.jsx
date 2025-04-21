@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BookCard from './BookCard.jsx';
+import addParamToUri from "../Utils/utils.jsx";
 
 
 const tempBooksData = [
@@ -54,19 +55,17 @@ async function topRated() {
             inverse: true
         };
 
+        const parameter = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
         // TODO: Must be Uncommented
-        // const response = await fetch('/api/books/search', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //
-        //     body: JSON.stringify(filter)
-        // });
-
-
-        // return await response.json()
-        return tempBooksData
+        const response = await fetch(
+            addParamToUri('/api/books/search', filter),
+            parameter);
+        return await response.json()
     } catch (error) {
 
     } finally {

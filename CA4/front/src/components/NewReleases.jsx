@@ -54,21 +54,17 @@ async function getNewReleases() {
         };
 
         const parameter = {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
         }
-
-        console.log(addParamToUri('http://localhost:8080/api/books/search', filter))
-
         // TODO: Must be Uncommented
         const response = await fetch(
-            addParamToUri('localhost:8080/api/books/search', filter),
+            addParamToUri('/api/books/search', filter),
             parameter);
 
-
-        console.log(response)
-
-        // return await response.json()
-        return tempBooksData
+        return await response.json()
     } catch (error) {
         console.log(error)
         return {}
@@ -102,7 +98,7 @@ const NewReleases = () => {
 
     return (
         <section className="mt-4 px-1">
-            <h2 className="fw-light fs-3 lh-sm mb-3 px-5">Top Rated</h2>
+            <h2 className="fw-light fs-3 lh-sm mb-3 px-5">New Releases</h2>
             <div className="d-flex flex-wrap justify-content-around gap-4">
                 {books.map((book) => (
                     <BookCard

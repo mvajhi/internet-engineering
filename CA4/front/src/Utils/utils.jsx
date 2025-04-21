@@ -1,11 +1,18 @@
 import React from 'react';
 
-const addParamsToUri = function (uri, params) {
-    const url = new URL(uri); // Create a URL object
-    Object.keys(params).forEach(key => {
-        url.searchParams.append(key, params[key]); // Add each key-value pair to the URL's search parameters
+function addParamsToUri(path, params) {
+    const searchParams = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+            searchParams.append(key, value.toString());
+        }
     });
-    return url.toString(); // Return the updated URI
+
+    const queryString = searchParams.toString();
+
+    return queryString ? `${path}?${queryString}` : path;
 }
+
 
 export default addParamsToUri;
