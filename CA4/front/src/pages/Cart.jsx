@@ -53,8 +53,8 @@ const BookRow = ({ book, username, onRemove }) => {
         try {
             const TmpTable = (img) => {
                 return (
-                    <div class="text-center">
-                        <img src={img} class="img-fluid" alt="No product" />
+                    <div className="text-center">
+                        <img src={img} className="img-fluid" alt="No product" />
                     </div>
                 );
             }
@@ -178,9 +178,9 @@ const BookTable = (tableHeaders, books, username, fetchBooks) => {
                 ))}
             </tbody>
         </table>
-        <div class="d-flex mt-1 mb-4 justify-content-center">
-            <button class="btn btn-green-custom mt-2 text-white rounded px-5" onClick={PurchaseCart}>
-                <span class="px-md-5 px-sm-0">Purchase</span>
+        <div className="d-flex mt-1 mb-4 justify-content-center">
+            <button className="btn btn-green-custom mt-2 text-white rounded px-5" onClick={PurchaseCart}>
+                <span className="px-md-5 px-sm-0">Purchase</span>
             </button>
         </div>
     </div>;

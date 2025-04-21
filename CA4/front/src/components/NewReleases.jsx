@@ -63,7 +63,6 @@ async function getNewReleases() {
         const response = await fetch(
             addParamToUri('/api/books/search', filter),
             parameter);
-        // console.log(response)
         if (response.length === 0){
             return {}
         }

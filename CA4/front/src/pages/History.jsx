@@ -8,7 +8,6 @@ import { TmpTable } from '../components/TmpTable';
 const tableHeaders = ["Image", "Name", "Author", "Price", "Borrow Days",];
 
 const BookRow = ({ book }) => {
-    console.log(book);
     return (
         <tr className="border-bottom">
             <td className="align-middle">
@@ -100,7 +99,6 @@ const AccordionItem = ({ id, purchaseDate, totalCost, books }) => {
 };
 
 const HistoryAccordion = ({ orders }) => {
-    console.log(orders)
     return (
         <div className="accordion accordion-flush" id="accordionFlushExample">
             {orders.slice().reverse().map((order, index) => (

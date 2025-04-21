@@ -42,7 +42,6 @@ const BookCard = ({ title, author, price, rating = 0, imageUrl, link }) => {
                     </p>
                     <div className="d-flex justify-content-between mb-2 mt-auto">
                         <div className="text-warning">
-                            {/*{console.log(renderStars())}*/}
                             {renderStars()}
                         </div>
                         <div className="">

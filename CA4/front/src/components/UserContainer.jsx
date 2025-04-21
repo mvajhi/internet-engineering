@@ -14,7 +14,6 @@ const CreditSection = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get("/api/user");
-        console.log(response);
         if (response.data.success) {
           setBalance(response.data.data.balance);
         }
@@ -109,9 +108,9 @@ const ProfileSection = () => {
         <div className="d-flex mb-3 flex-wrap align-items-center">
           <img src="assets/mail.svg" className="me-2" alt="Email" /> {userData.email}
         </div>
-        <ul class="pagination m-0 justify-content-center align-items-center">
-          <li class="page-item active" aria-current="page">
-            <Link to="/logout" class="page-link text-dark border-0 rounded-3">&nbsp; Logout &nbsp;</Link>
+        <ul className="pagination m-0 justify-content-center align-items-center">
+          <li className="page-item active" aria-current="page">
+            <Link to="/logout" className="page-link text-dark border-0 rounded-3">&nbsp; Logout &nbsp;</Link>
           </li>
         </ul>
       </div>

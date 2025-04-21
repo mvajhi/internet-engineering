@@ -9,7 +9,7 @@ const Footer = () => {
         //         Copyright © 2025 - MioBook
         //     </p>
         // </footer>
-        <footer class="w-100 text-white text-center py-2 footer">
+        <footer className="w-100 text-white text-center py-2 footer">
             Copyright © 2025 - MioBook
         </footer>
         // <footer class="text-white text-center pt-2 mt-5 w-100 text-white  bottom-0">
