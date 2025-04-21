@@ -9,7 +9,7 @@ const Header = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
             <header className="bg-white shadow-sm">
                 <div className="container d-flex justify-content-between align-items-center py-3 px-4">
                     <Link to="/homepage">
-                        <img src="assets/logo.png" alt="MioBook" height="30" />
+                        <img src="/assets/logo.png" alt="MioBook" height="30" />
                     </Link>
                     <div className="d-none d-md-flex bg-light rounded w-50">
                         <SearchBar />
