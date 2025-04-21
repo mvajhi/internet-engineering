@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from "axios";
 
 
 const Header = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
@@ -7,13 +8,13 @@ const Header = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
         <>
             <header className="bg-white shadow-sm">
                 <div className="container d-flex justify-content-between align-items-center py-3 px-4">
-                    <a href="homepage.html">
+                    <Link to="/homepage">
                         <img src="assets/logo.png" alt="MioBook" height="30" />
-                    </a>
+                    </Link>
                     <div className="d-none d-md-flex bg-light rounded w-50">
                         <SearchBar />
                     </div>
-                    <ProfileIcon userName="John Doe" />
+                    <ProfileIcon />
                 </div>
 
             </header>
@@ -24,13 +25,27 @@ const Header = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
     );
 };
 
-const ProfileIcon = ({ userName }) => {
+const ProfileIcon = () => {
+    const [userName, setUserName] = useState("");
+
+    useEffect(() => {
+        const fetchUserName = async () => {
+            const response = await axios.get("/api/user");
+            if (response.data.success) {
+                setUserName(response.data.data.username);
+            }
+        };
+
+        fetchUserName();
+    }, []);
+
     const firstLetter = userName.charAt(0).toUpperCase();
+
     return (
         <div className="dropdown">
             {/* آیکون پروفایل */}
             <button
-                className="btn btn-success rounded-circle d-flex justify-content-center align-items-center  px-3 py-2 user-select-none"
+                className="btn btn-success rounded-circle d-flex justify-content-center align-items-center px-3 py-2 user-select-none"
                 type="button"
                 id="profileDropdown"
                 data-bs-toggle="dropdown"
@@ -48,24 +63,23 @@ const ProfileIcon = ({ userName }) => {
                 <li>
                     <hr className="dropdown-divider mx-3 bg-dark" />
                 </li>
-                {/* TODO : Add links to the pages */}
-                <DropdownItem href="#profile" iconSrc="/assets/profile_menu/person.svg" text="Profile" />
-                <DropdownItem href="#my-books" iconSrc="/assets/profile_menu/book.svg" text="My Books" />
-                <DropdownItem href="#buy-cart" iconSrc="/assets/profile_menu/cart.svg" text="Buy Cart" />
-                <DropdownItem href="#purchase-history" iconSrc="/assets/profile_menu/history.svg" text="Purchase History" />
+                <DropdownItem to="/user" iconSrc="/assets/profile_menu/person.svg" text="Profile" />
+                <DropdownItem to="#my-books" iconSrc="/assets/profile_menu/book.svg" text="My Books" />
+                <DropdownItem to="/cart" iconSrc="/assets/profile_menu/cart.svg" text="Buy Cart" />
+                <DropdownItem to="#purchase-history" iconSrc="/assets/profile_menu/history.svg" text="Purchase History" />
                 <li>
                     <hr className="dropdown-divider mx-3" />
                 </li>
-                <DropdownItem href="#logout" iconSrc="/assets/profile_menu/logout.svg" text="Logout" />
+                <DropdownItem to="/logout" iconSrc="/assets/profile_menu/logout.svg" text="Logout" />
             </ul>
         </div>
     );
 };
 
-const DropdownItem = ({ href, iconSrc, text }) => {
+const DropdownItem = ({ to, iconSrc, text }) => {
     return (
         <li>
-            <Link className="dropdown-item d-flex align-items-center pb-2" to={href}>
+            <Link className="dropdown-item d-flex align-items-center pb-2" to={to}>
                 <img src={iconSrc} className="me-2" alt="" /> {text}
             </Link>
         </li>

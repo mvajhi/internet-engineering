@@ -126,3 +126,7 @@ button {
 .bg-select-bar {
     background-color: #F2F2F2;
 }
+
+.small-text {
+    font-size: 0.75rem;
+}

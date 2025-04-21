@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.request.*;
 import org.example.services.BookShopService;
+import org.example.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,12 @@ public class BookShopController {
         return bookShopService.showUserDetails(username).convertToString();
     }
 
+    @RequestMapping("/user")
+    @GetMapping
+    public String getUser() {
+        return bookShopService.showUserDetails(AuthenticationUtils.getUsername()).convertToString();
+    }
+
     @RequestMapping("/author/{authorName}")
     @GetMapping
     public String getAuthor(@PathVariable String authorName) {
@@ -52,7 +59,9 @@ public class BookShopController {
     }
 
     @GetMapping("/cart")
-    public String getCart(@RequestBody ShowCartRequest request) {
+    public String getCart() {
+        ShowCartRequest request= new ShowCartRequest();
+        request.setUsername(AuthenticationUtils.getUsername());
         return bookShopService.showShoppingCart(request).convertToString();
     }
 
@@ -72,8 +81,8 @@ public class BookShopController {
     }
 
     @GetMapping("/purchase/books")
-    public String getBooks(@RequestBody ShowHistoryRequest request) {
-        return bookShopService.showBooks(request).convertToString();
+    public String getBooks() {
+        return bookShopService.showBooks().convertToString();
     }
 
     @GetMapping("/purchase/history")

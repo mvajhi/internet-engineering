@@ -87,55 +87,57 @@ const SignIn = () => {
   };
 
   return (
-    <div className="bg-light d-flex align-items-center justify-content-center vh-100">
-      <div className="bg-white rounded-4 w-100 main-box">
-        <FormHeader
-          title="Sign in"
-          subtitle="MioBook"
-        />
-        <form onSubmit={handleSubmit}>
-          <FormInput
-            name="username"
-            type="text"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange}
-            error={errors.username}
+    <div className="bg-light d-flex flex-column vh-100">
+      <div className="bg-light d-flex align-items-center justify-content-center vh-100">
+        <div className="bg-white rounded-4 w-100 main-box">
+          <FormHeader
+            title="Sign in"
+            subtitle="MioBook"
           />
+          <form onSubmit={handleSubmit}>
+            <FormInput
+              name="username"
+              type="text"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              error={errors.username}
+            />
 
-          <FormInput
-            name="password"
-            type={passwordVisible ? "text" : "password"}
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            error={errors.password}
-            hasIcon={true}
-            passwordVisible={passwordVisible}
-            togglePasswordVisibility={togglePasswordVisibility}
-          />
+            <FormInput
+              name="password"
+              type={passwordVisible ? "text" : "password"}
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              error={errors.password}
+              hasIcon={true}
+              passwordVisible={passwordVisible}
+              togglePasswordVisibility={togglePasswordVisibility}
+            />
 
 
-          <div className="mb-3">
-            {apiError == "" ? "" : <p className='text-center text-danger'>Username or password is incorrect.</p>}
-            <button
-              type="submit"
-              className={`btn w-100 rounded ${isFormValid() ? 'btn-green-custom text-white' : 'btn-secondary'}`}
-              disabled={!isFormValid()}
-            >
-              <strong>Sign in</strong>
-            </button>
-          </div>
+            <div className="mb-3">
+              {apiError == "" ? "" : <p className='text-center text-danger'>Username or password is incorrect.</p>}
+              <button
+                type="submit"
+                className={`btn w-100 rounded ${isFormValid() ? 'btn-green-custom text-white' : 'btn-secondary'}`}
+                disabled={!isFormValid()}
+              >
+                <strong>Sign in</strong>
+              </button>
+            </div>
 
-          <p className="text-center text-secondary">
-            <small>
-              Not a member yet?{' '}
-              <Link to="/signup" className="">
-                <strong>Sign Up</strong>
-              </Link>
-            </small>
-          </p>
-        </form>
+            <p className="text-center text-secondary">
+              <small>
+                Not a member yet?{' '}
+                <Link to="/signup" className="">
+                  <strong>Sign Up</strong>
+                </Link>
+              </small>
+            </p>
+          </form>
+        </div>
       </div>
       <Footer />
     </div>
