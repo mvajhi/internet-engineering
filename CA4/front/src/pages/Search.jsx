@@ -154,15 +154,16 @@ const SearchPage = () => {
                             }}
                         >
                             <div className="card h-100 border-0 rounded-0">
-                                <div className="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                                    <h5 className="card-title mb-3 pb-2 border-bottom border-dark text-center">Filters</h5>
-                                    <button
-                                        className="btn btn-outline-secondary btn-sm p-1"
+                                <div className="card-header bg-white border-0 justify-content-between">
+                                    <div>
+                                        <button
+                                        className="btn d-flex justify-content-end mb-4"
                                         onClick={() => setShowFilters(false)}
-                                        style={{ width: '30px', height: '30px' }}
-                                    >
-                                        ×
-                                    </button>
+                                        >×</button>
+                                    </div>
+
+
+                                    <h5 className="card-title border-bottom border-dark text-center">Filters</h5>
                                 </div>
 
                                 <div className="card-body">
@@ -374,7 +375,7 @@ const SearchPage = () => {
                 )}
             </main>
 
-            {/*<Footer />*/}
+            <Footer />
         </>
     );
 };
