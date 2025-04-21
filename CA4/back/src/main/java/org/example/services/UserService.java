@@ -108,6 +108,17 @@ public class UserService {
         return bookResponses;
     }
 
+    public BookResponses getBookResponse(Map.Entry<Book, Integer> entry, LocalDateTime date) {
+        Book book = entry.getKey();
+        Integer borrowedDays = entry.getValue();
+        BookResponses bookResponse = bookService.createTmpBookResponse(book);
+        bookResponse.setBorrowed(true);
+        bookResponse.setFinalPrice(bookResponse.getPrice() * borrowedDays / 10);
+        bookResponse.setBorrowedDays(borrowedDays);
+        bookResponse.setBorrowedDate(date.plusDays((long) borrowedDays));
+        return bookResponse;
+    }
+
     public BookResponses getBookResponse(Map.Entry<Book, Integer> entry) {
         Book book = entry.getKey();
         Integer borrowedDays = entry.getValue();

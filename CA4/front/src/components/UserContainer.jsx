@@ -212,7 +212,7 @@ const BookRow = ({ book }) => {
               Borrowed
               <div className="text-muted fw-lighter small-text">
                 {/* TODO change to until */}
-                {`Remaining days: ${book.borrowedDays}`}
+                {`Until ${book.borrowedDate}`}
               </div>
             </>
           ) : (

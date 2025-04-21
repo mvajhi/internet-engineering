@@ -389,7 +389,7 @@ public class BookShopService {
             books.addAll(userService.getBookResponsesList(receipt.getBooks()));
             for (Map.Entry<Book, Integer> entry : receipt.getBorrowedBooks().entrySet()) {
                 if (isStillInBorrowInterval(receipt.getDate(), entry.getValue())) {
-                    books.add(userService.getBookResponse(entry));
+                    books.add(userService.getBookResponse(entry, receipt.getDate()));
                 }
             }
         }
