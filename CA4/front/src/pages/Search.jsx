@@ -206,31 +206,47 @@ const SearchPage = () => {
                                 {/* Sort By */}
                                 <div className="d-flex align-items-center">
                                     <label className="form-label me-3" style={{ minWidth: '120px' }}>Sort By</label>
-                                    <select
-                                        className="form-select"
-                                        name="sortBy"
-                                        value={filters.sortBy}
-                                        // onChange={handleFilterChange}
-                                        style={{ flex: 1 }}
-                                    >
-                                        <option value="Rating">Rating</option>
-                                        <option value="Reviews">Reviews</option>
-                                    </select>
+                                    <div className="d-flex gap-2">
+                                        <button
+                                            type="button"
+                                            className={`btn rounded-3 px-5 ${filters.sortBy === 'Rating' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                            onClick={() => setFilters({...filters, sortBy: 'Rating'})}
+                                            style={{ minWidth: '100px' }}
+                                        >
+                                            Rating
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`btn rounded-3 px-5 ${filters.sortBy === 'Reviews' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                            onClick={() => setFilters({...filters, sortBy: 'Reviews'})}
+                                            style={{ minWidth: '100px' }}
+                                        >
+                                            Reviews
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Order */}
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center mt-2">
                                     <label className="form-label me-3" style={{ minWidth: '120px' }}>Order</label>
-                                    <select
-                                        className="form-select"
-                                        name="order"
-                                        value={filters.order}
-                                        // onChange={handleFilterChange}
-                                        style={{ flex: 1 }}
-                                    >
-                                        <option value="Descending">Descending</option>
-                                        <option value="Ascending">Ascending</option>
-                                    </select>
+                                    <div className="d-flex gap-2">
+                                        <button
+                                            type="button"
+                                            className={`btn rounded-3 px-5 ${filters.order === 'Descending' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                            onClick={() => setFilters({...filters, order: 'Descending'})}
+                                            style={{ minWidth: '100px' }}
+                                        >
+                                            Desc
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`btn rounded-3 px-5 ${filters.order === 'Ascending' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                            onClick={() => setFilters({...filters, order: 'Ascending'})}
+                                            style={{ minWidth: '100px' }}
+                                        >
+                                            Asc
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 

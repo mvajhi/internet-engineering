@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import BookCard from "./BookCard.jsx";
+import addParamToUri from "../Utils/utils.jsx"
 
 const tempBooksData = [
     {
@@ -52,21 +53,25 @@ async function getNewReleases() {
             inverse: true
         };
 
-        // TODO: Must be Uncommented
-        // const response = await fetch('/api/books/search', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //
-        //     body: JSON.stringify(filter)
-        // });
+        const parameter = {
+            method: 'GET'
+        }
 
+        console.log(addParamToUri('http://localhost:8080/api/books/search', filter))
+
+        // TODO: Must be Uncommented
+        const response = await fetch(
+            addParamToUri('localhost:8080/api/books/search', filter),
+            parameter);
+
+
+        console.log(response)
 
         // return await response.json()
         return tempBooksData
     } catch (error) {
-
+        console.log(error)
+        return {}
     } finally {
 
     }
