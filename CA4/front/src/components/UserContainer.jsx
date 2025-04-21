@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
+import { TmpTable } from './TmpTable';
 
 
 
@@ -151,29 +152,32 @@ const HistoryTable = () => {
   const tableHeaders = ["Image", "Name", "Author", "Genre", "Publisher", "Published Year", "Status", "Read",];
 
   return (
-    <div className="card p-4 pb-0 border-0 rounded-4 pb-3">
+    <div className="card p-4 pb-0 border-0 rounded-4 pb-3 mb-3">
       <div className="d-flex align-items-center mb-3">
         <img src="assets/book.svg" className="me-2" alt="book" />
         <div className="fs-3 fw-bold">My Books</div>
       </div>
-      <div className="table-responsive rounded-4">
-        <table className="table border-0 border-bottom border-light">
-          <thead>
-            <tr>
-              {tableHeaders.map((header, index) => (
-                <td key={index} className="text-secondary bg-light">
-                  {header}
-                </td>
+      {books.length ?
+        <div className="table-responsive rounded-4">
+          <table className="table border-0 border-bottom border-light">
+            <thead>
+              <tr>
+                {tableHeaders.map((header, index) => (
+                  <td key={index} className="text-secondary bg-light">
+                    {header}
+                  </td>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {books.map((book, index) => (
+                <BookRow key={index} book={book} />
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {books.map((book, index) => (
-              <BookRow key={index} book={book} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
+        : TmpTable("assets/no_history.svg")}
+
     </div>
   );
 };
@@ -238,7 +242,7 @@ const BookRow = ({ book }) => {
 
 const UserContainer = () => {
   return (
-    <div className="container w-75 pt-4 flex-grow-1">
+    <div className="container w-100 w-sm-75 pt-4 flex-grow-1">
       <div className="row mb-4 p-2">
         <CreditSection />
         <ProfileSection />
