@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import BookCard from "./BookCard.jsx";
+import addParamToUri from "../Utils/utils.jsx"
 
 const tempBooksData = [
     {
@@ -52,21 +53,21 @@ async function getNewReleases() {
             inverse: true
         };
 
+        const parameter = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
         // TODO: Must be Uncommented
-        // const response = await fetch('/api/books/search', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //
-        //     body: JSON.stringify(filter)
-        // });
+        const response = await fetch(
+            addParamToUri('/api/books/search', filter),
+            parameter);
 
-
-        // return await response.json()
-        return tempBooksData
+        return await response.json()
     } catch (error) {
-
+        console.log(error)
+        return {}
     } finally {
 
     }
@@ -97,7 +98,7 @@ const NewReleases = () => {
 
     return (
         <section className="mt-4 px-1">
-            <h2 className="fw-light fs-3 lh-sm mb-3 px-5">Top Rated</h2>
+            <h2 className="fw-light fs-3 lh-sm mb-3 px-5">New Releases</h2>
             <div className="d-flex flex-wrap justify-content-around gap-4">
                 {books.map((book) => (
                     <BookCard
