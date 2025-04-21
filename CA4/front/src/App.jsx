@@ -7,6 +7,7 @@ import User from './pages/User';
 import Logout from './pages/Logout';
 import Cart from "./pages/Cart";
 import History from "./pages/History";
+import BookContent from "./pages/BookContent";
 import HomePage from "./pages/HomePage.jsx";
 import Search from "./pages/Search.jsx";
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/search-books" element={<Search />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/history" element={<History />} />
+        <Route path="/books/:bookTitle/content" element={<BookContent />} />
       </Routes>
     </BrowserRouter>
   );

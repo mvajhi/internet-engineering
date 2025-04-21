@@ -58,7 +58,7 @@ public class BookService {
         if (!hasBook(user, book)) {
             return new Response(false, "User has not purchased this book", null);
         }
-        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
+        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent(), book.getAuthor().getName());
         return new Response(true, "Book content retrieved successfully.", response);
     }
 

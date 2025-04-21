@@ -7,10 +7,12 @@ import java.util.List;
 public class BookContentResponse {
     String title;
     String content;
+    String author;
 
-    public BookContentResponse(String title, String content) {
+    public BookContentResponse(String title, String content, String author) {
         this.title=title;
         this.content=content;
+        this.author=author;
     }
 
     public String getTitle() {
@@ -27,5 +29,12 @@ public class BookContentResponse {
 
     public void setContent(String content) {
         this.content=content;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+    public void setAuthor(String author) {
+        this.author=author;
     }
 }
