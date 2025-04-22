@@ -102,7 +102,7 @@ const TopRatedBooks = () => {
                 {books.map((book) => (
                     <BookCard
                         title={book.title}
-                        author={book.author}
+                        author={book.author.name}
                         price={book.price}
                         rating={book.rating}
                         imageUrl={'/assets/book.png'}

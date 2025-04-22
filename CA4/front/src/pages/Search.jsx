@@ -70,7 +70,7 @@ async function getBookWithFilter(filters) {
 
 const SearchPage = () => {
     const location = useLocation();
-    console.log(location);
+
     // State for search parameters and results
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Title');
@@ -84,7 +84,7 @@ const SearchPage = () => {
 
     const [filters, setFilters] = useState({
         title: location.state?.searchParams?.title,
-        author: location.state?.searchParams?.author,
+        author: location.state?.searchParams?.author || null,
         // title: '',
         // author: '',
         // genre: '',
@@ -97,13 +97,13 @@ const SearchPage = () => {
     // Simulate API search
     const searchBooks = () => {
         setIsLoading(true);
-        console.log(filters);
 
         // Simulate API delay
-        setTimeout(() => {
-            // const filteredBooks = getBookWithFilter(filters);
+        setTimeout(async () => {
+            console.log("search books with filters", filters);
 
-            const actualBooks = getBookWithFilter(filters);
+            const actualBooks = await getBookWithFilter(filters);
+            console.log(actualBooks);
             if (actualBooks.length > booksPerPage) {
                 setBooks(actualBooks.slice(0, booksPerPage))
                 setPaginated(true)
@@ -111,6 +111,7 @@ const SearchPage = () => {
                 setPaginated(false);
                 setBooks(actualBooks);
             }
+            console.log(books);
             setIsLoading(false);
             setCurrentPage(currentPage); // Reset to first page on new search
         }, 500);
@@ -370,10 +371,10 @@ const SearchPage = () => {
                                 books.map(book => (
                                     <BookCard
                                         title={book.title}
-                                        author={book.author}
+                                        author={book.author.name}
                                         price={book.price}
                                         rating={book.rating}
-                                        imageUrl={book.imageUrl}
+                                        imageUrl={'/assets/book.png'}
                                         link={book.link}
                                     />
                                 ))

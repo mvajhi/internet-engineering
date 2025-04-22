@@ -62,7 +62,6 @@ async function getNewReleases() {
         const response = await fetch(
             addParamToUri('/api/books/search', filter),
             parameter);
-        // console.log(response)
         // if (response===undefined || response.length ===0){
         //     return {}
         // }
@@ -87,6 +86,7 @@ const NewReleases = () => {
                 setLoading(true);
                 const newReleasesBook = await getNewReleases();
                 setBooks(newReleasesBook);
+                console.log(books);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -107,7 +107,7 @@ const NewReleases = () => {
                 {books.map((book) => (
                     <BookCard
                         title={book.title}
-                        author={book.author}
+                        author={book.author.name}
                         price={book.price}
                         rating={book.rating}
                         imageUrl={'/assets/book.png'}

@@ -144,8 +144,6 @@ const SearchBar = () => {
                     setSearchParam(event.target.value);
                 }}
                 onKeyDown={(event) => {
-                    console.log(selected);
-                    console.log(titleSearch);
                     if (event.key === 'Enter') {
                         navigate('/search-books', {
                             state: {
