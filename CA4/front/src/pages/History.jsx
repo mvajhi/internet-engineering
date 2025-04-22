@@ -3,69 +3,47 @@ import { Footer } from "../components/Footer";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
-import { TmpTable } from '../components/TmpTable';
+import Table from '../components/Table';
 
-const tableHeaders = ["Image", "Name", "Author", "Price", "Borrow Days",];
-
-const BookRow = ({ book }) => {
-    return (
-        <tr className="border-bottom">
-            <td className="align-middle">
-                <img
-                    alt={`Cover of the book '${book.title}'`}
-                    className="img-fluid"
-                    src="assets/book2.png" // TODO تصویر باید به صورت استاتیک یا پویا تنظیم شود
-                />
-            </td>
-            <td className="align-middle">
-                <div className="text-sm text-dark">{book.title}</div>
-            </td>
-            <td className="align-middle">
-                <div className="text-sm text-dark">{book.author}</div>
-            </td>
-            <td className="align-middle">
-                <div className="text-sm text-dark">
-                    {book.borrowed ? (
-                        <div className="d-flex align-items-center">
-                            <div className="text-decoration-line-through me-2">{`$${book.price}`}</div>
-                            <div>{`$${book.price * book.borrowedDays / 10}`}</div>
-                        </div>
-                    ) : (
-                        `$${book.price}`
-                    )}
-                </div>
-            </td>
-            <td className="align-middle">
-                <div className="text-sm text-dark">
-                    {book.borrowed ? (
-                        book.borrowedDays
-                    ) : (
-                        "Not Borrowed"
-                    )}
-                </div>
-            </td>
-        </tr>
-    );
-};
 
 const BookTable = (books) => {
+    console.log(books.books);
+    const columns = [
+        { key: "image", header: "Image", type: "image", alt: "Cover of the book", src: "assets/book2.png" },
+        { key: "title", header: "Name", type: "text" },
+        { key: "author", header: "Author", type: "text" },
+        {
+            key: "price",
+            header: "Price",
+            type: "text",
+            customRender: (book) =>
+                book.borrowed ? (
+                    <div className="d-flex align-items-center">
+                        <div className="text-decoration-line-through me-2">{`$${book.price}`}</div>
+                        <div>{`$${book.price * book.borrowedDays / 10}`}</div>
+                    </div>
+                ) : (
+                    `$${book.price}`
+                )
+        },
+        {
+            key: "borrowedDays",
+            header: "Borrow Days",
+            type: "text",
+            customRender: (book) =>
+                book.borrowed ? (
+                    book.borrowedDays
+                ) : (
+                    "Not Borrowed"
+                )
+        },
+    ];
     return <div className="table-responsive rounded-4">
-        <table className="table border-0 border-bottom border-light">
-            <thead>
-                <tr>
-                    {tableHeaders.map((header, index) => (
-                        <td key={index} className="text-secondary bg-light">
-                            {header}
-                        </td>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {books.books.map((book, index) => (
-                    <BookRow key={index} book={book} />
-                ))}
-            </tbody>
-        </table>
+        <Table
+            items={books.books}
+            columns={columns}
+            tmp_img="/assets/no_history.svg"
+        />
     </div>;
 }
 
@@ -149,11 +127,9 @@ const HistoryTable = () => {
                 <img src="assets/history.svg" className="me-2" alt="cart" />
                 <div className="fs-3 fw-bold">History</div>
             </div>
-            {orders.length ?
                 <div className="table-responsive rounded-4 border">
                     <HistoryAccordion orders={orders} />
                 </div>
-                : TmpTable("assets/no_history.svg")}
         </div>
     );
 };
