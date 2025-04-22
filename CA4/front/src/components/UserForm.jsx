@@ -123,14 +123,12 @@ const UserForm = () => {
         navigate('/signin');
       } else {
         if (data.message.includes('email')) {
-          console.log(data.message);
           setErrors(prev => ({
             ...prev,
             "email": "Email already exists"
           }));
         }
         if (data.message.includes('username')) {
-          console.log(data.message);
           setErrors(prev => ({
             ...prev,
             "username": "Username already exists"

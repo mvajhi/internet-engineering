@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
+import Table from './Table';
 
 
 
@@ -13,7 +14,6 @@ const CreditSection = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get("/api/user");
-        console.log(response);
         if (response.data.success) {
           setBalance(response.data.data.balance);
         }
@@ -108,9 +108,9 @@ const ProfileSection = () => {
         <div className="d-flex mb-3 flex-wrap align-items-center">
           <img src="assets/mail.svg" className="me-2" alt="Email" /> {userData.email}
         </div>
-        <ul class="pagination m-0 justify-content-center align-items-center">
-          <li class="page-item active" aria-current="page">
-            <Link to="/logout" class="page-link text-dark border-0 rounded-3">&nbsp; Logout &nbsp;</Link>
+        <ul className="pagination m-0 justify-content-center align-items-center">
+          <li className="page-item active" aria-current="page">
+            <Link to="/logout" className="page-link text-dark border-0 rounded-3">&nbsp; Logout &nbsp;</Link>
           </li>
         </ul>
       </div>
@@ -147,98 +147,50 @@ const HistoryTable = () => {
     }
   }, [username]);
 
-
-  const tableHeaders = ["Image", "Name", "Author", "Genre", "Publisher", "Published Year", "Status", "Read",];
-
-  return (
-    <div className="card p-4 pb-0 border-0 rounded-4 pb-3">
-      <div className="d-flex align-items-center mb-3">
-        <img src="assets/book.svg" className="me-2" alt="book" />
-        <div className="fs-3 fw-bold">My Books</div>
-      </div>
-      <div className="table-responsive rounded-4">
-        <table className="table border-0 border-bottom border-light">
-          <thead>
-            <tr>
-              {tableHeaders.map((header, index) => (
-                <td key={index} className="text-secondary bg-light">
-                  {header}
-                </td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {books.map((book, index) => (
-              <BookRow key={index} book={book} />
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-
-const BookRow = ({ book }) => {
-  return (
-    <tr className="border-bottom">
-      <td className="align-middle">
-        <img
-          alt={`Cover of the book '${book.title}'`}
-          className="img-fluid"
-          src="assets/book2.png" // TODO تصویر باید به صورت استاتیک یا پویا تنظیم شود
-        />
-      </td>
-      <td className="align-middle">
-        <div className="text-sm text-dark">{book.title}</div>
-      </td>
-      <td className="align-middle">
-        <div className="text-sm text-dark">{book.author}</div>
-      </td>
-      <td className="align-middle">
-        <div className="text-sm text-dark">
-          {book.genres.join(", ")}
-        </div>
-      </td>
-      <td className="align-middle">
-        <div className="text-sm text-dark">{book.publisher}</div>
-      </td>
-      <td className="align-middle">
-        <div className="text-sm text-dark">{book.year}</div>
-      </td>
-      <td className="align-middle">
-        <div className="text-sm text-dark">
-          {book.borrowed ? (
+  const columns = [
+    { key: "image", header: "Image", type: "image", alt: "Cover of the book", src: "assets/book2.png" },
+    { key: "title", header: "Name", type: "text" },
+    { key: "author", header: "Author", type: "text" },
+    { key: "genres", header: "Genre", type: "array", separator: ", " },
+    { key: "publisher", header: "Publisher", type: "text" },
+    { key: "year", header: "Published Year", type: "text" },
+    {
+      key: "borrowed",
+      header: "Status",
+      type: "text",
+      customRender: (book) =>
+        book.borrowed
+          ? (
             <>
               Borrowed
               <div className="text-muted fw-lighter small-text">
                 {`Until ${book.borrowedDate}`}
               </div>
             </>
-          ) : (
-            "Owned"
-          )}
-        </div>
-      </td>
-      <td className="align-middle">
-        <ul className="pagination m-0 justify-content-center align-items-center">
-          <li className="page-item active" aria-current="page">
-            <Link
-              to={`/books/${book.title}/content`}
-              className="page-link text-dark border-0 rounded-3 px-4"
-            >
-              Read
-            </Link>
-          </li>
-        </ul>
-      </td>
-    </tr>
+          )
+          : "Owned"
+    },
+    { key: "actions", header: "", type: "link", to: "/books/{title}/content", text: "Read" },
+  ];
+
+  return (
+    <div className="card p-4 pb-0 border-0 rounded-4 pb-3 mb-3">
+      <div className="d-flex align-items-center mb-3">
+        <img src="assets/book.svg" className="me-2" alt="book" />
+        <div className="fs-3 fw-bold">My Books</div>
+      </div>
+      <Table
+        items={books}
+        columns={columns}
+        tmp_img="/assets/no_history.svg"
+      />
+    </div>
   );
 };
 
-
 const UserContainer = () => {
   return (
-    <div className="container w-75 pt-4 flex-grow-1">
+    <div className="container w-100 w-sm-75 pt-4 flex-grow-1">
       <div className="row mb-4 p-2">
         <CreditSection />
         <ProfileSection />

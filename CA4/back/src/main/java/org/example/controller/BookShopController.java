@@ -12,16 +12,24 @@ public class BookShopController {
     @Autowired
     BookShopService bookShopService;
 
-    @RequestMapping("/author")
-    @PostMapping
+    @PostMapping("/author")
     public String addAuthor(@RequestBody AddAuthorRequest request) {
         return bookShopService.addAuthor(request).convertToString();
     }
 
-    @RequestMapping("/books")
-    @PostMapping
+    @GetMapping("/author")
+    public String getAllAuthors() {
+        return bookShopService.getAllAuthors().convertToString();
+    }
+
+    @PostMapping("/books")
     public String addBook(@RequestBody AddBookRequest request) {
         return bookShopService.addBook(request).convertToString();
+    }
+
+    @GetMapping("/books")
+    public String getAllBooks() {
+        return bookShopService.getAllBooks().convertToString();
     }
 
     @RequestMapping("/user/{username}")
@@ -86,7 +94,9 @@ public class BookShopController {
     }
 
     @GetMapping("/purchase/history")
-    public String getCartHistory(@RequestBody ShowHistoryRequest request) {
+    public String getCartHistory() {
+        ShowHistoryRequest request= new ShowHistoryRequest();
+        request.setUsername(AuthenticationUtils.getUsername());
         return bookShopService.showShoppingCartHistory(request).convertToString();
     }
 

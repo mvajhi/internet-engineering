@@ -397,4 +397,13 @@ public class BookShopService {
         UserBookResponse userBookResponse = new UserBookResponse(user.getUsername(), books);
         return new Response(true, "Books retrieved successfully", userBookResponse);
     }
+
+    public Response getAllBooks() {
+        return bookService.getAllBooks();
+    }
+
+    public Response getAllAuthors() {
+        return new Response(true, "Authors retrieved successfully", bookShop.getAuthors());
+    }
+
 }

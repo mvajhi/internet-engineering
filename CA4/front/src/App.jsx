@@ -6,6 +6,10 @@ import SignUp from './pages/SignUp';
 import User from './pages/User';
 import Logout from './pages/Logout';
 import Cart from "./pages/Cart";
+import History from "./pages/History";
+import Admin from "./pages/Admin";
+import BookContent from "./pages/BookContent";
+import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage.jsx";
 import Search from "./pages/Search.jsx";
 
@@ -22,6 +26,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/search-books" element={<Search />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/books/:bookTitle/content" element={<BookContent />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

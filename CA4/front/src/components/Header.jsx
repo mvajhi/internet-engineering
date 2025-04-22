@@ -9,7 +9,7 @@ const Header = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
             <header className="bg-white shadow-sm">
                 <div className="container d-flex justify-content-between align-items-center py-3 px-4">
                     <Link to="/homepage">
-                        <img src="assets/logo.png" alt="MioBook" height="30" />
+                        <img src="/assets/logo.png" alt="MioBook" height="30" />
                     </Link>
                     <div className="d-none d-md-flex bg-light rounded w-50">
                         <SearchBar />
@@ -64,9 +64,9 @@ const ProfileIcon = () => {
                     <hr className="dropdown-divider mx-3 bg-dark" />
                 </li>
                 <DropdownItem to="/user" iconSrc="/assets/profile_menu/person.svg" text="Profile" />
-                <DropdownItem to="#my-books" iconSrc="/assets/profile_menu/book.svg" text="My Books" />
+                <DropdownItem to="/user" iconSrc="/assets/profile_menu/book.svg" text="My Books" />
                 <DropdownItem to="/cart" iconSrc="/assets/profile_menu/cart.svg" text="Buy Cart" />
-                <DropdownItem to="#purchase-history" iconSrc="/assets/profile_menu/history.svg" text="Purchase History" />
+                <DropdownItem to="/history" iconSrc="/assets/profile_menu/history.svg" text="Purchase History" />
                 <li>
                     <hr className="dropdown-divider mx-3" />
                 </li>

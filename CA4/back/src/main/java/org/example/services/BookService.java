@@ -58,7 +58,7 @@ public class BookService {
         if (!hasBook(user, book)) {
             return new Response(false, "User has not purchased this book", null);
         }
-        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent());
+        BookContentResponse response = new BookContentResponse(book.getTitle(), book.getContent(), book.getAuthor().getName());
         return new Response(true, "Book content retrieved successfully.", response);
     }
 
@@ -173,4 +173,25 @@ public class BookService {
         }
         return false;
     }
+
+    public Response getAllBooks() {
+        List<BookResponses> bookResponses = new ArrayList<>();
+        for (Book book : bookShop.getBooks()) {
+            BookResponses bookResponse = createTmpBookResponse(book);
+            bookResponse.setTotalBuy(getCountOfBuy(book));
+            bookResponses.add(bookResponse);
+        }
+        return new Response(true, "Books retrieved successfully.", bookResponses);
+    }
+
+    public int getCountOfBuy(Book book) {
+        int count = 0;
+        for (PurchaseReceipt receipt : bookShop.getReceipts()) {
+            if (receipt.isSuccess() && receipt.getBooks().contains(book)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
 }
