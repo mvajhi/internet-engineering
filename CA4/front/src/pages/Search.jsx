@@ -148,16 +148,16 @@ const SearchPage = () => {
                         <div
                             className="position-fixed top-0 start-0 h-100 bg-white shadow-sm"
                             style={{
-                                width: '400px',
+                                maxWidth: 'fit-content',
                                 zIndex: 1050,
                                 overflowY: 'auto'
                             }}
                         >
                             <div className="card h-100 border-0 rounded-0">
                                 <div className="card-header bg-white border-0 justify-content-between">
-                                    <div>
+                                    <div className="text-end">
                                         <button
-                                        className="btn d-flex justify-content-end mb-4"
+                                        className="btn mb-4"
                                         onClick={() => setShowFilters(false)}
                                         >×</button>
                                     </div>
@@ -203,7 +203,12 @@ const SearchPage = () => {
                                                 className="form-select"
                                                 name="genre"
                                                 value={filters.genre}
-                                                // onChange={handleFilterChange}
+                                                onChange={(event) => {
+                                                    setFilters({
+                                                        ...filters,
+                                                        genre: event.target.value
+                                                    })
+                                                }}
                                                 style={{ flex: 1 }}
                                             >
                                                 <option value="">All Genres</option>
@@ -233,20 +238,20 @@ const SearchPage = () => {
                                         {/* Sort By */}
                                         <div className="d-flex align-items-center">
                                             <label className="form-label me-3" style={{ minWidth: '120px' }}>Sort By</label>
-                                            <div className="d-flex gap-2">
+                                            <div  className="d-flex flex-fill gap-2">
                                                 <button
                                                     type="button"
-                                                    className={`btn rounded-3 px-5 ${filters.sortBy === 'Rating' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                                    className={`btn rounded-3 px-1 ${filters.sortBy === 'Rating' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
                                                     onClick={() => setFilters({...filters, sortBy: 'Rating'})}
-                                                    style={{ minWidth: '100px' }}
+                                                    style={{flexBasis:'50%'}}
                                                 >
                                                     Rating
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    className={`btn rounded-3 px-5 ${filters.sortBy === 'Reviews' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                                    className={`btn rounded-3 px-1 ${filters.sortBy === 'Reviews' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
                                                     onClick={() => setFilters({...filters, sortBy: 'Reviews'})}
-                                                    style={{ minWidth: '100px' }}
+                                                    style={{flexBasis:'50%'}}
                                                 >
                                                     Reviews
                                                 </button>
@@ -256,20 +261,20 @@ const SearchPage = () => {
                                         {/* Order */}
                                         <div className="d-flex align-items-center mt-2">
                                             <label className="form-label me-3" style={{ minWidth: '120px' }}>Order</label>
-                                            <div className="d-flex gap-2">
+                                            <div className="d-flex flex-row flex-fill gap-2">
                                                 <button
                                                     type="button"
-                                                    className={`btn rounded-3 px-5 ${filters.order === 'Descending' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                                    className={`btn rounded-3 px-1 ${filters.order === 'Descending' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
                                                     onClick={() => setFilters({...filters, order: 'Descending'})}
-                                                    style={{ minWidth: '100px' }}
+                                                    style={{flexBasis:'50%'}}
                                                 >
                                                     Desc
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    className={`btn rounded-3 px-5 ${filters.order === 'Ascending' ? 'btn-green-custom' : 'btn-outline-dark'}`}
+                                                    className={`btn rounded-3 px-1 ${filters.order === 'Ascending' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
                                                     onClick={() => setFilters({...filters, order: 'Ascending'})}
-                                                    style={{ minWidth: '100px' }}
+                                                    style={{flexBasis:'50%'}}
                                                 >
                                                     Asc
                                                 </button>
@@ -277,9 +282,16 @@ const SearchPage = () => {
                                         </div>
                                     </div>
 
-                                    <div className="d-flex justify-content-center mt-4">
+                                    <div
+                                        style={{
+                                            width: 'fit-content',
+                                            left: '50%',
+                                            transform: 'translateX(-50%)'
+                                        }}
+                                        className="position-absolute bottom-0 w-100 d-flex justify-content-center"
+                                    >
                                         <button
-                                            className="btn btn-green-custom text-white w-50 py-2"
+                                            className="btn btn-green-custom w-50 text-white py-2"
                                             onClick={applyFilters}
                                         >
                                             Apply Filters
