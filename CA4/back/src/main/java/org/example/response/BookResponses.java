@@ -20,6 +20,8 @@ public class BookResponses {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime borrowedDate;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Integer totalBuy = -1;
 
     public BookResponses(String title, String author, String publisher, List<String> genres, int year, int price, boolean isBorrowed, int finalPrice, int borrowedDays) {
         this.title=title;
@@ -120,5 +122,13 @@ public class BookResponses {
 
     public void setBorrowedDate(LocalDateTime borrowedDate) {
         this.borrowedDate=borrowedDate;
+    }
+
+    public Integer getTotalBuy() {
+        return totalBuy;
+    }
+
+    public void setTotalBuy(Integer totalBuy) {
+        this.totalBuy=totalBuy;
     }
 }
