@@ -88,10 +88,25 @@ const DropdownItem = ({ to, iconSrc, text }) => {
 
 const SearchBar = () => {
     const [selected, setSelected] = useState("Author");
+    const [titleSearch, setSearchParam] = useState(null);
+    const navigate = useNavigate();
 
     const handleSelect = (value) => {
         setSelected(value);
     };
+
+    function makeSearchParam() {
+        if (selected === "Author") {
+            return {
+                author : titleSearch
+            }
+        }
+        if (selected === "Name") {
+            return {
+                title : titleSearch
+            }
+        }
+    }
 
     return (
         <div className="d-flex bg-light-custom rounded p-1 w-100 text-secondary">
@@ -125,6 +140,20 @@ const SearchBar = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control border-0 bg-light-custom"
+                onChange={(event) => {
+                    setSearchParam(event.target.value);
+                }}
+                onKeyDown={(event) => {
+                    console.log(selected);
+                    console.log(titleSearch);
+                    if (event.key === 'Enter') {
+                        navigate('/search-books', {
+                            state: {
+                                searchParams: makeSearchParam()
+                            }
+                        });
+                    }
+                }}
             />
         </div>
     );

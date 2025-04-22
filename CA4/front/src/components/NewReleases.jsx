@@ -59,16 +59,18 @@ async function getNewReleases() {
                 'Content-Type': 'application/json',
             }
         }
-        // TODO: Must be Uncommented
         const response = await fetch(
             addParamToUri('/api/books/search', filter),
             parameter);
-        if (response.length === 0){
-            return {}
-        }
+        // console.log(response)
+        // if (response===undefined || response.length ===0){
+        //     return {}
+        // }
         return await response.json()
     } catch (error) {
-        console.log(error)
+        console.log("has an error")
+        return []
+        // console.log(error)
         return {}
     } finally {
 

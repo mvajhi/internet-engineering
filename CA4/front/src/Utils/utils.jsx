@@ -4,7 +4,7 @@ function addParamsToUri(path, params) {
     const searchParams = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
+        if (value !== undefined && value !== null && value !== "") {
             searchParams.append(key, value.toString());
         }
     });
@@ -13,6 +13,4 @@ function addParamsToUri(path, params) {
 
     return queryString ? `${path}?${queryString}` : path;
 }
-
-
 export default addParamsToUri;

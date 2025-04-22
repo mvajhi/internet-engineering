@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header.jsx';
 import {Footer} from '../components/Footer.jsx';
 import BookCard from '../components/BookCard.jsx';
+import addParamToUri from "../Utils/utils.jsx";
+import { useLocation } from 'react-router-dom';
 
 const tempBooksData = [
     {
@@ -46,7 +48,29 @@ const tempBooksData = [
     },
 ];
 
+async function getBookWithFilter(filters) {
+    try {
+        const parameter = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        const response = await fetch(
+            addParamToUri('/api/books/search', filters),
+            parameter);
+        return await response.json()
+    } catch (error) {
+        console.log("has an error")
+        return []
+    }
+}
+
+
+
 const SearchPage = () => {
+    const location = useLocation();
+    console.log(location);
     // State for search parameters and results
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Title');
@@ -54,50 +78,52 @@ const SearchPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showFilters, setShowFilters] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const booksPerPage = 2;
+    const [paginated, setPaginated] = useState(false);
+
+    const booksPerPage = 10;
 
     const [filters, setFilters] = useState({
-        bookName: '',
-        authorName: '',
-        genre: '',
-        publishedYear: '',
-        sortBy: '',
-        order: ''
+        title: location.state?.searchParams?.title,
+        author: location.state?.searchParams?.author,
+        // title: '',
+        // author: '',
+        // genre: '',
+        // year: '',
+        // sortBy: '',
+        // order: ''
+        pageSize: booksPerPage + 1
     });
-
-    // Mock data - replace with actual API call
-    const mockBooks = Array(15).fill().map((_, i) => ({
-        title: `Book Title ${i + 1}`,
-        author: `Author ${String.fromCharCode(65 + (i % 5))}`, // A, B, C, etc.
-        price: (10 + (i * 0.5)).toFixed(2),
-        rating: 3 + (i % 3), // Ratings between 3-5
-        imageUrl: 'public/assets/book.png',
-        link: `/book/${i + 1}`
-    }));
 
     // Simulate API search
     const searchBooks = () => {
         setIsLoading(true);
+        console.log(filters);
 
         // Simulate API delay
         setTimeout(() => {
-            const filteredBooks = tempBooksData
+            // const filteredBooks = getBookWithFilter(filters);
 
-            //     mockBooks.filter(book => {
-            //     const term = searchTerm.toLowerCase();
-            //     if (searchType === 'Title') {
-            //         return book.title.toLowerCase().includes(term);
-            //     } else if (searchType === 'Author') {
-            //         return book.author.toLowerCase().includes(term);
-            //     }
-            //     return true;
-            // });
-
-            setBooks(filteredBooks);
+            const actualBooks = getBookWithFilter(filters);
+            if (actualBooks.length > booksPerPage) {
+                setBooks(actualBooks.slice(0, booksPerPage))
+                setPaginated(true)
+            } else {
+                setPaginated(false);
+                setBooks(actualBooks);
+            }
             setIsLoading(false);
-            setCurrentPage(1); // Reset to first page on new search
+            setCurrentPage(currentPage); // Reset to first page on new search
         }, 500);
     };
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+            setFilters({
+                ...filters,
+                pageSize: pageNumber
+            });
+            searchBooks();
+
+    }
 
     // Initial load or when search parameters change
     useEffect(() => {
@@ -110,12 +136,14 @@ const SearchPage = () => {
     const currentBooks = books //.slice(indexOfFirstBook, indexOfLastBook);
     const totalPages = Math.ceil(books.length / booksPerPage);
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    let hghgg = 0;
 
     function applyFilters() {
-
+        setIsLoading(true);
+        setShowFilters(false);
+        searchBooks();
+        setIsLoading(false);
     }
 
     return (
@@ -175,8 +203,13 @@ const SearchPage = () => {
                                                 type="text"
                                                 className="form-control"
                                                 name="bookName"
-                                                value={filters.bookName}
-                                                // onChange={handleFilterChange}
+                                                value={filters.title}
+                                                onChange={(event) => {
+                                                    setFilters({
+                                                        ...filters,
+                                                        title: event.target.value
+                                                    })
+                                                }}
                                                 placeholder="Sample"
                                                 style={{ flex: 1 }}
                                             />
@@ -189,8 +222,13 @@ const SearchPage = () => {
                                                 type="text"
                                                 className="form-control"
                                                 name="authorName"
-                                                value={filters.authorName}
-                                                // onChange={handleFilterChange}
+                                                value={filters.author}
+                                                onChange={(event) => {
+                                                    setFilters({
+                                                        ...filters,
+                                                        author: event.target.value
+                                                    })
+                                                }}
                                                 placeholder="Sample"
                                                 style={{ flex: 1 }}
                                             />
@@ -226,8 +264,13 @@ const SearchPage = () => {
                                                 type="number"
                                                 className="form-control"
                                                 name="publishedYear"
-                                                value={filters.publishedYear}
-                                                // onChange={handleFilterChange}
+                                                value={filters.year}
+                                                onChange={(event) => {
+                                                    setFilters({
+                                                        ...filters,
+                                                        year: event.target.value
+                                                    })
+                                                }}
                                                 placeholder="2015"
                                                 min="1900"
                                                 max={new Date().getFullYear()}
@@ -344,7 +387,7 @@ const SearchPage = () => {
                         </div>
 
                         {/* Pagination */}
-                        {books.length > booksPerPage && (
+                        {paginated && (
                             <nav className="pb-5 mb-5 mt-5" aria-label="Page navigation">
                                 <ul className="pagination m-0 justify-content-center align-items-center">
                                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>

@@ -61,13 +61,12 @@ async function topRated() {
                 'Content-Type': 'application/json',
             }
         }
-        // TODO: Must be Uncommented
         const response = await fetch(
             addParamToUri('/api/books/search', filter),
             parameter);
         return await response.json()
     } catch (error) {
-
+        return []
     } finally {
 
     }
