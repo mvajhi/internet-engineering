@@ -10,7 +10,7 @@ public class BookFilter {
     int page;
     int pageSize;
 
-    String order;
+    String sortBy;
 
     boolean inverse;
 
@@ -22,8 +22,8 @@ public class BookFilter {
         this.inverse = inverse;
     }
 
-    public String getOrder() {
-        return order;
+    public String getSortBy() {
+        return sortBy;
     }
 
     public List<String> getTitle() {
@@ -75,7 +75,7 @@ public class BookFilter {
         this.pageSize = pageSize;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
     }
 }

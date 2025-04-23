@@ -234,16 +234,16 @@ const SearchPage = () => {
                                             <div className="d-flex flex-fill gap-2">
                                                 <button
                                                     type="button"
-                                                    className={`btn rounded-3 px-1 ${filters.sortBy === 'Rating' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({ ...filters, sortBy: 'Rating' })}
+                                                    className={`btn rounded-3 px-1 ${filters.sortBy === 'rating' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
+                                                    onClick={() => setFilters({ ...filters, sortBy: 'rating' })}
                                                     style={{ flexBasis: '50%' }}
                                                 >
                                                     Rating
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    className={`btn rounded-3 px-1 ${filters.sortBy === 'Reviews' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({ ...filters, sortBy: 'Reviews' })}
+                                                    className={`btn rounded-3 px-1 ${filters.sortBy === 'reviewNumber' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
+                                                    onClick={() => setFilters({ ...filters, sortBy: 'reviewNumber' })}
                                                     style={{ flexBasis: '50%' }}
                                                 >
                                                     Reviews
@@ -257,19 +257,19 @@ const SearchPage = () => {
                                             <div className="d-flex flex-row flex-fill gap-2">
                                                 <button
                                                     type="button"
-                                                    className={`btn rounded-3 px-1 ${filters.order === 'Descending' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({ ...filters, order: 'Descending' })}
-                                                    style={{ flexBasis: '50%' }}
-                                                >
-                                                    Desc
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className={`btn rounded-3 px-1 ${filters.order === 'Ascending' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({ ...filters, order: 'Ascending' })}
+                                                    className={`btn rounded-3 px-1 ${filters.inverse === false ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
+                                                    onClick={() => setFilters({ ...filters, inverse: false })}
                                                     style={{ flexBasis: '50%' }}
                                                 >
                                                     Asc
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className={`btn rounded-3 px-1 ${filters.inverse === true ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
+                                                    onClick={() => setFilters({ ...filters, inverse: true })}
+                                                    style={{ flexBasis: '50%' }}
+                                                >
+                                                    Desc
                                                 </button>
                                             </div>
                                         </div>

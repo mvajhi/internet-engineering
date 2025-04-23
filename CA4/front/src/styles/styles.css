@@ -38,6 +38,7 @@ a {
 
 footer {
     background-color: var(--primary-color);
+    margin-top: auto;
 }
 
 .btn.btn-secondary[disabled] {

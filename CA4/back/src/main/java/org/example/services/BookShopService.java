@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.example.exeptions.*;
 
+import static org.example.services.ReviewService.calculateAverageRating;
 import static org.example.utils.TimeUtils.isStillInBorrowInterval;
 
 @Service
@@ -184,6 +185,7 @@ public class BookShopService {
         if (newReview.getRate() < 1 || newReview.getRate() > 5)
             return new Response(false, "invalid rate", null);
         this.bookShop.addReview(newReview);
+        book.setAverageRating(calculateAverageRating(book, bookShop.getReviews()));
         return new Response(true, "Review added successfully", null);
     }
 
