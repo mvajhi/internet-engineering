@@ -121,6 +121,7 @@ const ProfileSection = () => {
 const HistoryTable = () => {
   const [books, setBooks] = useState([]);
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -147,10 +148,59 @@ const HistoryTable = () => {
     }
   }, [username]);
 
+  const handleBookClick = (title) => {
+    navigate(`/books/${title}`);
+  };
+
+  const handleAuthorClick = (author) => {
+    navigate(`/authors/${author}`);
+  };
+
   const columns = [
-    { key: "image", header: "Image", type: "image", alt: "Cover of the book", src: "assets/book2.png" },
-    { key: "title", header: "Name", type: "text" },
-    { key: "author", header: "Author", type: "text" },
+    { 
+      key: "image", 
+      header: "Image", 
+      type: "image", 
+      alt: "Cover of the book", 
+      src: "assets/book2.png",
+      customRender: (book) => (
+        <img 
+          src={book.image || "assets/book2.png"} 
+          alt="Cover of the book" 
+          className="img-fluid rounded book-cover-img"
+          style={{ cursor: 'pointer', maxWidth: '50px' }}
+          onClick={() => handleBookClick(book.title)}
+        />
+      )
+    },
+    { 
+      key: "title", 
+      header: "Name", 
+      type: "text",
+      customRender: (book) => (
+        <span 
+          className="text-dark" 
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleBookClick(book.title)}
+        >
+          {book.title}
+        </span>
+      )
+    },
+    { 
+      key: "author", 
+      header: "Author", 
+      type: "text",
+      customRender: (book) => (
+        <span 
+          className="text-dark" 
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleAuthorClick(book.author)}
+        >
+          {book.author}
+        </span>
+      )
+    },
     { key: "genres", header: "Genre", type: "array", separator: ", " },
     { key: "publisher", header: "Publisher", type: "text" },
     { key: "year", header: "Published Year", type: "text" },

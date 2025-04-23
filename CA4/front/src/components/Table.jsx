@@ -3,7 +3,15 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 
 // ImageCell Component
-const ImageCell = ({ alt, src }) => {
+const ImageCell = ({ alt, src, customRender, item }) => {
+  if (customRender) {
+    return (
+      <td className="align-middle">
+        {customRender(item)}
+      </td>
+    );
+  }
+  
   return (
     <td className="align-middle">
       <img alt={alt} className="img-fluid" src={src} />
@@ -57,6 +65,8 @@ const Row = ({ item, columns }) => {
               key={index}
               alt={`${column.alt} '${item.title}'`}
               src={column.src}
+              customRender={column.customRender}
+              item={item}
             />
           );
         } else if (column.type === "text") {
