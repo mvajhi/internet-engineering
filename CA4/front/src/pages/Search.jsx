@@ -63,7 +63,6 @@ const SearchPage = () => {
                 setPaginated(false);
                 setBooks(actualBooks);
             }
-            console.log(books);
             setIsLoading(false);
             setCurrentPage(currentPage); // Reset to first page on new search
         }, 500);
@@ -132,7 +131,7 @@ const SearchPage = () => {
                                 overflowY: 'auto'
                             }}
                         >
-                            <div className="card h-100 border-0 rounded-0">
+                            <div className="card h-100 border-0 rounded-0 px-3">
                                 <div className="card-header bg-white border-0 justify-content-between">
                                     <div className="text-end">
                                         <button
@@ -142,7 +141,7 @@ const SearchPage = () => {
                                     </div>
 
 
-                                    <h5 className="card-title border-bottom border-dark text-center">Filters</h5>
+                                    <h5 className="card-title border-bottom border-dark text-center fw-bold fs-3 pb-3 pt-4">Filters</h5>
                                 </div>
 
                                 <div className="card-body">
@@ -285,10 +284,10 @@ const SearchPage = () => {
                                         className="position-absolute bottom-0 w-100 d-flex justify-content-center"
                                     >
                                         <button
-                                            className="btn btn-green-custom w-50 text-white py-2"
+                                            className="btn btn-green-custom w-50 text-white py-2 mb-4 rounded-3"
                                             onClick={applyFilters}
                                         >
-                                            Apply Filters
+                                            Apply
                                         </button>
                                     </div>
                                 </div>
@@ -324,7 +323,7 @@ const SearchPage = () => {
                                         author={book.author.name}
                                         price={book.price}
                                         rating={book.averageRating}
-                                        imageUrl={'/assets/book.png'}
+                                        imageLink={book.imageLink||'/assets/book.png'}
                                         link={book.link}
                                     />
                                 ))
