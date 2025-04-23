@@ -323,8 +323,8 @@ const SearchPage = () => {
                                         author={book.author.name}
                                         price={book.price}
                                         rating={book.averageRating}
-                                        imageLink={book.imageLink||'/assets/book.png'}
-                                        link={book.link}
+                                        imageLink={book.imageLink || '/assets/book.png'}
+                                        link={'/books/' + book.title}
                                     />
                                 ))
                             ) : (
@@ -379,8 +379,6 @@ const SearchPage = () => {
                     </>
                 )}
             </main>
-
-            <Footer />
         </>
     );
 };
