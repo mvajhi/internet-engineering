@@ -106,6 +106,7 @@ public class BookShopController {
     @PostMapping("/books/{bookTitle}/review")
     public String addReview(@RequestBody AddReviewRequest request, @PathVariable String bookTitle) {
         request.setTitle(bookTitle);
+        request.setUsername(AuthenticationUtils.getUsername());
         return bookShopService.addReview(request).convertToString();
     }
 

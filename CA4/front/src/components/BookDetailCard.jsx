@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-/**
- * کامپوننت BookDetailCard برای نمایش جزئیات کامل یک کتاب
- */
+
 const BookDetailCard = ({ book, onAddToCart }) => {
   const {
     title,
     author,
     publisher,
     year,
+    genres, 
     about,
     price,
     rating,
-    imageUrl = '/assets/big_book.png'
+    imageUrl = '/assets/big_book.png',
+    owned = false,
+    borrowed = false 
   } = book;
 
-  // تابع رندر کردن ستاره‌های امتیاز
   const renderStars = () => {
     const stars = [];
     const fullStars = Math.floor(rating || 0);
@@ -32,11 +32,33 @@ const BookDetailCard = ({ book, onAddToCart }) => {
     return stars;
   };
 
+  const formattedGenres = Array.isArray(genres) ? genres.join(', ') : genres;
+
+  // تعیین متن و استایل وضعیت برای نمایش
+  const getStatusText = () => {
+    if (owned) {
+      if (borrowed) {
+        return "Borrowed";
+      } else {
+        return "Owned";
+      }
+    } else {
+      return "Available";
+    }
+  };
+
   return (
     <div className="bg-white mw-60 rounded-4 border-bottom border-2 border-brown p-md-4 w-sm-75 w-100 mt-5 pt-sm-5 p-1">
       <div className="row">
         <div className="col-12 col-md-4 text-center pt-2">
-          <img className="rounded img-fluid" src={imageUrl} alt={title} />
+          <div className='position-relative'>
+            <img className="rounded img-fluid" src={imageUrl} alt={title} />
+                <div className="position-absolute bottom-0 start-0 end-0 bg-white bg-opacity-50 d-flex justify-content-end align-items-center p-2">
+                <div className='btn btn-green-custom text-white py-1 me-2'>
+                  {getStatusText()}
+                </div>
+              </div>
+          </div>
         </div>
         <div className="col-12 col-md-8 d-flex flex-column">
           <div className="flex-grow-1">
@@ -61,13 +83,13 @@ const BookDetailCard = ({ book, onAddToCart }) => {
                   <td>Author</td>
                   <td>Publisher</td>
                   <td>Year</td>
-                  <td className="px-5"></td>
+                  <td>Genre</td>
                 </tr>
                 <tr>
                   <td>{author}</td>
                   <td>{publisher}</td>
                   <td>{year}</td>
-                  <td></td>
+                  <td>{formattedGenres}</td>
                 </tr>
                 <tr className="text-secondary small">
                   <td>About</td>
@@ -84,8 +106,9 @@ const BookDetailCard = ({ book, onAddToCart }) => {
           
           <div className="mt-auto">
             <button 
-              className="btn btn-green-custom w-md-25 text-white rounded m-3 m-sm-0"
+              className={`btn fs-bold w-md-25 rounded m-3 m-sm-0 ${!owned ? 'btn-green-custom text-white' : 'btn-secondary'}`}
               onClick={onAddToCart}
+              disabled={owned}
             >
               <strong>Add to Cart</strong>
             </button>
@@ -102,10 +125,13 @@ BookDetailCard.propTypes = {
     author: PropTypes.string.isRequired,
     publisher: PropTypes.string,
     year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    genres: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
     about: PropTypes.string,
     price: PropTypes.number.isRequired,
     rating: PropTypes.number,
-    imageUrl: PropTypes.string
+    imageUrl: PropTypes.string,
+    owned: PropTypes.bool,
+    borrowed: PropTypes.bool 
   }).isRequired,
   onAddToCart: PropTypes.func.isRequired
 };

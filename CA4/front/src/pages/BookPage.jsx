@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { Footer } from '../components/Footer';
 import BookDetailCard from '../components/BookDetailCard';
 import ReviewsList from '../components/ReviewsList';
+import AddReviewForm from '../components/AddReviewForm';
 
 const BookPage = () => {
     const { bookTitle } = useParams();
@@ -16,9 +17,11 @@ const BookPage = () => {
     const [displayedReviews, setDisplayedReviews] = useState([]); // Reviews for current page
     const [currentPage, setCurrentPage] = useState(1);
     const [totalReviews, setTotalReviews] = useState(0);
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [userBooks, setUserBooks] = useState([]); // Store user's purchased books
     const reviewsPerPage = 4;
     
-    // Fetch book data and reviews
+    // Fetch book data, reviews, and user's purchased books
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -40,16 +43,40 @@ const BookPage = () => {
                     return;
                 }
                 
+                // Fetch user's purchased books
+                let userPurchasedBooks = [];
+                try {
+                    const purchasedBooksResponse = await axios.get('/api/purchase/books');
+                    
+                    if (purchasedBooksResponse.data.success) {
+                        userPurchasedBooks = purchasedBooksResponse.data.data.books || [];
+                        setUserBooks(userPurchasedBooks);
+                    }
+                } catch (purchaseErr) {
+                    console.error('Error fetching purchased books:', purchaseErr);
+                    // Continue with the rest of the data even if this fails
+                }
+                
                 // Map API responses to our component's expected format
+                // Check if the current book is in the user's purchased books
+                const currentBookTitle = bookResponse.data.data.title;
+                const userBookMatch = userPurchasedBooks.find(userBook => userBook.title === currentBookTitle);
+                
+                const owned = !!userBookMatch;
+                const borrowed = owned && userBookMatch?.borrowed === true;
+                
                 const bookData = {
                     title: bookResponse.data.data.title,
                     author: bookResponse.data.data.author,
                     publisher: bookResponse.data.data.publisher,
                     year: bookResponse.data.data.year,
+                    genres: bookResponse.data.data.genres,
                     about: bookResponse.data.data.synopsis,
                     price: bookResponse.data.data.price,
-                    rating: reviewsResponse.data.data.averageRating, // Use average rating from reviews API
-                    imageUrl: '/assets/big_book.png' 
+                    rating: reviewsResponse.data.data.averageRating,
+                    imageUrl: '/assets/big_book.png',
+                    owned: owned,
+                    borrowed: borrowed
                 };
                 
                 setBook(bookData);
@@ -87,7 +114,7 @@ const BookPage = () => {
         };
         
         fetchData();
-    }, [bookTitle]);
+    }, [bookTitle]); // Remove userBooks from dependency array
     
     // Update displayed reviews based on current page
     const updateDisplayedReviews = (reviews, page) => {
@@ -109,10 +136,67 @@ const BookPage = () => {
         updateDisplayedReviews(allReviews, pageNumber);
     };
     
-    // Handle adding a review
+    // Handle adding a review - open the modal
     const handleAddReview = () => {
-        // Implementation would go here - maybe show a modal
-        console.log('Add review clicked');
+        setIsReviewModalOpen(true);
+    };
+    
+    // Handle review submission
+    const handleSubmitReview = async (reviewData) => {
+        try {
+            const response = await axios.post(`/api/books/${bookTitle}/review`, {
+                rate: reviewData.rating,
+                comment: reviewData.comment
+            });
+            
+            if (response.data.success) {
+                try {
+                    const bookResponse = await axios.get(`/api/books/${bookTitle}`);
+                    
+                    const reviewsResponse = await axios.get(`/api/books/${bookTitle}/review`);
+                    
+                    if (bookResponse.data.success) {
+                        const updatedBookData = {
+                            ...book,
+                            rating: reviewsResponse.data.data.averageRating
+                        };
+                        setBook(updatedBookData);
+                    }
+                    
+                    // Process reviews from the API
+                    const apiReviews = reviewsResponse.data.data.reviews;
+                    
+                    // Format reviews to match our component's expected structure
+                    const formattedReviews = apiReviews.map(review => {
+                        // Format date for display
+                        const currentDate = new Date();
+                        const month = currentDate.toLocaleString('en-US', { month: 'long' });
+                        const day = currentDate.getDate();
+                        const year = currentDate.getFullYear();
+                        
+                        return {
+                            username: review.username,
+                            content: review.comment,
+                            rating: review.rate,
+                            date: `${month} ${day}, ${year}`
+                        };
+                    });
+                    
+                    setAllReviews(formattedReviews);
+                    setTotalReviews(formattedReviews.length);
+                    
+                    // Set displayed reviews (first page)
+                    updateDisplayedReviews(formattedReviews, 1);
+                    setCurrentPage(1);
+                } catch (fetchErr) {
+                    console.error('Error fetching updated data:', fetchErr);
+                }
+            } else {
+                console.error('Failed to submit review:', response.data.message);
+            }
+        } catch (err) {
+            console.error('Error submitting review:', err);
+        }
     };
 
     if (loading) {
@@ -151,6 +235,12 @@ const BookPage = () => {
                     onAddReview={handleAddReview}
                 />
             </div>
+            <AddReviewForm 
+                isOpen={isReviewModalOpen}
+                onClose={() => setIsReviewModalOpen(false)}
+                bookTitle={book?.title || ''}
+                onSubmit={handleSubmitReview}
+            />
             <Footer />
         </>
     );
