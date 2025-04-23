@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage.jsx";
 import Search from "./pages/Search.jsx";
 import AuthorPage from "./pages/AuthorPage.jsx";
+import BookPage from "./pages/BookPage.jsx";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/history" element={<History />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/books/:bookTitle/" element={<BookPage />} />
         <Route path="/books/:bookTitle/content" element={<BookContent />} />
         <Route path="/authors/:authorId" element={<AuthorPage />} />
         <Route path="/*" element={<NotFound />} />
