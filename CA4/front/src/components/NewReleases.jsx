@@ -109,7 +109,7 @@ const NewReleases = () => {
                         title={book.title}
                         author={book.author.name}
                         price={book.price}
-                        rating={book.rating}
+                        rating={book.averageRating}
                         imageUrl={'/assets/book.png'}
                         link={`/books/${book.title}`}
                     />
