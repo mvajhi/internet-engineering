@@ -137,12 +137,12 @@ public class BookService {
                 result.add(book);
             }
         }
-        if (Objects.equals(bookFilter.getOrder(), "rating")) {
+        if (Objects.equals(bookFilter.getSortBy(), "rating")) {
             result.forEach(book ->
                     book.setAverageRating(calculateAverageRating(book, bookShop.getReviews())));
             result.sort(Comparator.comparingDouble(Book::getAverageRating));
 
-        } else if(Objects.equals(bookFilter.getOrder(), "reviewNumber")){
+        } else if(Objects.equals(bookFilter.getSortBy(), "reviewNumber")){
             result.forEach(book ->
                     book.setReviewNumber(getReviewNumber(book.getTitle())));
             result.sort(Comparator.comparingInt(Book::getReviewNumber));
