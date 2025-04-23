@@ -12,6 +12,7 @@ import BookContent from "./pages/BookContent";
 import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage.jsx";
 import Search from "./pages/Search.jsx";
+import AuthorPage from "./pages/AuthorPage.jsx";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/history" element={<History />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/books/:bookTitle/content" element={<BookContent />} />
+        <Route path="/authors/:authorId" element={<AuthorPage />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

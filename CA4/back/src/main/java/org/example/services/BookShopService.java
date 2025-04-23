@@ -406,4 +406,11 @@ public class BookShopService {
         return new Response(true, "Authors retrieved successfully", bookShop.getAuthors());
     }
 
+    public Response showAuthorBooks(String authorName) {
+        Author author = bookShop.findAuthor(authorName);
+        if (author == null)
+            return new Response(false, "Author not exist", null);
+        List<Book> books = bookShop.getBooksByAuthor(authorName);
+        return new Response(true, "Books by " + authorName + " retrieved successfully", books);
+    }
 }
