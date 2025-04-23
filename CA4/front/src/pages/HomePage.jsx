@@ -73,7 +73,7 @@ const HomePage = () => {
                 </div>
             </div>
 
-            <div className="container py-5">
+            <div className="container py-5 bg-light">
 
                 <NewReleases />
                 <TopRatedBooks />
