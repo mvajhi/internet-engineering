@@ -105,22 +105,4 @@ BookList.propTypes = {
     })).isRequired
 };
 
-// Example usage:
-/*
-const booksData = [
-  {
-    title: "Book Title 1",
-    author: "Author One",
-    price: 10.25,
-    rating: 4,
-    imageUrl: "assets/book1.png",
-    link: "/book1",
-    authorId: "author1"
-  },
-  // ... more books
-];
-
-<BookList books={booksData} />
-*/
-
 export default BookCard;
