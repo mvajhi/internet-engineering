@@ -2,16 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 import Table from './Table';
+import Modal from './Modal';
+import AddAuthorForm from './AddAuthorForm';
+import AddBookForm from './AddBookForm';
 
 
-const AddingSection = () => {
+const AddingSection = ({ onAddAuthorClick, onAddBookClick }) => {
 
   return (
     <div className="py-3 justify-content-center d-flex">
-      <button className={"btn rounded btn-green-custom text-white py-2 mx-sm-5 mx-2"}>
+      <button 
+        className={"btn rounded btn-green-custom text-white py-2 mx-sm-5 mx-2"}
+        onClick={onAddAuthorClick}
+      >
         Add Author
       </button>
-      <button className={"btn rounded btn-green-custom text-white py-2 mx-sm-5 mx-2"}>
+      <button 
+        className={"btn rounded btn-green-custom text-white py-2 mx-sm-5 mx-2"}
+        onClick={onAddBookClick}
+      >
         Add Book
       </button>
     </div>
@@ -189,14 +198,56 @@ const AuthorTable = () => {
 };
 
 const AdminContainer = () => {
+  const [showAuthorModal, setShowAuthorModal] = useState(false);
+  const [showBookModal, setShowBookModal] = useState(false);
+  const [refreshAuthors, setRefreshAuthors] = useState(false);
+  const [refreshBooks, setRefreshBooks] = useState(false);
+  
+  const handleAddAuthorSuccess = () => {
+    // Trigger a refresh of the author table
+    setRefreshAuthors(prev => !prev);
+  };
+  
+  const handleAddBookSuccess = () => {
+    // Trigger a refresh of the book table
+    setRefreshBooks(prev => !prev);
+  };
+
   return (
     <div className="container w-100 w-sm-75 pt-4 flex-grow-1">
       <ProfileSection />
-      <AddingSection />
+      <AddingSection 
+        onAddAuthorClick={() => setShowAuthorModal(true)} 
+        onAddBookClick={() => setShowBookModal(true)}
+      />
       <div className="row mb-3" />
-      <BookTable />
+      <BookTable key={refreshBooks ? 'refresh-books' : 'initial-books'} />
       <div className="row mb-4 p-2" />
-      <AuthorTable />
+      <AuthorTable key={refreshAuthors ? 'refresh-authors' : 'initial-authors'} />
+      
+      {/* Author Modal */}
+      <Modal 
+        isOpen={showAuthorModal} 
+        onClose={() => setShowAuthorModal(false)}
+        title="Add Author"
+      >
+        <AddAuthorForm 
+          onClose={() => setShowAuthorModal(false)} 
+          onSuccess={handleAddAuthorSuccess}
+        />
+      </Modal>
+      
+      {/* Book Modal */}
+      <Modal 
+        isOpen={showBookModal} 
+        onClose={() => setShowBookModal(false)}
+        title="Add Book"
+      >
+        <AddBookForm 
+          onClose={() => setShowBookModal(false)} 
+          onSuccess={handleAddBookSuccess}
+        />
+      </Modal>
     </div>
   );
 };

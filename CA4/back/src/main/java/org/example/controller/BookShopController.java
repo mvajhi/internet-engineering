@@ -50,8 +50,7 @@ public class BookShopController {
         return bookShopService.showAuthorDetails(authorName).convertToString();
     }
 
-    @RequestMapping("/books/{bookTitle}")
-    @GetMapping
+    @GetMapping("/books/{bookTitle}")
     public String getBook(@PathVariable String bookTitle) {
         return bookShopService.showBookDetails(bookTitle).convertToString();
     }
