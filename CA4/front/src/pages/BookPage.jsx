@@ -6,6 +6,7 @@ import { Footer } from '../components/Footer';
 import BookDetailCard from '../components/BookDetailCard';
 import ReviewsList from '../components/ReviewsList';
 import AddReviewForm from '../components/AddReviewForm';
+import PurchaseModal from '../components/PurchaseModal';
 
 const BookPage = () => {
     const { bookTitle } = useParams();
@@ -18,6 +19,7 @@ const BookPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalReviews, setTotalReviews] = useState(0);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
     const [userBooks, setUserBooks] = useState([]); // Store user's purchased books
     const reviewsPerPage = 4;
 
@@ -123,11 +125,36 @@ const BookPage = () => {
         setDisplayedReviews(reviews.slice(startIndex, endIndex));
     };
 
-    // Handle add to cart
+    // Handle add to cart - update to open the modal
     const handleAddToCart = () => {
-        // Implementation would go here
-        console.log(`Added ${book?.title} to cart`);
-        // You might navigate to cart or show a notification
+        setIsPurchaseModalOpen(true);
+    };
+
+    // Handle purchase completion
+    const handlePurchaseComplete = async (isBorrowing, days) => {
+        // Refresh the book data to show updated ownership status
+        try {
+            const purchasedBooksResponse = await axios.get('/api/purchase/books');
+            if (purchasedBooksResponse.data.success) {
+                setUserBooks(purchasedBooksResponse.data.data.books || []);
+                
+                // Update the current book's ownership status
+                const updatedBookTitle = book.title;
+                const updatedUserBookMatch = purchasedBooksResponse.data.data.books.find(
+                    userBook => userBook.title === updatedBookTitle
+                );
+
+                if (updatedUserBookMatch) {
+                    setBook({
+                        ...book,
+                        owned: true,
+                        borrowed: isBorrowing
+                    });
+                }
+            }
+        } catch (purchaseErr) {
+            console.error('Error updating purchased books:', purchaseErr);
+        }
     };
 
     // Handle page change for reviews
@@ -240,6 +267,12 @@ const BookPage = () => {
                 onClose={() => setIsReviewModalOpen(false)}
                 bookTitle={book?.title || ''}
                 onSubmit={handleSubmitReview}
+            />
+            <PurchaseModal
+                isOpen={isPurchaseModalOpen}
+                onClose={() => setIsPurchaseModalOpen(false)}
+                book={book}
+                onPurchaseComplete={handlePurchaseComplete}
             />
             <Footer />
         </>

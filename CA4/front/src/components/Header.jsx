@@ -27,12 +27,14 @@ const Header = () => {
 
 const ProfileIcon = () => {
     const [userName, setUserName] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const fetchUserName = async () => {
             const response = await axios.get("/api/user");
             if (response.data.success) {
                 setUserName(response.data.data.username);
+                setIsAdmin(response.data.data.admin === true);
             }
         };
 
@@ -63,10 +65,16 @@ const ProfileIcon = () => {
                 <li>
                     <hr className="dropdown-divider mx-3 bg-dark" />
                 </li>
-                <DropdownItem to="/user" iconSrc="/assets/profile_menu/person.svg" text="Profile" />
-                <DropdownItem to="/user" iconSrc="/assets/profile_menu/book.svg" text="My Books" />
-                <DropdownItem to="/cart" iconSrc="/assets/profile_menu/cart.svg" text="Buy Cart" />
-                <DropdownItem to="/history" iconSrc="/assets/profile_menu/history.svg" text="Purchase History" />
+                {isAdmin ? (
+                    <DropdownItem to="/admin" iconSrc="/assets/profile_menu/book.svg" text="Manage Shop" />
+                ) : (
+                    <>
+                    <DropdownItem to="/user" iconSrc="/assets/profile_menu/person.svg" text="Profile" />
+                        <DropdownItem to="/user" iconSrc="/assets/profile_menu/book.svg" text="My Books" />
+                        <DropdownItem to="/cart" iconSrc="/assets/profile_menu/cart.svg" text="Buy Cart" />
+                        <DropdownItem to="/history" iconSrc="/assets/profile_menu/history.svg" text="Purchase History" />
+                    </>
+                )}
                 <li>
                     <hr className="dropdown-divider mx-3" />
                 </li>

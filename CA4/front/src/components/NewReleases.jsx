@@ -101,7 +101,7 @@ const NewReleases = () => {
     if (error) return <div className="text-center py-5 text-danger">Error: {error}</div>;
 
     return (
-        <section className="mt-4 px-1">
+        <section className="mt-4 px-1 bg-light">
             <h2 className="fw-light fs-3 lh-sm mb-3 px-5">New Releases</h2>
             <div className="d-flex flex-wrap justify-content-around gap-4">
                 {books.map((book) => (
