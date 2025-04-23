@@ -168,7 +168,7 @@ const HistoryTable = () => {
           src={book.imageLink || "assets/book2.png"}
           alt="Cover of the book"
           className="img-fluid rounded book-cover-img"
-          style={{ maxWidth: '32px', maxHeight: '44px', objectFit: 'cover' }}
+          style={{ maxWidth: '32px', height: '44px', objectFit: 'cover' }}
           onClick={() => handleBookClick(book.title)}
         />
       )

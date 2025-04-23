@@ -114,7 +114,7 @@ const AuthorPage = () => {
             <Header />
 
             {/* Top background section */}
-            <div className="bg-image position-relative overflow-hidden border-bottom border-dark border-1 vh-25" style={{ height: '50vh' }}>
+            <div className="bg-image position-relative overflow-hidden border-bottom border-dark border-4 vh-25" style={{ height: '50vh' }}>
                 <img
                     src="/assets/author_back.png"
                     alt="background"
@@ -132,7 +132,7 @@ const AuthorPage = () => {
                             style={{
                                 marginTop: '-95%',
                                 maxWidth: 'min(280px, 80vw)',
-                                maxHeight: '550px',
+                                height: '420px',
                                 objectFit: 'cover'
                             }}
                         />
