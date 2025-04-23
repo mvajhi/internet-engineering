@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 
 
-const Header = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
+const Header = () => {
     return (
         <>
             <header className="bg-white shadow-sm">
@@ -98,12 +98,12 @@ const SearchBar = () => {
     function makeSearchParam() {
         if (selected === "Author") {
             return {
-                author : titleSearch
+                author: titleSearch
             }
         }
         if (selected === "Name") {
             return {
-                title : titleSearch
+                title: titleSearch
             }
         }
     }

@@ -8,6 +8,7 @@ import Table from '../components/Table';
 const CartTable = () => {
     const [books, setBooks] = useState([]);
     const [username, setUsername] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserName = async () => {
@@ -49,10 +50,57 @@ const CartTable = () => {
         }
     }, [username]);
 
+    const handleBookClick = (title) => {
+        navigate(`/books/${title}`);
+    };
+
+    const handleAuthorClick = (author) => {
+        navigate(`/authors/${author}`);
+    };
+
     const columns = [
-        { key: "image", header: "Image", type: "image", alt: "Cover of the book", src: "assets/book2.png" },
-        { key: "title", header: "Name", type: "text" },
-        { key: "author", header: "Author", type: "text" },
+        {
+            key: "image",
+            header: "Image",
+            type: "image",
+            alt: "Cover of the book",
+            src: "assets/book2.png",
+            customRender: (book) => (
+                <img
+                    src={book.image || "assets/book2.png"}
+                    alt="Cover of the book"
+                    className="img-fluid rounded book-cover-img"
+                    style={{ cursor: 'pointer', maxWidth: '50px' }}
+                    onClick={() => handleBookClick(book.title)}
+                />
+            )
+        },
+        {
+            key: "title",
+            header: "Name",
+            type: "text",
+            customRender: (book) => (
+                <span
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleBookClick(book.title)}
+                >
+                    {book.title}
+                </span>
+            )
+        },
+        {
+            key: "author",
+            header: "Author",
+            type: "text",
+            customRender: (book) => (
+                <span
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleAuthorClick(book.author)}
+                >
+                    {book.author}
+                </span>
+            )
+        },
         {
             key: "price",
             header: "Price",
@@ -85,7 +133,7 @@ const CartTable = () => {
             customRender: (book) =>
                 <button
                     className="btn bg-light rounded-3"
-                    onClick={() => {handleRemove(book.title)}}
+                    onClick={() => { handleRemove(book.title) }}
                 >
                     Remove
                 </button>
@@ -120,27 +168,19 @@ const CartTable = () => {
                 columns={columns}
                 tmp_img="/assets/no_product.svg"
             />
-                    <div className="d-flex mt-1 mb-4 justify-content-center">
-            {books.length ? <button className="btn btn-green-custom mt-2 text-white rounded px-5" onClick={PurchaseCart}>
-                <span className="px-md-5 px-sm-0">Purchase</span>
-            </button> : ""}
-        </div>
+            <div className="d-flex mt-1 mb-4 justify-content-center">
+                {books.length ? <button className="btn btn-green-custom mt-2 text-white rounded px-5" onClick={PurchaseCart}>
+                    <span className="px-md-5 px-sm-0">Purchase</span>
+                </button> : ""}
+            </div>
         </div>
     );
 };
 
 const Cart = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            // Navigate to search results
-            console.log('Searching for:', searchQuery);
-        }
-    };
     return (
         <div className='bg-light d-flex flex-column vh-100'>
-            <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onSearchSubmit={handleSearch} />
+            <Header />
             <br /><br />
             <div className="container w-100 w-sm-75 pt-4 flex-grow-1">
                 <CartTable />

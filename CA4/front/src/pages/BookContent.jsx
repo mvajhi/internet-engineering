@@ -28,19 +28,10 @@ const BookContent = () => {
         fetchBookContent();
     }, [bookTitle]);
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            // Navigate to search results
-            console.log('Searching for:', searchQuery);
-        }
-    };
-
     return (
         <>
             <div className="bg-light d-flex flex-column vh-100">
-                <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onSearchSubmit={handleSearch} />
+                <Header />
                 <div className="flex-grow-1 mx-1 px-4">
                     <div className="bg-light d-flex align-items-baseline justify-content-center pb-1">
                         <div className="bg-white mw-60 rounded-4 border-bottom border-2 border-brown p-md-4 w-100 mt-5 pt-5">

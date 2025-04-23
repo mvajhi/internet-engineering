@@ -127,26 +127,17 @@ const HistoryTable = () => {
                 <img src="assets/history.svg" className="me-2" alt="cart" />
                 <div className="fs-3 fw-bold">History</div>
             </div>
-                <div className="table-responsive rounded-4 border">
-                    <HistoryAccordion orders={orders} />
-                </div>
+            <div className="table-responsive rounded-4 border">
+                <HistoryAccordion orders={orders} />
+            </div>
         </div>
     );
 };
 
 const History = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            // Navigate to search results
-            console.log('Searching for:', searchQuery);
-        }
-    };
-
     return (
         <div className='bg-light d-flex flex-column vh-100'>
-            <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onSearchSubmit={handleSearch} />
+            <Header />
             <br /><br />
             <div className="container w-100 w-sm-75 pt-4 flex-grow-1 mb-3">
                 <HistoryTable />

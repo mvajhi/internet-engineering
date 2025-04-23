@@ -9,7 +9,7 @@ const Logout = () => {
     await axios.post("/api/users/logout");
     navigate("/signin");
   };
-  
+
   useEffect(() => {
     handleLogout();
   }, []);

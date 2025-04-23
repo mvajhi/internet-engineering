@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import BookCard from "./BookCard.jsx";
 import addParamToUri from "../Utils/utils.jsx"
 
@@ -109,7 +109,7 @@ const NewReleases = () => {
                         title={book.title}
                         author={book.author.name}
                         price={book.price}
-                        rating={book.rating}
+                        rating={book.averageRating}
                         imageUrl={'/assets/book.png'}
                         link={`/books/${book.title}`}
                     />

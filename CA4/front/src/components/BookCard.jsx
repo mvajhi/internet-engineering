@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-const BookCard = ({ title, author, price, rating = 0, imageUrl, link }) => {
+const BookCard = ({ title, author, price, rating = 0, imageUrl, link, authorId }) => {
     // Render star ratings dynamically
     const renderStars = () => {
         const stars = [];
@@ -24,7 +25,7 @@ const BookCard = ({ title, author, price, rating = 0, imageUrl, link }) => {
     return (
         <div className="">
             <div className="card card-book border-0 shadow-sm rounded-4 h-100">
-                <a href={link}>
+                <Link to={link}>
                     <img
                         alt={title}
                         className="card-img-top rounded-top-4"
@@ -32,13 +33,19 @@ const BookCard = ({ title, author, price, rating = 0, imageUrl, link }) => {
                         src={imageUrl}
                         width="200"
                     />
-                </a>
+                </Link>
                 <div className="card-body text-center d-flex flex-column">
                     <h2 className="fs-5 fw-bold mb-2">
-                        {title}
+                        <Link to={link} className="text-decoration-none text-dark">
+                            {title}
+                        </Link>
                     </h2>
                     <p className="text-muted mb-2 pb-2">
-                        {author}
+                        {author && (
+                            <Link to={`/authors/${author}`} className="text-decoration-none text-muted">
+                                {author}
+                            </Link>
+                        )}
                     </p>
                     <div className="d-flex justify-content-between mb-2 mt-auto">
                         <div className="text-warning">
@@ -63,7 +70,8 @@ BookCard.propTypes = {
     price: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
     imageUrl: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired
+    link: PropTypes.string.isRequired,
+    authorId: PropTypes.string
 };
 
 const BookList = ({ books }) => {
@@ -78,6 +86,7 @@ const BookList = ({ books }) => {
                     rating={book.rating}
                     imageUrl={book.imageUrl}
                     link={book.link}
+                    authorId={book.authorId}
                 />
             ))}
         </div>
@@ -91,8 +100,27 @@ BookList.propTypes = {
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
         imageUrl: PropTypes.string,
-        link: PropTypes.string.isRequired
+        link: PropTypes.string.isRequired,
+        authorId: PropTypes.string
     })).isRequired
 };
+
+// Example usage:
+/*
+const booksData = [
+  {
+    title: "Book Title 1",
+    author: "Author One",
+    price: 10.25,
+    rating: 4,
+    imageUrl: "assets/book1.png",
+    link: "/book1",
+    authorId: "author1"
+  },
+  // ... more books
+];
+
+<BookList books={booksData} />
+*/
 
 export default BookCard;

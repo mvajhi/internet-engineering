@@ -14,7 +14,6 @@ const HomePage = () => {
     const [newReleases, setNewReleases] = useState([]);
     const [topRated, setTopRated] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -35,22 +34,13 @@ const HomePage = () => {
         fetchBooks();
     }, []);
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            // Navigate to search results
-            console.log('Searching for:', searchQuery);
-        }
-    };
-
     if (loading) {
         return <div className="text-center py-5">Loading books...</div>;
     }
 
     return (
         <div className="bg-light">
-            <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onSearchSubmit={handleSearch} />
-
+            <Header />
 
             <br /><br />
             <div className="p-4 rounded-3 d-flex flex-column flex-md-row align-items-center w-100 hello-box">
@@ -86,14 +76,6 @@ const HomePage = () => {
             <div className="container py-5">
 
                 <NewReleases />
-                {/*<section className="mt-5">*/}
-                {/*    <h2 className="fw-light fs-3 mb-4">New Releases</h2>*/}
-                {/*    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">*/}
-                {/*        {newReleases.map(book => (*/}
-                {/*            <BookCard key={book.id} book={book} />*/}
-                {/*        ))}*/}
-                {/*    </div>*/}
-                {/*</section>*/}
                 <TopRatedBooks />
             </div>
             <Footer />

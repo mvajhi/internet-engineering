@@ -49,7 +49,7 @@ const AddBookForm = ({ onClose, onSuccess }) => {
   const nextStep = async () => {
     try {
       const response = await axios.get(`/api/books/${formData.title}`);
-      
+
       if (response.data.success) {
         setDubpName(1);
       } else {
@@ -69,15 +69,15 @@ const AddBookForm = ({ onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       const bookData = {
         ...formData,
         genres: formData.genres.split(',').map(genre => genre.trim())
       };
-      
+
       const response = await axios.post('/api/books', bookData);
-      
+
       if (response.data.success) {
         if (onSuccess) onSuccess();
         onClose();
@@ -95,75 +95,75 @@ const AddBookForm = ({ onClose, onSuccess }) => {
     return (
       <form className='px-1'>
         <div className='px-2'>
-        <FormInput
-          name="title"
-          type="text"
-          placeholder="Name"
-          value={formData.title}
-          onChange={handleChange}
-          error={DubpName ? "Book name already exists" : ""}
-        />
-        
-        <FormInput
-          name="author"
-          type="text"
-          placeholder="Author"
-          value={formData.author}
-          onChange={handleChange}
-        />
-        
-        <FormInput
-          name="publisher"
-          type="text"
-          placeholder="Publisher"
-          value={formData.publisher}
-          onChange={handleChange}
-        />
-        
-        <FormInput
-          name="genres"
-          type="text"
-          placeholder="Genres (comma separated)"
-          value={formData.genres}
-          onChange={handleChange}
-        />
-        
-        <FormInput
-          name="year"
-          type="text"
-          placeholder="Published Year"
-          value={formData.year}
-          onChange={handleChange}
-        />
-        
-        <FormInput
-          name="price"
-          type="text"
-          placeholder="Price"
-          value={formData.price}
-          onChange={handleChange}
-        />
-        
-        <FormInput
-          name="imageLink"
-          type="text"
-          placeholder="Image Link"
-          value={formData.imageLink}
-          onChange={handleChange}
-        />
+          <FormInput
+            name="title"
+            type="text"
+            placeholder="Name"
+            value={formData.title}
+            onChange={handleChange}
+            error={DubpName ? "Book name already exists" : ""}
+          />
+
+          <FormInput
+            name="author"
+            type="text"
+            placeholder="Author"
+            value={formData.author}
+            onChange={handleChange}
+          />
+
+          <FormInput
+            name="publisher"
+            type="text"
+            placeholder="Publisher"
+            value={formData.publisher}
+            onChange={handleChange}
+          />
+
+          <FormInput
+            name="genres"
+            type="text"
+            placeholder="Genres (comma separated)"
+            value={formData.genres}
+            onChange={handleChange}
+          />
+
+          <FormInput
+            name="year"
+            type="text"
+            placeholder="Published Year"
+            value={formData.year}
+            onChange={handleChange}
+          />
+
+          <FormInput
+            name="price"
+            type="text"
+            placeholder="Price"
+            value={formData.price}
+            onChange={handleChange}
+          />
+
+          <FormInput
+            name="imageLink"
+            type="text"
+            placeholder="Image Link"
+            value={formData.imageLink}
+            onChange={handleChange}
+          />
         </div>
-        
+
         <div className="d-flex flex-column mt-3">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className={`btn w-100 mb-2 ${isStep1Valid() ? 'btn-green-custom text-white' : 'btn-secondary'}`}
             onClick={nextStep}
             disabled={!isStep1Valid()}
           >
             Next
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn bg-light rounded-3 w-100"
             onClick={onClose}
           >
@@ -176,9 +176,9 @@ const AddBookForm = ({ onClose, onSuccess }) => {
     return (
       <form onSubmit={handleSubmit} className='px-1'>
         <div className="form-group mb-3 px-2">
-          <textarea 
-            className="form-control" 
-            id="synopsis" 
+          <textarea
+            className="form-control"
+            id="synopsis"
             name="synopsis"
             value={formData.synopsis}
             onChange={handleChange}
@@ -186,11 +186,11 @@ const AddBookForm = ({ onClose, onSuccess }) => {
             placeholder="Synopsis"
           ></textarea>
         </div>
-        
+
         <div className="form-group mb-3 px-2">
-          <textarea 
-            className="form-control" 
-            id="content" 
+          <textarea
+            className="form-control"
+            id="content"
             name="content"
             value={formData.content}
             onChange={handleChange}
@@ -198,17 +198,17 @@ const AddBookForm = ({ onClose, onSuccess }) => {
             placeholder="Content"
           ></textarea>
         </div>
-        
+
         <div className="d-flex flex-column mt-3">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className={`btn w-100 mb-2 ${isStep2Valid() ? 'btn-green-custom text-white' : 'btn-secondary'}`}
             disabled={!isStep2Valid() || isSubmitting}
           >
             Submit
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn bg-light rounded-3 w-100"
             onClick={prevStep}
           >
