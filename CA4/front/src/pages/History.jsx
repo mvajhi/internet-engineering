@@ -135,18 +135,9 @@ const HistoryTable = () => {
 };
 
 const History = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            // Navigate to search results
-            console.log('Searching for:', searchQuery);
-        }
-    };
-
     return (
         <div className='bg-light d-flex flex-column vh-100'>
-            <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onSearchSubmit={handleSearch} />
+            <Header />
             <br /><br />
             <div className="container w-100 w-sm-75 pt-4 flex-grow-1 mb-3">
                 <HistoryTable />
