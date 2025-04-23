@@ -9,7 +9,7 @@ const tempBooksData = [
         author: "Author One",
         price: 10.25,
         rating: 4,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book1"
     },
     {
@@ -17,7 +17,7 @@ const tempBooksData = [
         author: "Author One",
         price: 13.25,
         rating: 2,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
     {
@@ -25,7 +25,7 @@ const tempBooksData = [
         author: "Author One",
         price: 500.25,
         rating: 4,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
     {
@@ -33,7 +33,7 @@ const tempBooksData = [
         author: "ALi Momtahen",
         price: 313,
         rating: 5,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
     {
@@ -41,7 +41,7 @@ const tempBooksData = [
         author: "ALi Momtahen",
         price: 1000,
         rating: 5,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
 ];
@@ -96,8 +96,8 @@ const TopRatedBooks = () => {
     if (error) return <div className="text-center py-5 text-danger">Error: {error}</div>;
 
     return (
-        <section className="mt-4 px-1">
-            <h2 className="fw-light fs-3 lh-sm mb-3 px-5">Top Rated</h2>
+        <section className="mt-4 px-1 bg-light">
+            <h2 className="fw-light fs-3 lh-sm mb-3 px-5 bg-light">Top Rated</h2>
             <div className="d-flex flex-wrap justify-content-around gap-4">
                 {books.map((book) => (
                     <BookCard
@@ -105,7 +105,7 @@ const TopRatedBooks = () => {
                         author={book.author.name}
                         price={book.price}
                         rating={book.averageRating}
-                        imageUrl={'/assets/book.png'}
+                        imageLink={book.imageLink || '/assets/book.png'}
                         link={`/books/${book.title}`}
                     />
                 ))}

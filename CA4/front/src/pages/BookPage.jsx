@@ -76,7 +76,7 @@ const BookPage = () => {
                     about: bookResponse.data.data.synopsis,
                     price: bookResponse.data.data.price,
                     rating: reviewsResponse.data.data.averageRating,
-                    imageUrl: '/assets/big_book.png',
+                    imageLink: bookResponse.data.data.imageLink || '/assets/big_book.png',
                     owned: owned,
                     borrowed: borrowed
                 };

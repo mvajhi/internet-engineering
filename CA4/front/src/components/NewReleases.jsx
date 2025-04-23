@@ -8,7 +8,7 @@ const tempBooksData = [
         author: "Author One",
         price: 10.25,
         rating: 4,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book1"
     },
     {
@@ -16,7 +16,7 @@ const tempBooksData = [
         author: "Author One",
         price: 13.25,
         rating: 2,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
     {
@@ -24,7 +24,7 @@ const tempBooksData = [
         author: "Author One",
         price: 500.25,
         rating: 4,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
     {
@@ -32,7 +32,7 @@ const tempBooksData = [
         author: "ALi Momtahen",
         price: 313,
         rating: 5,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
     {
@@ -40,7 +40,7 @@ const tempBooksData = [
         author: "ALi Momtahen",
         price: 1000,
         rating: 5,
-        imageUrl: "assets/book.png",
+        imageLink: "assets/book.png",
         link: "/book"
     },
 ];
@@ -110,7 +110,7 @@ const NewReleases = () => {
                         author={book.author.name}
                         price={book.price}
                         rating={book.averageRating}
-                        imageUrl={'/assets/book.png'}
+                        imageLink={book.imageLink ||'/assets/book.png'}
                         link={`/books/${book.title}`}
                     />
                 ))}

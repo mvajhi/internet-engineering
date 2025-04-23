@@ -165,10 +165,10 @@ const HistoryTable = () => {
       src: "assets/book2.png",
       customRender: (book) => (
         <img
-          src={book.image || "assets/book2.png"}
+          src={book.imageLink || "assets/book2.png"}
           alt="Cover of the book"
           className="img-fluid rounded book-cover-img"
-          style={{ cursor: 'pointer', maxWidth: '50px' }}
+          style={{ maxWidth: '32px', maxHeight: '44px', objectFit: 'cover' }}
           onClick={() => handleBookClick(book.title)}
         />
       )

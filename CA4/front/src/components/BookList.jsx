@@ -29,6 +29,9 @@ const BookList = ({ books, title, loading = false }) => {
     );
   }
 
+  console.log('Books:');
+  console.log(books);
+
   return (
     <section className="my-4">
       {title && <h2 className="fw-light fs-3 mb-4">{title}</h2>}
@@ -40,7 +43,7 @@ const BookList = ({ books, title, loading = false }) => {
               author={book.author}
               price={book.price}
               rating={book.rating || 0}
-              imageUrl={book.imageUrl || '/assets/book.png'}
+              imageLink={book.imageLink || '/assets/book.png'}
               link={book.link || `/books/${book.title}`}
             />
           </div>
@@ -58,7 +61,7 @@ BookList.propTypes = {
       author: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
       rating: PropTypes.number,
-      imageUrl: PropTypes.string,
+      imageLink: PropTypes.string,
       link: PropTypes.string
     })
   ).isRequired,

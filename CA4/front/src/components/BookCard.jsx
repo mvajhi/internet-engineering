@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import PurchaseModal from './PurchaseModal';
 
-const BookCard = ({ title, author, price, rating = 0, imageUrl, link, authorId }) => {
+const BookCard = ({ title, author, price, rating = 0, imageLink, link, authorId }) => {
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
     
     // Render star ratings dynamically
@@ -48,9 +48,9 @@ const BookCard = ({ title, author, price, rating = 0, imageUrl, link, authorId }
                     <img
                         alt={title}
                         className="card-img-top rounded-top-4"
-                        height="200"
-                        src={imageUrl}
-                        width="200"
+                        src={imageLink}
+        style={{width: '210px', height: '200px', objectFit: 'cover' }}
+
                     />
                 </Link>
                 <div className="card-body text-center d-flex flex-column">
@@ -98,7 +98,7 @@ BookCard.propTypes = {
     author: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
-    imageUrl: PropTypes.string.isRequired,
+    imageLink: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
     authorId: PropTypes.string
 };
@@ -113,7 +113,7 @@ const BookList = ({ books }) => {
                     author={book.author}
                     price={book.price}
                     rating={book.rating}
-                    imageUrl={book.imageUrl}
+                    imageLink={book.imageLink}
                     link={book.link}
                     authorId={book.authorId}
                 />
@@ -128,7 +128,7 @@ BookList.propTypes = {
         author: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
-        imageUrl: PropTypes.string,
+        imageLink: PropTypes.string,
         link: PropTypes.string.isRequired,
         authorId: PropTypes.string
     })).isRequired

@@ -12,9 +12,20 @@ const ImageCell = ({ alt, src, customRender, item }) => {
     );
   }
 
+  let imageSrc = src;
+  
+  if (item && item.imageLink) {
+    imageSrc = item.imageLink;
+  }
+
   return (
     <td className="align-middle">
-      <img alt={alt} className="img-fluid" src={src} />
+      <img 
+        alt={alt || "Image"} 
+        className="img-fluid" 
+        src={imageSrc}
+        style={{maxWidth: '32px', height: '44px', objectFit: 'cover' }}
+      />
     </td>
   );
 };

@@ -27,7 +27,7 @@ const AuthorPage = () => {
                         birthDate: authorData.born,
                         deathDate: authorData.died || null,
                         booksCount: authorData.booksCount || 0,
-                        imageUrl: authorData.imageUrl || '/assets/author_big_pic.png'
+                        imageLink: authorData.imageLink || '/assets/author_big_pic.png'
                     });
                 } else {
                     console.error("Failed to fetch author details:", response.data.message);
@@ -126,7 +126,7 @@ const AuthorPage = () => {
                 <div className="row g-0 align-items-center">
                     <div className="col-12 col-md-3 d-flex flex-column align-items-center">
                         <img
-                            src={author.imageUrl}
+                            src={author.imageLink}
                             alt={author.name}
                             className="rounded-4 shadow author-image img-fluid"
                             style={{
@@ -198,8 +198,8 @@ const AuthorPage = () => {
                                             title={book.title}
                                             author={book.author?.name || author.name}
                                             price={book.price}
-                                            rating={book.rating}
-                                            imageUrl={book.imageUrl || '/assets/book.png'}
+                                            rating={book.averageRating}
+                                            imageLink={book.imageLink || '/assets/book.png'}
                                             link={`/books/${book.id || book.title}`}
                                         />
                                     </div>

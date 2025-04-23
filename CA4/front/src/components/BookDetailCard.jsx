@@ -12,7 +12,7 @@ const BookDetailCard = ({ book, onAddToCart }) => {
     about,
     price,
     rating,
-    imageUrl = '/assets/big_book.png',
+    imageLink,
     owned = false,
     borrowed = false
   } = book;
@@ -34,7 +34,6 @@ const BookDetailCard = ({ book, onAddToCart }) => {
 
   const formattedGenres = Array.isArray(genres) ? genres.join(', ') : genres;
 
-  // تعیین متن و استایل وضعیت برای نمایش
   const getStatusText = () => {
     if (owned) {
       if (borrowed) {
@@ -52,7 +51,7 @@ const BookDetailCard = ({ book, onAddToCart }) => {
       <div className="row">
         <div className="col-12 col-md-4 text-center pt-2">
           <div className='position-relative'>
-            <img className="rounded img-fluid" src={imageUrl} alt={title} />
+            <img className="rounded img-fluid" src={imageLink} alt={title} style={{maxWidth: '280px', height: '420px', objectFit: 'cover' }}/>
             <div className="position-absolute bottom-0 start-0 end-0 bg-white bg-opacity-50 d-flex justify-content-end align-items-center p-2">
               <div className='btn btn-green-custom text-white py-1 me-2'>
                 {getStatusText()}
@@ -129,7 +128,7 @@ BookDetailCard.propTypes = {
     about: PropTypes.string,
     price: PropTypes.number.isRequired,
     rating: PropTypes.number,
-    imageUrl: PropTypes.string,
+    imageLink: PropTypes.string,
     owned: PropTypes.bool,
     borrowed: PropTypes.bool
   }).isRequired,
