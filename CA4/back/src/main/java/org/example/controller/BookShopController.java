@@ -44,10 +44,14 @@ public class BookShopController {
         return bookShopService.showUserDetails(AuthenticationUtils.getUsername()).convertToString();
     }
 
-    @RequestMapping("/author/{authorName}")
-    @GetMapping
+    @GetMapping("/author/{authorName}")
     public String getAuthor(@PathVariable String authorName) {
         return bookShopService.showAuthorDetails(authorName).convertToString();
+    }
+
+    @GetMapping("/author/{authorName}/books")
+    public String getAuthorBooks(@PathVariable String authorName) {
+        return bookShopService.showAuthorBooks(authorName).convertToString();
     }
 
     @GetMapping("/books/{bookTitle}")
