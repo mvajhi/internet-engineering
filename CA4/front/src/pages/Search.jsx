@@ -1,52 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header.jsx';
-import {Footer} from '../components/Footer.jsx';
+import { Footer } from '../components/Footer.jsx';
 import BookCard from '../components/BookCard.jsx';
 import addParamToUri from "../Utils/utils.jsx";
 import { useLocation } from 'react-router-dom';
 
-const tempBooksData = [
-    {
-        title: "Book Title 1",
-        author: "Author One",
-        price: 10.25,
-        rating: 4,
-        imageUrl: "assets/book.png",
-        link: "/book1"
-    },
-    {
-        title: "Book Title 2",
-        author: "Author One",
-        price: 13.25,
-        rating: 2,
-        imageUrl: "assets/book.png",
-        link: "/book"
-    },
-    {
-        title: "Who is Mehdi Vajhi",
-        author: "Author One",
-        price: 500.25,
-        rating: 4,
-        imageUrl: "assets/book.png",
-        link: "/book"
-    },
-    {
-        title: "Mehdi Vajhi rises",
-        author: "ALi Momtahen",
-        price: 313,
-        rating: 5,
-        imageUrl: "assets/book.png",
-        link: "/book"
-    },
-    {
-        title: "Mehdi Vajhi rises2",
-        author: "ALi Momtahen",
-        price: 1000,
-        rating: 5,
-        imageUrl: "assets/book.png",
-        link: "/book"
-    },
-];
 
 async function getBookWithFilter(filters) {
     try {
@@ -85,12 +43,6 @@ const SearchPage = () => {
     const [filters, setFilters] = useState({
         title: location.state?.searchParams?.title,
         author: location.state?.searchParams?.author || null,
-        // title: '',
-        // author: '',
-        // genre: '',
-        // year: '',
-        // sortBy: '',
-        // order: ''
         pageSize: booksPerPage + 1
     });
 
@@ -118,11 +70,11 @@ const SearchPage = () => {
     };
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
-            setFilters({
-                ...filters,
-                pageSize: pageNumber
-            });
-            searchBooks();
+        setFilters({
+            ...filters,
+            pageSize: pageNumber
+        });
+        searchBooks();
 
     }
 
@@ -132,8 +84,6 @@ const SearchPage = () => {
     }, [searchTerm, searchType]);
 
     // Pagination logic
-    // const indexOfLastBook = currentPage * booksPerPage;
-    // const indexOfFirstBook = indexOfLastBook - booksPerPage;
     const currentBooks = books //.slice(indexOfFirstBook, indexOfLastBook);
     const totalPages = Math.ceil(books.length / booksPerPage);
 
@@ -186,8 +136,8 @@ const SearchPage = () => {
                                 <div className="card-header bg-white border-0 justify-content-between">
                                     <div className="text-end">
                                         <button
-                                        className="btn mb-4"
-                                        onClick={() => setShowFilters(false)}
+                                            className="btn mb-4"
+                                            onClick={() => setShowFilters(false)}
                                         >×</button>
                                     </div>
 
@@ -282,20 +232,20 @@ const SearchPage = () => {
                                         {/* Sort By */}
                                         <div className="d-flex align-items-center">
                                             <label className="form-label me-3" style={{ minWidth: '120px' }}>Sort By</label>
-                                            <div  className="d-flex flex-fill gap-2">
+                                            <div className="d-flex flex-fill gap-2">
                                                 <button
                                                     type="button"
                                                     className={`btn rounded-3 px-1 ${filters.sortBy === 'Rating' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({...filters, sortBy: 'Rating'})}
-                                                    style={{flexBasis:'50%'}}
+                                                    onClick={() => setFilters({ ...filters, sortBy: 'Rating' })}
+                                                    style={{ flexBasis: '50%' }}
                                                 >
                                                     Rating
                                                 </button>
                                                 <button
                                                     type="button"
                                                     className={`btn rounded-3 px-1 ${filters.sortBy === 'Reviews' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({...filters, sortBy: 'Reviews'})}
-                                                    style={{flexBasis:'50%'}}
+                                                    onClick={() => setFilters({ ...filters, sortBy: 'Reviews' })}
+                                                    style={{ flexBasis: '50%' }}
                                                 >
                                                     Reviews
                                                 </button>
@@ -309,16 +259,16 @@ const SearchPage = () => {
                                                 <button
                                                     type="button"
                                                     className={`btn rounded-3 px-1 ${filters.order === 'Descending' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({...filters, order: 'Descending'})}
-                                                    style={{flexBasis:'50%'}}
+                                                    onClick={() => setFilters({ ...filters, order: 'Descending' })}
+                                                    style={{ flexBasis: '50%' }}
                                                 >
                                                     Desc
                                                 </button>
                                                 <button
                                                     type="button"
                                                     className={`btn rounded-3 px-1 ${filters.order === 'Ascending' ? 'btn-green-custom text-white' : 'btn-outline-dark'}`}
-                                                    onClick={() => setFilters({...filters, order: 'Ascending'})}
-                                                    style={{flexBasis:'50%'}}
+                                                    onClick={() => setFilters({ ...filters, order: 'Ascending' })}
+                                                    style={{ flexBasis: '50%' }}
                                                 >
                                                     Asc
                                                 </button>

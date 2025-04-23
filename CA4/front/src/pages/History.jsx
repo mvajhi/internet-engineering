@@ -127,9 +127,9 @@ const HistoryTable = () => {
                 <img src="assets/history.svg" className="me-2" alt="cart" />
                 <div className="fs-3 fw-bold">History</div>
             </div>
-                <div className="table-responsive rounded-4 border">
-                    <HistoryAccordion orders={orders} />
-                </div>
+            <div className="table-responsive rounded-4 border">
+                <HistoryAccordion orders={orders} />
+            </div>
         </div>
     );
 };

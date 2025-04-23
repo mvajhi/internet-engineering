@@ -98,12 +98,12 @@ const SearchBar = () => {
     function makeSearchParam() {
         if (selected === "Author") {
             return {
-                author : titleSearch
+                author: titleSearch
             }
         }
         if (selected === "Name") {
             return {
-                title : titleSearch
+                title: titleSearch
             }
         }
     }

@@ -7,7 +7,7 @@ const User = () => {
     return (
         <div className='bg-light d-flex flex-column vh-100'>
             <Header />
-            <br/><br/>
+            <br /><br />
             <UserContainer />
             <Footer />
         </div>

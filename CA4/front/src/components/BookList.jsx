@@ -19,7 +19,7 @@ const BookList = ({ books, title, loading = false }) => {
       </section>
     );
   }
-  
+
   if (!books || books.length === 0) {
     return (
       <section className="my-4">

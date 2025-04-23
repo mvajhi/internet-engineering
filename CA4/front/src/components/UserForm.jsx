@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LocationInputs from './LocationInputs';
 import RoleSelection from './RoleSelection';
 import FormInput from './FormInput';
-import { useNavigate , Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const UserForm = () => {
 

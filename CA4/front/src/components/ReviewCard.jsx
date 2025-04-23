@@ -11,7 +11,7 @@ const ReviewCard = ({ review }) => {
   const renderStars = () => {
     const stars = [];
     const fullStars = Math.floor(rating || 0);
-    
+
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
         stars.push(<i key={i} className="fas fa-star"></i>);
@@ -26,7 +26,7 @@ const ReviewCard = ({ review }) => {
   return (
     <div className="list-group-item border-0 pb-3">
       <div className="d-flex align-items-start">
-        <img alt="User profile picture" className="rounded-circle me-3" height="40" src="/assets/user.png"/>
+        <img alt="User profile picture" className="rounded-circle me-3" height="40" src="/assets/user.png" />
         <div className="flex-grow-1">
           <h6 className="mb-1">
             {username}
@@ -44,7 +44,7 @@ const ReviewCard = ({ review }) => {
           </p>
         </div>
       </div>
-      <hr className="my-1 text-secondary"/>
+      <hr className="my-1 text-secondary" />
     </div>
   );
 };

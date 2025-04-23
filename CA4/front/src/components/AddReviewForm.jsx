@@ -14,7 +14,7 @@ const AddReviewForm = ({ isOpen, onClose, bookTitle, onSubmit }) => {
   useEffect(() => {
     const checkBookOwnership = async () => {
       if (!bookTitle || !isOpen) return;
-      
+
       setIsCheckingOwnership(true);
       try {
         const response = await axios.get(`/api/books/${bookTitle}/content`);
@@ -103,25 +103,25 @@ const AddReviewForm = ({ isOpen, onClose, bookTitle, onSubmit }) => {
   const isFormValid = rating > 0 && canReview;
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onClose={onClose} 
-      title="Add Review" 
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Add Review"
     >
       <div className="text-center mb-4">
-        <div 
+        <div
           className="mx-auto mb-3"
-          style={{ 
-            width: '120px', 
-            height: '180px', 
+          style={{
+            width: '120px',
+            height: '180px',
             borderRadius: '8px',
             overflow: 'hidden',
             background: 'linear-gradient(to bottom, #1a365d, #4a5568)'
           }}
         >
-          <img 
-            src="/assets/book.png" 
-            alt={bookTitle} 
+          <img
+            src="/assets/book.png"
+            alt={bookTitle}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </div>
@@ -130,51 +130,51 @@ const AddReviewForm = ({ isOpen, onClose, bookTitle, onSubmit }) => {
 
       <div className="mb-4">
         <div className="d-flex flex-column align-items-start ms-2">
-          <span className=" mb-3" style={{fontSize: '1rem', alignSelf: 'flex-start'}}>Rating</span>
+          <span className=" mb-3" style={{ fontSize: '1rem', alignSelf: 'flex-start' }}>Rating</span>
           <div className="w-100 d-flex align-items-center justify-content-between mb-1">
             <div className="d-flex w-100 justify-content-between mx-3">
               {renderStars()}
             </div>
           </div>
-          <small className="text-muted mt-2 fw-light" style={{alignSelf: 'flex-start'}}>tap to rate</small>
+          <small className="text-muted mt-2 fw-light" style={{ alignSelf: 'flex-start' }}>tap to rate</small>
         </div>
       </div>
 
       <div className="mb-4">
-        <textarea 
+        <textarea
           className="form-control bg-light border-0 rounded-3"
-          rows="4" 
+          rows="4"
           placeholder="Not bad."
           value={review}
           onChange={(e) => setReview(e.target.value)}
           disabled={!canReview}
         ></textarea>
       </div>
-      
+
       {error && (
         <div className="text-danger text-center mb-3">
           {error}
         </div>
       )}
-      
+
       {!canReview && !isCheckingOwnership && (
         <div className="text-danger text-center mb-3">
           You can't review this book.
         </div>
       )}
-      
+
       <div className="d-flex flex-column mt-3">
-        <button 
-          type="button" 
+        <button
+          type="button"
           className={`btn w-100 mb-2 ${isFormValid ? 'btn-green-custom text-white' : 'btn-secondary'}`}
           onClick={handleSubmit}
           disabled={!isFormValid}
         >
           Submit Reviews
         </button>
-        <button 
-          type="button" 
-          className="btn bg-light rounded-3 w-100" 
+        <button
+          type="button"
+          className="btn bg-light rounded-3 w-100"
           onClick={onClose}
         >
           Cancel

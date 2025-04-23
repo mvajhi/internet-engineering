@@ -8,19 +8,19 @@ const BookDetailCard = ({ book, onAddToCart }) => {
     author,
     publisher,
     year,
-    genres, 
+    genres,
     about,
     price,
     rating,
     imageUrl = '/assets/big_book.png',
     owned = false,
-    borrowed = false 
+    borrowed = false
   } = book;
 
   const renderStars = () => {
     const stars = [];
     const fullStars = Math.floor(rating || 0);
-    
+
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
         stars.push(<i key={i} className="fas fa-star"></i>);
@@ -53,11 +53,11 @@ const BookDetailCard = ({ book, onAddToCart }) => {
         <div className="col-12 col-md-4 text-center pt-2">
           <div className='position-relative'>
             <img className="rounded img-fluid" src={imageUrl} alt={title} />
-                <div className="position-absolute bottom-0 start-0 end-0 bg-white bg-opacity-50 d-flex justify-content-end align-items-center p-2">
-                <div className='btn btn-green-custom text-white py-1 me-2'>
-                  {getStatusText()}
-                </div>
+            <div className="position-absolute bottom-0 start-0 end-0 bg-white bg-opacity-50 d-flex justify-content-end align-items-center p-2">
+              <div className='btn btn-green-custom text-white py-1 me-2'>
+                {getStatusText()}
               </div>
+            </div>
           </div>
         </div>
         <div className="col-12 col-md-8 d-flex flex-column">
@@ -103,9 +103,9 @@ const BookDetailCard = ({ book, onAddToCart }) => {
               </tbody>
             </table>
           </div>
-          
+
           <div className="mt-auto">
-            <button 
+            <button
               className={`btn fs-bold w-md-25 rounded m-3 m-sm-0 ${!owned ? 'btn-green-custom text-white' : 'btn-secondary'}`}
               onClick={onAddToCart}
               disabled={owned}
@@ -131,7 +131,7 @@ BookDetailCard.propTypes = {
     rating: PropTypes.number,
     imageUrl: PropTypes.string,
     owned: PropTypes.bool,
-    borrowed: PropTypes.bool 
+    borrowed: PropTypes.bool
   }).isRequired,
   onAddToCart: PropTypes.func.isRequired
 };

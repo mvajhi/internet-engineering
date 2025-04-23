@@ -11,13 +11,13 @@ const AddingSection = ({ onAddAuthorClick, onAddBookClick }) => {
 
   return (
     <div className="py-3 justify-content-center d-flex">
-      <button 
+      <button
         className={"btn rounded btn-green-custom text-white py-2 mx-sm-5 mx-2"}
         onClick={onAddAuthorClick}
       >
         Add Author
       </button>
-      <button 
+      <button
         className={"btn rounded btn-green-custom text-white py-2 mx-sm-5 mx-2"}
         onClick={onAddBookClick}
       >
@@ -202,12 +202,12 @@ const AdminContainer = () => {
   const [showBookModal, setShowBookModal] = useState(false);
   const [refreshAuthors, setRefreshAuthors] = useState(false);
   const [refreshBooks, setRefreshBooks] = useState(false);
-  
+
   const handleAddAuthorSuccess = () => {
     // Trigger a refresh of the author table
     setRefreshAuthors(prev => !prev);
   };
-  
+
   const handleAddBookSuccess = () => {
     // Trigger a refresh of the book table
     setRefreshBooks(prev => !prev);
@@ -216,35 +216,35 @@ const AdminContainer = () => {
   return (
     <div className="container w-100 w-sm-75 pt-4 flex-grow-1">
       <ProfileSection />
-      <AddingSection 
-        onAddAuthorClick={() => setShowAuthorModal(true)} 
+      <AddingSection
+        onAddAuthorClick={() => setShowAuthorModal(true)}
         onAddBookClick={() => setShowBookModal(true)}
       />
       <div className="row mb-3" />
       <BookTable key={refreshBooks ? 'refresh-books' : 'initial-books'} />
       <div className="row mb-4 p-2" />
       <AuthorTable key={refreshAuthors ? 'refresh-authors' : 'initial-authors'} />
-      
+
       {/* Author Modal */}
-      <Modal 
-        isOpen={showAuthorModal} 
+      <Modal
+        isOpen={showAuthorModal}
         onClose={() => setShowAuthorModal(false)}
         title="Add Author"
       >
-        <AddAuthorForm 
-          onClose={() => setShowAuthorModal(false)} 
+        <AddAuthorForm
+          onClose={() => setShowAuthorModal(false)}
           onSuccess={handleAddAuthorSuccess}
         />
       </Modal>
-      
+
       {/* Book Modal */}
-      <Modal 
-        isOpen={showBookModal} 
+      <Modal
+        isOpen={showBookModal}
         onClose={() => setShowBookModal(false)}
         title="Add Book"
       >
-        <AddBookForm 
-          onClose={() => setShowBookModal(false)} 
+        <AddBookForm
+          onClose={() => setShowBookModal(false)}
           onSuccess={handleAddBookSuccess}
         />
       </Modal>

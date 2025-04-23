@@ -11,7 +11,7 @@ const ImageCell = ({ alt, src, customRender, item }) => {
       </td>
     );
   }
-  
+
   return (
     <td className="align-middle">
       <img alt={alt} className="img-fluid" src={src} />
@@ -100,36 +100,36 @@ const Row = ({ item, columns }) => {
 };
 
 export const TmpTable = (img) => {
-    return (
-        <div className="text-center">
-            <img src={img} className="img-fluid" alt="No product" />
-        </div>
-    );
+  return (
+    <div className="text-center">
+      <img src={img} className="img-fluid" alt="No product" />
+    </div>
+  );
 };
 
 
 const Table = ({ items, columns, tmp_img }) => {
   return (
     items.length ?
-    <div className="table-responsive rounded-4">
-      <table className="table border-0 border-bottom border-light">
-        <thead>
-          <tr>
-            {columns.map((column, index) => (
-              <td key={index} className="text-secondary bg-light">
-                {column.header}
-              </td>
+      <div className="table-responsive rounded-4">
+        <table className="table border-0 border-bottom border-light">
+          <thead>
+            <tr>
+              {columns.map((column, index) => (
+                <td key={index} className="text-secondary bg-light">
+                  {column.header}
+                </td>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <Row key={index} item={item} columns={columns} />
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <Row key={index} item={item} columns={columns} />
-          ))}
-        </tbody>
-      </table>
-    </div>
-    : TmpTable(tmp_img)
+          </tbody>
+        </table>
+      </div>
+      : TmpTable(tmp_img)
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
+import axios from 'axios';
 import Header from '../components/Header';
 import { Footer } from '../components/Footer';
 import BookDetailCard from '../components/BookDetailCard';
@@ -20,34 +20,34 @@ const BookPage = () => {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [userBooks, setUserBooks] = useState([]); // Store user's purchased books
     const reviewsPerPage = 4;
-    
+
     // Fetch book data, reviews, and user's purchased books
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                
+
                 // Fetch book details
                 const bookResponse = await axios.get(`/api/books/${bookTitle}`);
-                
+
                 if (!bookResponse.data.success) {
                     setError('Failed to load book details');
                     return;
                 }
-                
+
                 // Fetch reviews
                 const reviewsResponse = await axios.get(`/api/books/${bookTitle}/review`);
-                
+
                 if (!reviewsResponse.data.success) {
                     setError('Failed to load reviews');
                     return;
                 }
-                
+
                 // Fetch user's purchased books
                 let userPurchasedBooks = [];
                 try {
                     const purchasedBooksResponse = await axios.get('/api/purchase/books');
-                    
+
                     if (purchasedBooksResponse.data.success) {
                         userPurchasedBooks = purchasedBooksResponse.data.data.books || [];
                         setUserBooks(userPurchasedBooks);
@@ -56,15 +56,15 @@ const BookPage = () => {
                     console.error('Error fetching purchased books:', purchaseErr);
                     // Continue with the rest of the data even if this fails
                 }
-                
+
                 // Map API responses to our component's expected format
                 // Check if the current book is in the user's purchased books
                 const currentBookTitle = bookResponse.data.data.title;
                 const userBookMatch = userPurchasedBooks.find(userBook => userBook.title === currentBookTitle);
-                
+
                 const owned = !!userBookMatch;
                 const borrowed = owned && userBookMatch?.borrowed === true;
-                
+
                 const bookData = {
                     title: bookResponse.data.data.title,
                     author: bookResponse.data.data.author,
@@ -78,12 +78,12 @@ const BookPage = () => {
                     owned: owned,
                     borrowed: borrowed
                 };
-                
+
                 setBook(bookData);
-                
+
                 // Process reviews from the API
                 const apiReviews = reviewsResponse.data.data.reviews;
-                
+
                 // Format reviews to match our component's expected structure
                 const formattedReviews = apiReviews.map(review => {
                     // Get current date for the display - in a real app we'd get this from the API
@@ -91,7 +91,7 @@ const BookPage = () => {
                     const month = currentDate.toLocaleString('en-US', { month: 'long' });
                     const day = currentDate.getDate();
                     const year = currentDate.getFullYear();
-                    
+
                     return {
                         username: review.username,
                         content: review.comment,
@@ -99,48 +99,48 @@ const BookPage = () => {
                         date: `${month} ${day}, ${year}`
                     };
                 });
-                
+
                 setAllReviews(formattedReviews);
                 setTotalReviews(formattedReviews.length);
-                
+
                 // Set initial displayed reviews (first page)
                 updateDisplayedReviews(formattedReviews, 1);
-                
+
             } catch (err) {
                 setError(err.message || 'An error occurred while fetching data');
             } finally {
                 setLoading(false);
             }
         };
-        
+
         fetchData();
     }, [bookTitle]); // Remove userBooks from dependency array
-    
+
     // Update displayed reviews based on current page
     const updateDisplayedReviews = (reviews, page) => {
         const startIndex = (page - 1) * reviewsPerPage;
         const endIndex = startIndex + reviewsPerPage;
         setDisplayedReviews(reviews.slice(startIndex, endIndex));
     };
-    
+
     // Handle add to cart
     const handleAddToCart = () => {
         // Implementation would go here
         console.log(`Added ${book?.title} to cart`);
         // You might navigate to cart or show a notification
     };
-    
+
     // Handle page change for reviews
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
         updateDisplayedReviews(allReviews, pageNumber);
     };
-    
+
     // Handle adding a review - open the modal
     const handleAddReview = () => {
         setIsReviewModalOpen(true);
     };
-    
+
     // Handle review submission
     const handleSubmitReview = async (reviewData) => {
         try {
@@ -148,13 +148,13 @@ const BookPage = () => {
                 rate: reviewData.rating,
                 comment: reviewData.comment
             });
-            
+
             if (response.data.success) {
                 try {
                     const bookResponse = await axios.get(`/api/books/${bookTitle}`);
-                    
+
                     const reviewsResponse = await axios.get(`/api/books/${bookTitle}/review`);
-                    
+
                     if (bookResponse.data.success) {
                         const updatedBookData = {
                             ...book,
@@ -162,10 +162,10 @@ const BookPage = () => {
                         };
                         setBook(updatedBookData);
                     }
-                    
+
                     // Process reviews from the API
                     const apiReviews = reviewsResponse.data.data.reviews;
-                    
+
                     // Format reviews to match our component's expected structure
                     const formattedReviews = apiReviews.map(review => {
                         // Format date for display
@@ -173,7 +173,7 @@ const BookPage = () => {
                         const month = currentDate.toLocaleString('en-US', { month: 'long' });
                         const day = currentDate.getDate();
                         const year = currentDate.getFullYear();
-                        
+
                         return {
                             username: review.username,
                             content: review.comment,
@@ -181,10 +181,10 @@ const BookPage = () => {
                             date: `${month} ${day}, ${year}`
                         };
                     });
-                    
+
                     setAllReviews(formattedReviews);
                     setTotalReviews(formattedReviews.length);
-                    
+
                     // Set displayed reviews (first page)
                     updateDisplayedReviews(formattedReviews, 1);
                     setCurrentPage(1);
@@ -235,7 +235,7 @@ const BookPage = () => {
                     onAddReview={handleAddReview}
                 />
             </div>
-            <AddReviewForm 
+            <AddReviewForm
                 isOpen={isReviewModalOpen}
                 onClose={() => setIsReviewModalOpen(false)}
                 bookTitle={book?.title || ''}
