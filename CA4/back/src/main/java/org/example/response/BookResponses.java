@@ -22,6 +22,16 @@ public class BookResponses {
     LocalDateTime borrowedDate;
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Integer totalBuy = -1;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private String imageLink;
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
 
     public BookResponses(String title, String author, String publisher, List<String> genres, int year, int price, boolean isBorrowed, int finalPrice, int borrowedDays) {
         this.title=title;

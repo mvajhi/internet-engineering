@@ -1,5 +1,6 @@
 package org.example.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.example.entities.Author;
 import org.example.entities.Book;
 
@@ -14,6 +15,16 @@ public class BookDetailsResponse {
     private String synopsis;
     private float averageRating;
     private String publisher;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private String imageLink;
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
 
     public float getAverageRating() {
         return averageRating;
@@ -90,6 +101,7 @@ public class BookDetailsResponse {
         b.price = book.getPrice();
         b.synopsis = book.getSynopsis();
         b.publisher = book.getPublisher();
+        b.imageLink = book.getImageLink();
         return b;
     }
 }

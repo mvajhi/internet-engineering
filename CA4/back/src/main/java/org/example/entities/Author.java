@@ -14,6 +14,8 @@ public class Author {
     private LocalDate born;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate died;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private String imageLink;
 
     public Author(String name, String penName, String nationality, LocalDate born, LocalDate died) {
         this.name = name;
@@ -49,5 +51,13 @@ public class Author {
 
     public void setDied(LocalDate died) {
         this.died = died;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }

@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
 public class Book {
@@ -14,6 +16,17 @@ public class Book {
 
     private float averageRating;
     private int reviewNumber;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private String imageLink;
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
 
     public Book(String title, Author author, String publisher, int year, int price, String synopsis, String content, List<String> genres) {
         this.title = title;

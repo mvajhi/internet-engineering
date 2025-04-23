@@ -12,6 +12,15 @@ public class AddBookRequest {
     String synopsis;
     String content;
     List<String> genres;
+    String imageLink;
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
 
     public String getUsername() {
         return username;

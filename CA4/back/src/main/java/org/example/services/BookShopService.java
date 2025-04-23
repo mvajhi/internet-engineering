@@ -73,6 +73,7 @@ public class BookShopService {
             return auth;
         Response response = new Response(true, "Author added successfully", null);
         Author newAuthor = authorService.createAuthor(request);
+        newAuthor.setImageLink(request.getImageLink());
         if (!bookShop.isAuthorNameUnique(newAuthor.getName()))
             return new Response(false, "redundant author name", null);
 
@@ -96,6 +97,7 @@ public class BookShopService {
         if (newBook.getGenres().isEmpty()) {
             return new Response(false, "book should have at least one genre", null);
         }
+        newBook.setImageLink(request.getImageLink());
         this.bookShop.addBook(newBook);
         return new Response(true, "Book added successfully", null);
 

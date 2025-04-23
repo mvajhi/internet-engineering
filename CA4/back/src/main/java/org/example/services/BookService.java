@@ -179,6 +179,7 @@ public class BookService {
         for (Book book : bookShop.getBooks()) {
             BookResponses bookResponse = createTmpBookResponse(book);
             bookResponse.setTotalBuy(getCountOfBuy(book));
+            bookResponse.setImageLink(book.getImageLink());
             bookResponses.add(bookResponse);
         }
         return new Response(true, "Books retrieved successfully.", bookResponses);

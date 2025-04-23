@@ -116,6 +116,7 @@ public class UserService {
         bookResponse.setFinalPrice(bookResponse.getPrice() * borrowedDays / 10);
         bookResponse.setBorrowedDays(borrowedDays);
         bookResponse.setBorrowedDate(date.plusDays((long) borrowedDays));
+        bookResponse.setImageLink(book.getImageLink());
         return bookResponse;
     }
 
@@ -126,6 +127,7 @@ public class UserService {
         bookResponse.setBorrowed(true);
         bookResponse.setFinalPrice(bookResponse.getPrice() * borrowedDays / 10);
         bookResponse.setBorrowedDays(borrowedDays);
+        bookResponse.setImageLink(book.getImageLink());
         return bookResponse;
     }
 
@@ -142,6 +144,7 @@ public class UserService {
         BookResponses bookResponse = bookService.createTmpBookResponse(book);
         bookResponse.setBorrowed(false);
         bookResponse.setFinalPrice(bookResponse.getPrice());
+        bookResponse.setImageLink(book.getImageLink());
         return bookResponse;
     }
 
