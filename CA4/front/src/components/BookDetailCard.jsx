@@ -33,7 +33,7 @@ const BookDetailCard = ({ book, onAddToCart }) => {
   };
 
   return (
-    <div className="bg-white mw-60 rounded-4 border-bottom border-2 border-brown p-md-4 w-75 mt-5 pt-5">
+    <div className="bg-white mw-60 rounded-4 border-bottom border-2 border-brown p-md-4 w-sm-75 w-100 mt-5 pt-sm-5 p-1">
       <div className="row">
         <div className="col-12 col-md-4 text-center pt-2">
           <img className="rounded img-fluid" src={imageUrl} alt={title} />
@@ -84,7 +84,7 @@ const BookDetailCard = ({ book, onAddToCart }) => {
           
           <div className="mt-auto">
             <button 
-              className="btn btn-green-custom w-25 w-md-25 text-white rounded"
+              className="btn btn-green-custom w-md-25 text-white rounded m-3 m-sm-0"
               onClick={onAddToCart}
             >
               <strong>Add to Cart</strong>
