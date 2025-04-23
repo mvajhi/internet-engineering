@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import PurchaseModal from './PurchaseModal';
 
 const BookCard = ({ title, author, price, rating = 0, imageUrl, link, authorId }) => {
+    const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+    
     // Render star ratings dynamically
     const renderStars = () => {
         const stars = [];
@@ -20,6 +23,22 @@ const BookCard = ({ title, author, price, rating = 0, imageUrl, link, authorId }
         }
 
         return stars;
+    };
+
+    const handleAddToCart = () => {
+        setIsPurchaseModalOpen(true);
+    };
+
+    const handlePurchaseComplete = (isBorrowing, days) => {
+        // Handle successful purchase (can be expanded later)
+        console.log(`Book ${title} added to cart. Borrowed: ${isBorrowing}, Days: ${days}`);
+        setIsPurchaseModalOpen(false);
+    };
+
+    const book = {
+        title,
+        price,
+        author
     };
 
     return (
@@ -55,11 +74,21 @@ const BookCard = ({ title, author, price, rating = 0, imageUrl, link, authorId }
                             ${price.toFixed(2)}
                         </div>
                     </div>
-                    <button className="btn btn-green-custom w-100 text-white rounded mt-auto">
+                    <button 
+                        className="btn btn-green-custom w-100 text-white rounded mt-auto"
+                        onClick={handleAddToCart}
+                    >
                         <strong>Add to Cart</strong>
                     </button>
                 </div>
             </div>
+            
+            <PurchaseModal
+                isOpen={isPurchaseModalOpen}
+                onClose={() => setIsPurchaseModalOpen(false)}
+                book={book}
+                onPurchaseComplete={handlePurchaseComplete}
+            />
         </div>
     );
 };
@@ -104,23 +133,5 @@ BookList.propTypes = {
         authorId: PropTypes.string
     })).isRequired
 };
-
-// Example usage:
-/*
-const booksData = [
-  {
-    title: "Book Title 1",
-    author: "Author One",
-    price: 10.25,
-    rating: 4,
-    imageUrl: "assets/book1.png",
-    link: "/book1",
-    authorId: "author1"
-  },
-  // ... more books
-];
-
-<BookList books={booksData} />
-*/
 
 export default BookCard;
