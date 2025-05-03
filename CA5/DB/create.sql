@@ -9,7 +9,15 @@ CREATE TABLE Addresses (
 );
 
 -- 2. کاربران
-
+CREATE TABLE Users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  role ENUM('customer', 'admin') NOT NULL,
+  address_id NOT NULL,
+  FOREIGN KEY (address_id) REFERENCES Addresses(id)
+);
 
 -- 3. کیف پول
 CREATE TABLE Wallet (
