@@ -23,15 +23,31 @@ public class DataLoaderUtil {
     public void loadAllData() {
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String baseUrl = "http://194.60.230.196:8000";
+            String baseUrl = "http://194.60.231.242:8001";
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
 
-            loadData(restTemplate, baseUrl, mapper, "users", "Users", this::createUser);
-            loadData(restTemplate, baseUrl, mapper, "authors", "Authors", this::createAuthor);
-            loadData(restTemplate, baseUrl, mapper, "books", "Books", this::createBook);
-            loadData(restTemplate, baseUrl, mapper, "reviews", "Reviews", this::createReview);
+            try {
+                loadData(restTemplate, baseUrl, mapper, "users", "Users", this::createUser);
+            } catch (Exception e) {
+                ;
+            }
+            try {
+                loadData(restTemplate, baseUrl, mapper, "authors", "Authors", this::createAuthor);
+            } catch (Exception e) {
+                ;
+            }
+            try {
+                loadData(restTemplate, baseUrl, mapper, "books", "Books", this::createBook);
+            } catch (Exception e) {
+                ;
+            }
+            try {
+                loadData(restTemplate, baseUrl, mapper, "reviews", "Reviews", this::createReview);
+            } catch (Exception e) {
+                ;
+            }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load initial data", e);
         }
@@ -80,7 +96,20 @@ public class DataLoaderUtil {
         String content = (String) bookData.get("content");
         List<String> genres = (List<String>) bookData.get("genres");
 
-        return new Book(title, author, publisher, year, price, synopsis, content, genres);
+        Book book = new Book(title, author, publisher, year, price, synopsis, content, genres);
+        
+        // Find admin user by username and set it in Book object
+        String username = (String) bookData.get("username");
+        if (username != null) {
+            User user = bookShop.findUser(username);
+            if (user != null) {
+                book.setAdmin(user);
+            } else {
+                System.out.println("User with username '" + username + "' not found for book: " + title);
+            }
+        }
+
+        return book;
     }
 
     private Author createAuthor(Map<String, Object> authorData) {
@@ -95,7 +124,19 @@ public class DataLoaderUtil {
         String diedStr = (String) authorData.get("died");
         LocalDate died = diedStr == null ? null : LocalDate.parse(diedStr, formatter);
 
-        return new Author(name, penName, nationality, born, died);
+        Author author = new Author(name, penName, nationality, born, died);
+        
+        String username = (String) authorData.get("username");
+        if (username != null) {
+            User user = bookShop.findUser(username);
+            if (user != null) {
+                author.setUser(user);
+            } else {
+                System.out.println("User with username '" + username + "' not found for author: " + name);
+            }
+        }
+
+        return author;
     }
 
     private User createUser(Map<String, Object> userData) {
@@ -118,6 +159,25 @@ public class DataLoaderUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(dateStr, formatter);
 
-        return new Review(username, title, rate, comment, dateTime);
+        // Create Review object with initial values
+        Review review = new Review(username, title, rate, comment, dateTime);
+        
+        // Find and set related user
+        User user = bookShop.findUser(username);
+        if (user != null) {
+            review.setUser(user);
+        } else {
+            System.out.println("User with username '" + username + "' not found for review on book: " + title);
+        }
+        
+        // Find and set related book
+        Book book = bookShop.findBook(title);
+        if (book != null) {
+            review.setBook(book);
+        } else {
+            System.out.println("Book with title '" + title + "' not found for review by user: " + username);
+        }
+
+        return review;
     }
 }
