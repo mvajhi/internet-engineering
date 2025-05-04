@@ -142,27 +142,116 @@ public class BookService {
         int page = bookFilter.getPage();
         String sortBy = bookFilter.getSortBy();
         boolean isInverse = bookFilter.isInverse();
-        
-        Pageable pageable;
-        
-        // Create sort based on request
-        if (Objects.equals(sortBy, "rating")) {
-            pageable = PageRequest.of(page, pageSize);
-        } else if (Objects.equals(sortBy, "reviewNumber")) {
-            pageable = PageRequest.of(page, pageSize);
-        } else {
-            Sort sort = Sort.by("title");
-            if (isInverse) {
-                sort = sort.descending();
-            } else {
-                sort = sort.ascending();
+
+        try {
+            // Special case for rating and reviewNumber sorting - fetch ALL books and sort in memory
+            if ("rating".equals(sortBy) || "reviewNumber".equals(sortBy)) {
+                return handleSpecialSorting(bookFilter, sortBy, isInverse, page, pageSize);
             }
-            pageable = PageRequest.of(page, pageSize, sort);
+
+            // For regular sorting fields, use database sorting
+            return handleRegularSorting(bookFilter, sortBy, isInverse, page, pageSize);
+        } catch (Exception e) {
+            // Log the error and return empty list instead of crashing
+            System.err.println("Error in paginatedSearch: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
         }
+    }
+    
+    private List<BookCardResponses> handleSpecialSorting(BookFilter bookFilter, String sortBy, 
+                                                        boolean isInverse, int page, int pageSize) {
+        // For rating and reviewNumber sorting, we need to fetch all books and sort in memory
+        List<Book> allBooks = bookRepository.findAll();
+        
+        // Filter the books if any filter criteria are provided
+        List<Book> filteredBooks = allBooks;
+        if ((bookFilter.getTitle() != null && !bookFilter.getTitle().isEmpty()) || 
+            (bookFilter.getAuthor() != null && !bookFilter.getAuthor().isEmpty()) ||
+            (bookFilter.getGenre() != null && !bookFilter.getGenre().isEmpty()) ||
+            bookFilter.getYear() != 0) {
+            
+            filteredBooks = allBooks.stream()
+                .filter(book -> hasFilterCondition(book, bookFilter))
+                .toList();
+        }
+        
+        // Convert to BookCardResponses with ratings
+        List<BookCardResponses> results = new ArrayList<>();
+        Map<String, Integer> reviewCounts = new HashMap<>();
+        
+        for (Book book : filteredBooks) {
+            BookCardResponses response = new BookCardResponses();
+            response.setTitle(book.getTitle());
+            response.setAuthor(book.getAuthor().getName());
+            response.setPrice(book.getPrice());
+            response.setImageLink(book.getImageLink());
+            
+            // Get the average rating
+            Float avgRating = bookRepository.getAverageRatingByTitle(book.getTitle());
+            response.setAverageRating(avgRating != null ? avgRating : 0);
+            
+            // For review count sorting, populate the map
+            if ("reviewNumber".equals(sortBy)) {
+                Integer reviewCount = bookRepository.getReviewCountByTitle(book.getTitle());
+                reviewCounts.put(book.getTitle(), reviewCount != null ? reviewCount : 0);
+            }
+            
+            results.add(response);
+        }
+        
+        // Sort based on the requested field
+        if ("rating".equals(sortBy)) {
+            results.sort(Comparator.comparing(BookCardResponses::getAverageRating));
+        } else if ("reviewNumber".equals(sortBy)) {
+            results.sort(Comparator.comparing(book -> reviewCounts.getOrDefault(book.getTitle(), 0)));
+        }
+        
+        // Apply inverse if needed
+        if (isInverse) {
+            Collections.reverse(results);
+        }
+        
+        // Apply pagination
+        int start = page * pageSize;
+        int end = Math.min(start + pageSize, results.size());
+        
+        if (start < results.size()) {
+            return results.subList(start, end);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+    
+    private List<BookCardResponses> handleRegularSorting(BookFilter bookFilter, String sortBy, 
+                                                       boolean isInverse, int page, int pageSize) {
+        // Create sort for database query
+        Sort sort;
+        if (sortBy == null) {
+            sort = Sort.by("title"); // Default sort option
+        } else {
+            sort = Sort.by(sortBy);
+        }
+        
+        if (isInverse) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+        
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
         
         // Execute the appropriate query based on filter
         Page<Book> bookPage;
-        if (bookFilter.getGenre() != null && !bookFilter.getGenre().isEmpty()) {
+        if ((bookFilter.getTitle() == null || bookFilter.getTitle().isEmpty()) && 
+            (bookFilter.getAuthor() == null || bookFilter.getAuthor().isEmpty()) &&
+            (bookFilter.getGenre() == null || bookFilter.getGenre().isEmpty()) &&
+            bookFilter.getYear() == 0) {
+            
+            // Get all books with basic pagination
+            bookPage = bookRepository.findAll(pageable);
+        } 
+        else if (bookFilter.getGenre() != null && !bookFilter.getGenre().isEmpty()) {
             bookPage = bookRepository.searchBooksWithGenres(
                 bookFilter.getTitle(),
                 bookFilter.getAuthor(),
@@ -179,10 +268,10 @@ public class BookService {
             );
         }
         
-        List<Book> books = bookPage.getContent();
-        
         // Convert to BookCardResponses
+        List<Book> books = bookPage.getContent();
         List<BookCardResponses> result = new ArrayList<>();
+        
         for (Book book : books) {
             BookCardResponses response = new BookCardResponses();
             response.setTitle(book.getTitle());
@@ -190,58 +279,59 @@ public class BookService {
             response.setPrice(book.getPrice());
             response.setImageLink(book.getImageLink());
             
-            // Handle sorting by rating
-            if (Objects.equals(sortBy, "rating")) {
-                Float avgRating = bookRepository.getAverageRatingByTitle(book.getTitle());
-                response.setAverageRating(avgRating != null ? avgRating : 0);
-            } else {
-                response.setAverageRating(calculateAverageRating(book, bookShop.getReviews()));
-            }
+            // Get the average rating
+            Float avgRating = bookRepository.getAverageRatingByTitle(book.getTitle());
+            response.setAverageRating(avgRating != null ? avgRating : 0);
             
             result.add(response);
-        }
-        
-        // Sort after DB query if needed
-        if (Objects.equals(sortBy, "rating")) {
-            result.sort(Comparator.comparing(BookCardResponses::getAverageRating));
-            if (isInverse) {
-                Collections.reverse(result);
-            }
-        } else if (Objects.equals(sortBy, "reviewNumber")) {
-            // Sort by number of reviews
-            // We could do this in the DB with a join, but this approach 
-            // is cleaner for this implementation
-            Map<String, Integer> reviewCounts = new HashMap<>();
-            for (BookCardResponses resp : result) {
-                reviewCounts.put(resp.getTitle(), 
-                    bookRepository.getReviewCountByTitle(resp.getTitle()));
-            }
-            
-            result.sort(Comparator.comparing(book -> reviewCounts.getOrDefault(book.getTitle(), 0)));
-            if (isInverse) {
-                Collections.reverse(result);
-            }
         }
         
         return result;
     }
 
     private boolean hasFilterCondition(Book book, BookFilter bookFilter) {
-        List<String> authors  = Optional.ofNullable(bookFilter.getAuthor())
-                .orElse(List.of(book.getAuthor().getName()));
-        List<String> titles  = Optional.ofNullable(bookFilter.getTitle())
-                .orElse(List.of(book.getTitle()));
-        List<String> genres  = Optional.ofNullable(bookFilter.getGenre())
-                .orElse(book.getGenres());
-
-        if (titles.contains(book.getTitle()) && authors.contains(book.getAuthor().getName())) {
-            if (bookFilter.getYear() == 0 || bookFilter.getYear() == book.getYear()) {
-                if (new HashSet<>(book.getGenres()).containsAll(genres)){
-                    return true;
+        // Check title filter
+        if (bookFilter.getTitle() != null && !bookFilter.getTitle().isEmpty()) {
+            boolean hasTitle = false;
+            for (String titleFilter : bookFilter.getTitle()) {
+                if (book.getTitle().toLowerCase().contains(titleFilter.toLowerCase())) {
+                    hasTitle = true;
+                    break;
                 }
             }
+            if (!hasTitle) return false;
         }
-        return false;
+        
+        // Check author filter
+        if (bookFilter.getAuthor() != null && !bookFilter.getAuthor().isEmpty()) {
+            boolean hasAuthor = false;
+            for (String authorFilter : bookFilter.getAuthor()) {
+                if (book.getAuthor().getName().toLowerCase().contains(authorFilter.toLowerCase())) {
+                    hasAuthor = true;
+                    break;
+                }
+            }
+            if (!hasAuthor) return false;
+        }
+        
+        // Check year filter
+        if (bookFilter.getYear() != 0 && book.getYear() != bookFilter.getYear()) {
+            return false;
+        }
+        
+        // Check genre filter
+        if (bookFilter.getGenre() != null && !bookFilter.getGenre().isEmpty()) {
+            boolean hasGenre = false;
+            for (String genreFilter : bookFilter.getGenre()) {
+                if (book.getGenres().stream().anyMatch(g -> g.equalsIgnoreCase(genreFilter))) {
+                    hasGenre = true;
+                    break;
+                }
+            }
+            if (!hasGenre) return false;
+        }
+        
+        return true;
     }
 
     public Response getAllBooks() {

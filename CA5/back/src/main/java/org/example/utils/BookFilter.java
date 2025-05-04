@@ -78,4 +78,9 @@ public class BookFilter {
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
     }
+    
+    // Add this method to handle 'order' parameter from frontend
+    public void setOrder(String order) {
+        this.sortBy = order;
+    }
 }

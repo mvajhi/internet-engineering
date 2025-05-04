@@ -50,13 +50,13 @@ const AuthorPage = () => {
         const fetchBooks = async () => {
             setLoadingBooks(true);
             try {
-                const response = await axios.get(`/api/author/${authorId}/books`);
-                if (response.data.success) {
-                    setBooks(response.data.data.books);
-                } else {
-                    console.error("Failed to fetch books:", response.data.message);
-                    setBooks([]);
-                }
+                const response = await axios.get(`/api/books/search?author=${authorId}`);
+                setBooks(response.data);
+                // if (response.success) {
+                // } else {
+                //     console.error("Failed to fetch books:", response.data.message);
+                //     setBooks([]);
+                // }
             } catch (error) {
                 console.error("Error fetching books:", error);
                 setBooks([]);

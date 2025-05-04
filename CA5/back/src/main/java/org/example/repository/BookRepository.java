@@ -24,17 +24,18 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     
     @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Book> searchByTitle(String keyword);
-    
+
     @Query("SELECT b FROM Book b " +
            "WHERE (:year = 0 OR b.year = :year) " +
-           "AND (:title IS NULL OR LOWER(b.title) IN (:title)) " +
-           "AND (:authorName IS NULL OR LOWER(b.author.name) IN (:authorName))")
+           "AND (:title IS NULL OR LOWER(b.title) IN :title) " +
+           "AND (:authorName IS NULL OR LOWER(b.author.name) IN :authorName)")
     Page<Book> searchBooks(
-        @Param("title") List<String> title,
-        @Param("authorName") List<String> authorName,
-        @Param("year") int year,
-        Pageable pageable
+            @Param("title") List<String> title,
+            @Param("authorName") List<String> authorName,
+            @Param("year") int year,
+            Pageable pageable
     );
+
     
     @Query("SELECT b FROM Book b JOIN b.genres g " +
            "WHERE (:year = 0 OR b.year = :year) " +
