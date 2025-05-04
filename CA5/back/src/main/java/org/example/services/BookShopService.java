@@ -72,12 +72,22 @@ public class BookShopService {
         Response auth = bookShop.checkUser(AuthenticationUtils.getUsername(), Role.ADMIN);
         if (!auth.isSuccess())
             return auth;
+            
         Response response = new Response(true, "Author added successfully", null);
         Author newAuthor = authorService.createAuthor(request);
         newAuthor.setImageLink(request.getImageLink());
+        
         if (!bookShop.isAuthorNameUnique(newAuthor.getName()))
             return new Response(false, "redundant author name", null);
-
+            
+        // Set the current admin user as the Author's user
+        String username = AuthenticationUtils.getUsername();
+        User adminUser = bookShop.findUser(username);
+        if (adminUser == null) {
+            return new Response(false, "Admin user not found", null);
+        }
+        
+        newAuthor.setUser(adminUser);
         this.bookShop.addAuthor(newAuthor);
 
         return response;
@@ -99,6 +109,7 @@ public class BookShopService {
             return new Response(false, "book should have at least one genre", null);
         }
         newBook.setImageLink(request.getImageLink());
+        newBook.setAdmin(bookShop.findUser(AuthenticationUtils.getUsername()));
         this.bookShop.addBook(newBook);
         return new Response(true, "Book added successfully", null);
 
@@ -124,6 +135,10 @@ public class BookShopService {
             return new Response(false, "book limit exceedes", null);
         }
         userCart.addPurchasedBook(buiedBook);
+        
+        // Save the updated cart to persist the changes
+        this.bookShop.addBasket(userCart);
+        
         return new Response(true, "Added book to cart", null);
     }
 
@@ -167,7 +182,10 @@ public class BookShopService {
         if (request.getDays() < 1)
             return new Response(false, "invalid borrow day", null);
         userCart.addBorrowedBook(buiedBook, request.getDays());
-
+        
+        // Save the updated cart to persist the changes
+        this.bookShop.addBasket(userCart);
+        
         return new Response(true, "Added borrow book to cart", null);
     }
 
@@ -184,6 +202,8 @@ public class BookShopService {
             return new Response(false, "User has not purchased this book", null);
         if (newReview.getRate() < 1 || newReview.getRate() > 5)
             return new Response(false, "invalid rate", null);
+        newReview.setBook(book);
+        newReview.setUser(user);
         this.bookShop.addReview(newReview);
         book.setAverageRating(calculateAverageRating(book, bookShop.getReviews()));
         return new Response(true, "Review added successfully", null);
