@@ -52,7 +52,7 @@ const AuthorPage = () => {
             try {
                 const response = await axios.get(`/api/author/${authorId}/books`);
                 if (response.data.success) {
-                    setBooks(response.data.data);
+                    setBooks(response.data.data.books);
                 } else {
                     console.error("Failed to fetch books:", response.data.message);
                     setBooks([]);
@@ -196,7 +196,7 @@ const AuthorPage = () => {
                                     <div key={index} className="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
                                         <BookCard
                                             title={book.title}
-                                            author={book.author?.name || author.name}
+                                            author={author.name}
                                             price={book.price}
                                             rating={book.averageRating}
                                             imageLink={book.imageLink || '/assets/book.png'}
