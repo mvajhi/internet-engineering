@@ -1,207 +1,269 @@
 package org.example.entities;
 
+import org.example.repository.*;
 import org.example.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class BookShop {
-    private List<User> users = new ArrayList<>();
-    private List<Author> authors = new ArrayList<>();
-    private List<Book> books = new ArrayList<>();
-    private List<Review> reviews = new ArrayList<>();
-    private List<Cart> baskets = new ArrayList<>();
-    private List<PurchaseReceipt> receipts = new ArrayList<>();
+    private final UserRepository userRepository;
+    private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
+    private final CartRepository cartRepository;
+    private final PurchaseReceiptRepository receiptRepository;
+    private final WalletRepository walletRepository;
+    private final AddressRepository addressRepository;
+    private final GenreRepository genreRepository;
 
-    public List<User> getUsers() {
-        return users;
+    @Autowired
+    public BookShop(
+            UserRepository userRepository,
+            AuthorRepository authorRepository,
+            BookRepository bookRepository,
+            ReviewRepository reviewRepository,
+            CartRepository cartRepository,
+            PurchaseReceiptRepository receiptRepository,
+            WalletRepository walletRepository,
+            AddressRepository addressRepository,
+            GenreRepository genreRepository) {
+        this.userRepository = userRepository;
+        this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
+        this.reviewRepository = reviewRepository;
+        this.cartRepository = cartRepository;
+        this.receiptRepository = receiptRepository;
+        this.walletRepository = walletRepository;
+        this.addressRepository = addressRepository;
+        this.genreRepository = genreRepository;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 
     public List<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+        return authorRepository.findAll();
     }
 
     public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public List<Cart> getBaskets() {
-        return baskets;
-    }
-
-    public void setBaskets(List<Cart> baskets) {
-        this.baskets = baskets;
-    }
-
-    public List<PurchaseReceipt> getReceipts() {
-        return receipts;
-    }
-
-    public void setReceipts(List<PurchaseReceipt> receipts) {
-        this.receipts = receipts;
-    }
-
-    public void addUser(User user){
-        this.users.add(user);
-    }
-    public void addAuthor(Author author){
-        this.authors.add(author);
-    }
-    public void addBook(Book book){
-        this.books.add(book);
-    }
-    public void addBasket(Cart cart){
-        this.baskets.add(cart);
-    }
-    public void addRecipt(PurchaseReceipt receipt) {this.receipts.add(receipt);}
-    public void addReview(Review review){
-        removeReview(review.getBookTitle(), review.getUsername());
-        this.reviews.add(review);
-    }
-
-    private void removeReview(String bookTitle, String username) {
-        for (Review review : reviews) {
-            if (review.getBookTitle().equals(bookTitle) && review.getUsername().equals(username)) {
-                reviews.remove(review);
-                return;
-            }
-        }
-    }
-
-    public void removeCart(Cart cart){
-        this.baskets.remove(cart);
-    }
-
-    public Cart getCartByUsername(String username){
-        List<Cart> list = this.baskets.stream().filter(e ->e.getUser().getUsername().equals(username)).toList();
-        if(list.isEmpty())
-            return null;
-        else
-            return list.get(0);
-    }
-    public List<PurchaseReceipt> getReceiptsByUsername(String username){
-        return this.receipts.stream().filter(r -> r.getUser().getUsername().equals(username)).toList();
-    }
-
-    public boolean isEmailUnique(String email) {
-        return users.stream().noneMatch(e -> e.getEmail().equals(email));
-    }
-
-    public boolean isUserExist(String username) {
-        return users.stream().anyMatch(e -> e.getUsername().equals(username));
-
-    }
-
-    public boolean isUsernameUnique(String username) {
-        return users.stream().noneMatch(e -> e.getUsername().equals(username));
-    }
-
-    public boolean isAuthorNameUnique(String name) {
-        return authors.stream().noneMatch(e -> e.getName().equals(name));
-    }
-
-    public boolean isUserAdmin(String username) {
-        if (users.isEmpty()) {
-            return false;
-        }
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return user.getRole() == Role.ADMIN;
-            }
-        }
-        return false;
-    }
-
-    public Response checkUser(String username, Role role)
-    {
-        if (username == null)
-            return new Response(false, "No users logged in.", null);
-
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                if (role == null || user.getRole().equals(role))
-                    return new Response(true, "", null);
-                return new Response(false, "user is " + (role.equals(Role.ADMIN) ? "not " : "") + "admin", null);
-            }
-        }
-
-        return new Response(false, "invalid username", null);
-    }
-
-    public boolean isUserCustomer(String username) {
-        if (users.isEmpty()) {
-            return false;
-        }
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return user.getRole() == Role.CUSTOMER;
-            }
-        }
-        return false;
-    }
-
-    public boolean isBookNameUnique(String key) {
-        for (Book book : books) {
-            if (book.getTitle().equals(key)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public Book findBook(String title) {
-        for (Book book : books) {
-            if (book.getTitle().equals(title)) {
-                return book;
-            }
-        }
-        return null;
-    }
-
-    public Author findAuthor(String name) {
-        for (Author author : authors) {
-            if (author.getName().equals(name)) {
-                return author;
-            }
-        }
-        return null;
-    }
-
-    public User findUser(String name) {
-        for (User user : users) {
-            if (user.getUsername().equals(name)) {
-                return user;
-            }
-        }
-        return null;
+        return bookRepository.findAll();
     }
 
     public List<Review> getReviews() {
-        return reviews;
+        return reviewRepository.findAll();
+    }
+
+    public List<Cart> getBaskets() {
+        return cartRepository.findAll();
+    }
+
+    public List<PurchaseReceipt> getReceipts() {
+        return receiptRepository.findAll();
+    }
+
+    @Transactional
+    public void addUser(User user) {
+        // First save the Address if it doesn't already exist
+        Address address = user.getAddress();
+        if (address != null && address.getId() == null) {
+            // Check if we already have this address in database to avoid duplicates
+            Address existingAddress = addressRepository.findByCountryAndCity(
+                    address.getCountry(), address.getCity());
+            
+            if (existingAddress != null) {
+                user.setAddress(existingAddress);
+            } else {
+                addressRepository.save(address);
+            }
+        }
+        
+        // Now save the User
+        userRepository.save(user);
+        
+        // Create wallet for new user if not admin
+        if (user.getRole() == Role.CUSTOMER) {
+            Wallet wallet = new Wallet(user, BigDecimal.valueOf(user.getBalance() != null ? user.getBalance() : 0));
+            walletRepository.save(wallet);
+            user.setWallet(wallet);
+            userRepository.save(user);  // Save user again to update the wallet reference
+        }
+    }
+
+    @Transactional
+    public void addAuthor(Author author) {
+        // First check if the user exists and is saved to the database
+        User user = author.getUser();
+        if (user == null) {
+            throw new IllegalArgumentException("Author must be associated with a User");
+        }
+        
+        if (user.getId() == null) {
+            // The user hasn't been saved yet
+            // Check if this user exists in the database
+            Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+            
+            if (existingUser.isPresent()) {
+                // Use the existing user from the database
+                author.setUser(existingUser.get());
+            } else {
+                // Save the new user first
+                addUser(user); // This will handle saving address and wallet too
+            }
+        }
+        
+        // Now save the author
+        authorRepository.save(author);
+    }
+
+    @Transactional
+    public void addBook(Book book) {
+        // Process genres before saving the book
+        if (book.getGenres() != null && !book.getGenres().isEmpty()) {
+            // Create a set to hold the Genre entities
+            java.util.Set<Genre> genreEntities = new java.util.HashSet<>();
+            
+            // For each genre name in the book's genres list
+            for (String genreName : book.getGenres()) {
+                // Try to find an existing genre with this name
+                Optional<Genre> existingGenre = genreRepository.findByName(genreName);
+                
+                Genre genre;
+                if (existingGenre.isPresent()) {
+                    // Use the existing genre
+                    genre = existingGenre.get();
+                } else {
+                    // Create and save a new genre
+                    genre = new Genre(genreName);
+                    genreRepository.save(genre);
+                }
+                
+                // Add the genre entity to our set
+                genreEntities.add(genre);
+            }
+            
+            // Set the genres on the book
+            book.setGenreEntities(genreEntities);
+        }
+        
+        // Save the book with its genres
+        bookRepository.save(book);
+    }
+
+    @Transactional
+    public void addBasket(Cart cart) {
+        cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void addRecipt(PurchaseReceipt receipt) {
+        receiptRepository.save(receipt);
+    }
+
+    @Transactional
+    public void addReview(Review review) {
+        // Remove existing review if it exists
+        reviewRepository.findByUserAndBook(review.getUser(), review.getBook())
+                .ifPresent(existingReview -> reviewRepository.delete(existingReview));
+        
+        // Save the new review
+        reviewRepository.save(review);
+    }
+
+    @Transactional
+    public void removeCart(Cart cart) {
+        cartRepository.delete(cart);
+    }
+
+    public Cart getCartByUsername(String username) {
+        return cartRepository.findByUserUsername(username).orElse(null);
+    }
+
+    public List<PurchaseReceipt> getReceiptsByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.map(receiptRepository::findByUser).orElse(List.of());
+    }
+
+    public boolean isEmailUnique(String email) {
+        return !userRepository.existsByEmail(email);
+    }
+
+    public boolean isUserExist(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean isUsernameUnique(String username) {
+        return !userRepository.existsByUsername(username);
+    }
+
+    public boolean isAuthorNameUnique(String name) {
+        return !authorRepository.existsByName(name);
+    }
+
+    public boolean isUserAdmin(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.map(u -> u.getRole() == Role.ADMIN).orElse(false);
+    }
+
+    public Response checkUser(String username, Role role) {
+        if (username == null)
+            return new Response(false, "No users logged in.", null);
+
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            return new Response(false, "invalid username", null);
+        }
+
+        if (role == null || user.get().getRole().equals(role)) {
+            return new Response(true, "", null);
+        }
+        
+        return new Response(false, "user is " + (role.equals(Role.ADMIN) ? "not " : "") + "admin", null);
+    }
+
+    public boolean isUserCustomer(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.map(u -> u.getRole() == Role.CUSTOMER).orElse(false);
+    }
+
+    public boolean isBookNameUnique(String title) {
+        return !bookRepository.existsByTitle(title);
+    }
+
+    public Book findBook(String title) {
+        return bookRepository.findByTitle(title).orElse(null);
+    }
+
+    public Author findAuthor(String name) {
+        return authorRepository.findByName(name).orElse(null);
+    }
+
+    public User findUser(String username) {
+        // Load user with their wallet data
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent() && user.get().getRole() == Role.CUSTOMER) {
+            // Ensure wallet data is loaded and reflected in balance field
+            walletRepository.findByUser(user.get()).ifPresent(wallet -> {
+                user.get().setWallet(wallet);
+                // The balance getter in User will use wallet's balance
+            });
+        }
+        return user.orElse(null);
     }
 
     public List<Review> findReviews(String title) {
-        return reviews.stream().filter(e -> e.getBookTitle().equals(title)).toList();
+        Optional<Book> book = bookRepository.findByTitle(title);
+        return book.map(reviewRepository::findByBook).orElse(List.of());
     }
 
     public List<Book> getBooksByAuthor(String authorName) {
-        return books.stream().filter(e -> e.getAuthor().getName().equals(authorName)).toList();
+        Optional<Author> author = authorRepository.findByName(authorName);
+        return author.map(bookRepository::findByAuthor).orElse(List.of());
     }
 }
