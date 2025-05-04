@@ -14,12 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.HashMap;
 
 @Service
 public class UserService {
 
     @Autowired
     BookShop bookShop;
+
+    @Autowired
+    private org.example.repository.WalletRepository walletRepository;
 
     BookService bookService;
 
@@ -68,16 +72,26 @@ public class UserService {
             receipt.setMessage("User Credit Is Not Enough");
             return receipt;
         }
-        receipt.setBooks(cart.getPurchasedBooks());
-        receipt.setBorrowedBooks(cart.getBorrowedBooks());
+        
+        // Create new collections instead of sharing references
+        List<Book> purchasedBooksCopy = new ArrayList<>(cart.getPurchasedBooks());
+        Map<Book, Integer> borrowedBooksCopy = new HashMap<>(cart.getBorrowedBooks());
+        
+        receipt.setBooks(purchasedBooksCopy);
+        receipt.setBorrowedBooks(borrowedBooksCopy);
         receipt.setUser(cart.getUser());
         receipt.setSuccess(true);
         receipt.setDate(LocalDateTime.now());
         receipt.setMessage("Purchase completed successfully");
         receipt.setTotalPrice(totalPrice);
+        
+        // Reduce user credit and save the wallet changes to database
         cart.getUser().reduceCredit(totalPrice);
+        if (cart.getUser().getWallet() != null) {
+            walletRepository.save(cart.getUser().getWallet());
+        }
+        
         return receipt;
-
     }
 
     private static int getTotalPrice(Cart cart) {
@@ -149,7 +163,11 @@ public class UserService {
     }
 
     public void addCredit(User user, int credit) {
-        user.setBalance(user.getBalance() + credit);
+        user.addCredit(credit);
+        // Save the updated wallet to the database
+        if (user.getWallet() != null) {
+            walletRepository.save(user.getWallet());
+        }
     }
 
     private Role getRoleByString(String role) {
