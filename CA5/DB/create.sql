@@ -15,7 +15,7 @@ CREATE TABLE Users (
   password VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
   role ENUM('customer', 'admin') NOT NULL,
-  address_id NOT NULL,
+  address_id BIGINT NOT NULL,
   FOREIGN KEY (address_id) REFERENCES Addresses(id)
 );
 
