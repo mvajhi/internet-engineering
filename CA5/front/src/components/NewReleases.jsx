@@ -49,7 +49,7 @@ async function getNewReleases() {
 
     try {
         const filter = {
-            order: "reviewNumber",
+            order: "year",
             inverse: true
         };
 
