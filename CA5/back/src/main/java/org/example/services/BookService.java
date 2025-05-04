@@ -1,14 +1,17 @@
 package org.example.services;
 
 import org.example.entities.*;
+import org.example.repository.BookRepository;
 import org.example.request.AddBookRequest;
 import org.example.request.BookContentRequest;
+import org.example.response.BookCardResponses;
 import org.example.response.BookContentResponse;
 import org.example.response.BookResponses;
 import org.example.response.Response;
 import org.example.utils.AuthenticationUtils;
 import org.example.utils.BookFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +24,9 @@ public class BookService {
 
     @Autowired
     private BookShop bookShop;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     public void setBookShop(BookShop bookShop) {
         this.bookShop=bookShop;
@@ -127,33 +133,97 @@ public class BookService {
         return newBook.getGenres().size() <= 1;
     }
 
-    public List<Book> paginatedSearch(BookFilter bookFilter) {
+    public List<BookCardResponses> paginatedSearch(BookFilter bookFilter) {
         if (!AuthenticationUtils.loggedIn()){
             return null;
         }
-        List<Book> result = new ArrayList<>();
-        for (Book book : bookShop.getBooks()) {
-            if(hasFilterCondition(book, bookFilter)) {
-                result.add(book);
+        
+        int pageSize = bookFilter.getPageSize() <= 0 ? 10 : bookFilter.getPageSize();
+        int page = bookFilter.getPage();
+        String sortBy = bookFilter.getSortBy();
+        boolean isInverse = bookFilter.isInverse();
+        
+        Pageable pageable;
+        
+        // Create sort based on request
+        if (Objects.equals(sortBy, "rating")) {
+            pageable = PageRequest.of(page, pageSize);
+        } else if (Objects.equals(sortBy, "reviewNumber")) {
+            pageable = PageRequest.of(page, pageSize);
+        } else {
+            Sort sort = Sort.by("title");
+            if (isInverse) {
+                sort = sort.descending();
+            } else {
+                sort = sort.ascending();
+            }
+            pageable = PageRequest.of(page, pageSize, sort);
+        }
+        
+        // Execute the appropriate query based on filter
+        Page<Book> bookPage;
+        if (bookFilter.getGenre() != null && !bookFilter.getGenre().isEmpty()) {
+            bookPage = bookRepository.searchBooksWithGenres(
+                bookFilter.getTitle(),
+                bookFilter.getAuthor(),
+                bookFilter.getYear(),
+                bookFilter.getGenre(),
+                pageable
+            );
+        } else {
+            bookPage = bookRepository.searchBooks(
+                bookFilter.getTitle(),
+                bookFilter.getAuthor(),
+                bookFilter.getYear(),
+                pageable
+            );
+        }
+        
+        List<Book> books = bookPage.getContent();
+        
+        // Convert to BookCardResponses
+        List<BookCardResponses> result = new ArrayList<>();
+        for (Book book : books) {
+            BookCardResponses response = new BookCardResponses();
+            response.setTitle(book.getTitle());
+            response.setAuthor(book.getAuthor().getName());
+            response.setPrice(book.getPrice());
+            response.setImageLink(book.getImageLink());
+            
+            // Handle sorting by rating
+            if (Objects.equals(sortBy, "rating")) {
+                Float avgRating = bookRepository.getAverageRatingByTitle(book.getTitle());
+                response.setAverageRating(avgRating != null ? avgRating : 0);
+            } else {
+                response.setAverageRating(calculateAverageRating(book, bookShop.getReviews()));
+            }
+            
+            result.add(response);
+        }
+        
+        // Sort after DB query if needed
+        if (Objects.equals(sortBy, "rating")) {
+            result.sort(Comparator.comparing(BookCardResponses::getAverageRating));
+            if (isInverse) {
+                Collections.reverse(result);
+            }
+        } else if (Objects.equals(sortBy, "reviewNumber")) {
+            // Sort by number of reviews
+            // We could do this in the DB with a join, but this approach 
+            // is cleaner for this implementation
+            Map<String, Integer> reviewCounts = new HashMap<>();
+            for (BookCardResponses resp : result) {
+                reviewCounts.put(resp.getTitle(), 
+                    bookRepository.getReviewCountByTitle(resp.getTitle()));
+            }
+            
+            result.sort(Comparator.comparing(book -> reviewCounts.getOrDefault(book.getTitle(), 0)));
+            if (isInverse) {
+                Collections.reverse(result);
             }
         }
-        if (Objects.equals(bookFilter.getSortBy(), "rating")) {
-            result.forEach(book ->
-                    book.setAverageRating(calculateAverageRating(book, bookShop.getReviews())));
-            result.sort(Comparator.comparingDouble(Book::getAverageRating));
-
-        } else if(Objects.equals(bookFilter.getSortBy(), "reviewNumber")){
-            result.forEach(book ->
-                    book.setReviewNumber(getReviewNumber(book.getTitle())));
-            result.sort(Comparator.comparingInt(Book::getReviewNumber));
-        }
-
-        if(bookFilter.isInverse())
-            result = result.reversed();
-        int pageSize = bookFilter.getPageSize() <= 0 ? 10 : bookFilter.getPageSize();
-        int start = pageSize * bookFilter.getPage();
-        int end = Integer.min(result.size(), pageSize * (bookFilter.getPage() + 1));
-        return result.subList(start, end);
+        
+        return result;
     }
 
     private boolean hasFilterCondition(Book book, BookFilter bookFilter) {

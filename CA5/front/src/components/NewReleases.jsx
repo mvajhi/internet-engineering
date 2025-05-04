@@ -107,7 +107,7 @@ const NewReleases = () => {
                 {books.map((book) => (
                     <BookCard
                         title={book.title}
-                        author={book.author.name}
+                        author={book.author}
                         price={book.price}
                         rating={book.averageRating}
                         imageLink={book.imageLink ||'/assets/book.png'}

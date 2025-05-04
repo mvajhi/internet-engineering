@@ -5,7 +5,6 @@ import org.example.request.*;
 import org.example.response.*;
 import org.example.entities.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import org.example.utils.AuthenticationUtils;
 import org.example.utils.DataLoaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.example.exeptions.*;
 
 import static org.example.services.ReviewService.calculateAverageRating;
 import static org.example.utils.TimeUtils.isStillInBorrowInterval;
@@ -49,23 +47,6 @@ public class BookShopService {
             System.err.println("Error loading initial data: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-    public Response addUser(AddUserRequest request) {
-        Response response = new Response(true, "User added successfully.", null);
-        User newUser = userService.createUser(request);
-        if (newUser == null) {
-            return new Response(false, "invalid user parameter", null);
-        }
-        if (!bookShop.isEmailUnique(newUser.getEmail())) {
-            response.setSuccess(false);
-            response.setMessage("Email is not unique");
-        }
-        if (!bookShop.isUsernameUnique(newUser.getUsername())) {
-            response.setSuccess(false);
-            response.setMessage("username is not unique");
-        }
-        this.bookShop.addUser(newUser);
-        return response;
     }
 
     public Response addAuthor(AddAuthorRequest request) {
@@ -288,88 +269,6 @@ public class BookShopService {
         return new Response(true, "Purchased completed Successfully", purchaseCartResponse);
     }
 
-    public Response searchBookByTitle(String title) {
-        String key = title.toLowerCase();
-        List<Book> books = this.bookShop.getBooks().stream()
-                .filter(book -> book.getTitle().toLowerCase().contains(key))
-                .toList();
-        return new Response(true, "Books containing '" + title + "' in their title",
-                new SearchBookResponse(title, books));
-    }
-
-    public Response searchBookByAuthor(String authorName) {
-        String key = authorName.toLowerCase();
-        List<Book> books = this.bookShop.getBooks().stream()
-                .filter(book -> book.getAuthor().getName().toLowerCase().contains(key))
-                .toList();
-        return new Response(true, "Books by '" + authorName + "'",
-                new SearchBookResponse(authorName, books));
-    }
-
-    public Response searchBookByGenre(String genre) {
-        List<Book> books = this.bookShop.getBooks().stream().filter(book -> bookService.isGenreIs(book, genre)).toList();
-        return new Response(true, "Books in the " + genre + " genre", new SearchBookResponse(genre, books));
-    }
-
-    public Response searchBookByYear(String fromYear, String toYear) {
-        int from = Integer.parseInt(fromYear);
-        int to = Integer.parseInt(toYear);
-        if (to < from) {
-            return new Response(false, "invalid dates", null);
-        }
-        List<Book> books = this.bookShop.getBooks().stream().filter(book -> bookService.isPublishedIn(book, from, to)).toList();
-        return new Response(true, "Books published from " + from + " to " + to + ":", new SearchBookResponse(from + "-" + to, books));
-    }
-
-    public Response showPurchasedBooks(String username) {
-        Response auth = bookShop.checkUser(AuthenticationUtils.getUsername(), Role.CUSTOMER);
-        if (!auth.isSuccess())
-            return auth;
-        List<PurchaseReceipt> purchaseReceipts = this.bookShop.getReceiptsByUsername(username);
-        List<ShowPurchasedBookResponse> responses = this.findPurchasedBooks(purchaseReceipts);
-        return new Response(true, "Purchase history retrieved successfully.", responses);
-    }
-
-    private List<ShowPurchasedBookResponse> findPurchasedBooks(List<PurchaseReceipt> receipts) {
-        List<ShowPurchasedBookResponse> responses = new ArrayList<>();
-        for (PurchaseReceipt r : receipts) {
-            if (r.getBooks() != null) {
-                responses.addAll(r.getBooks().stream().map(b -> createResponseFromBook(b.getTitle())).toList());
-            }
-            Map<Book, Integer> borrowedBook = r.getBorrowedBooks();
-            if (borrowedBook == null) {
-                continue;
-            }
-            for (Book book : borrowedBook.keySet()) {
-                if (r.getDate().plusDays(borrowedBook.get(book)).isAfter(LocalDateTime.now())) {
-                    ShowPurchasedBookResponse borrowedBookResponse = createResponseFromBook(book.getTitle());
-                    borrowedBookResponse.setIsBorrowed(true);
-                    responses.add(borrowedBookResponse);
-
-                }
-            }
-        }
-        return responses;
-    }
-
-    private ShowPurchasedBookResponse createResponseFromBook(String title) {
-        Book book = bookShop.findBook(title);
-        ShowPurchasedBookResponse response = new ShowPurchasedBookResponse();
-        response.setCategory(book.getGenres());
-        response.setTitle(book.getTitle());
-        response.setAuthor(book.getAuthor().getName());
-        response.setPublisher(book.getPublisher());
-        response.setCategory(book.getGenres());
-        response.setYear(book.getYear());
-        response.setPrice(book.getPrice());
-        response.setIsBorrowed(false);
-        return response;
-    }
-
-    private int calculateBorrowPrice(int originalPrice, int days) {
-        return (int) (originalPrice * 0.1 * days);
-    }
-
     public Response showShoppingCart(ShowCartRequest request) {
         Response auth = bookShop.checkUser(AuthenticationUtils.getUsername(), Role.CUSTOMER);
         if (!auth.isSuccess())
@@ -434,7 +333,12 @@ public class BookShopService {
         Author author = bookShop.findAuthor(authorName);
         if (author == null)
             return new Response(false, "Author not exist", null);
+        
         List<Book> books = bookShop.getBooksByAuthor(authorName);
-        return new Response(true, "Books by " + authorName + " retrieved successfully", books);
+        
+        // Create a simplified response that avoids circular references
+        AuthorBooksResponse response = new AuthorBooksResponse(authorName, books);
+        
+        return new Response(true, "Books by " + authorName + " retrieved successfully", response);
     }
 }

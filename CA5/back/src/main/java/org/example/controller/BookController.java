@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.entities.Book;
 import org.example.request.BookContentRequest;
+import org.example.response.BookCardResponses;
 import org.example.services.BookService;
 import org.example.services.BookShopService;
 import org.example.utils.AuthenticationUtils;
@@ -19,7 +20,7 @@ public class BookController {
     BookService bookService;
 
     @GetMapping("/search")
-    public List<Book> search(@ModelAttribute BookFilter bookFilter) {
+    public List<BookCardResponses> search(@ModelAttribute BookFilter bookFilter) {
         return bookService.paginatedSearch(bookFilter);
     }
 
