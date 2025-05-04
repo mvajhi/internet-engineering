@@ -1,16 +1,38 @@
 package org.example.entities;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "Users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
+    
+    @Column(name = "password", nullable = false, length = 100)
     private String password;
+    
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private Role role;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Wallet wallet;
+
+    @Transient
     private Integer balance;
 
     public User(String username, String password, String email, Role role, Address address) {
@@ -27,13 +49,32 @@ public class User {
 
     public User() {
     }
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public String getEmail() { return email; }
     public Role getRole() { return role; }
     public Address getAddress() { return address; }
-    public Integer getBalance() { return balance; }
+    
+    public Integer getBalance() {
+        if (role == Role.ADMIN) {
+            return null;
+        }
+        
+        if (wallet != null) {
+            return wallet.getBalance().intValue();
+        }
+        
+        return balance != null ? balance : 0;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -56,11 +97,33 @@ public class User {
     }
 
     public void setBalance(int balance) {
-        this.balance = balance;
+        if (wallet != null) {
+            wallet.setBalance(java.math.BigDecimal.valueOf(balance));
+        }
+        getBalance();
     }
 
-    public void reduceCredit(int credit){
-        this.balance -= credit;
+    public void addCredit(int credit) {
+        if (wallet != null) {
+            wallet.addBalance(java.math.BigDecimal.valueOf(credit));
+        }
+        getBalance();
+    }
+
+    public void reduceCredit(int credit) {
+        if (wallet != null) {
+            wallet.deductBalance(java.math.BigDecimal.valueOf(credit));
+        } else if (balance != null) {
+            this.balance -= credit;
+        }
+    }
+    
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     @Override
@@ -68,7 +131,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return balance == user.balance && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && role == user.role && Objects.equals(address, user.address);
+        return Objects.equals(username, user.username) && 
+               Objects.equals(password, user.password) && 
+               Objects.equals(email, user.email) && 
+               role == user.role && 
+               Objects.equals(address, user.address);
     }
 
     @Override

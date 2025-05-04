@@ -1,14 +1,34 @@
 package org.example.entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Addresses")
 public class Address {
-    public Address(){};
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "country", nullable = false, length = 50)
+    private String country;
+    
+    @Column(name = "city", nullable = false, length = 50)
+    private String city;
+
+    public Address() {}
+    
     public Address(String country, String city) {
         this.country = country;
         this.city = city;
     }
 
-    String country;
-    String city;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCountry() {
         return country;
