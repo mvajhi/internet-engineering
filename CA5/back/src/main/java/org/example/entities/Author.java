@@ -1,21 +1,44 @@
 package org.example.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "Authors")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+    
+    @Column(name = "pen_name", length = 100)
     private String penName;
+    
+    @Column(name = "nationality", nullable = false, length = 50)
     private String nationality;
+    
+    @Column(name = "born", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate born;
+    
+    @Column(name = "died")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate died;
+    
+    @Column(name = "image_link")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String imageLink;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
 
     public Author(String name, String penName, String nationality, LocalDate born, LocalDate died) {
         this.name = name;
@@ -26,6 +49,22 @@ public class Author {
     }
 
     public Author() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getName() { return name; }
     public String getPenName() { return penName; }
