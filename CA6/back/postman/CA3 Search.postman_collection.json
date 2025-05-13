@@ -1,0 +1,964 @@
+{
+	"info": {
+		"_postman_id": "3583c605-189c-4f8d-aa83-362a68e70fe7",
+		"name": "CA3 Search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43173154"
+	},
+	"item": [
+		{
+			"name": "addUser (a1) Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"password\": \"mahdi\",\n    \"email\": \"mahdi@mail.com\",\n    \"role\": \"admin\",\n    \"address\": {\n        \"country\": \"Iran\",\n        \"city\": \"Tehran\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser (u1) Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"ali\",\n    \"password\": \"ali_pass\",\n    \"email\": \"ali@mail.com\",\n    \"role\": \"customer\",\n    \"address\": {\n        \"country\": \"Iran\",\n        \"city\": \"Karaj\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/users/login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"ali\",\r\n    \"password\": \"ali_pass\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if success value is true\", function () {",
+							"    pm.expect(pm.response.json().success).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "mahdi login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"mahdi\",\r\n    \"password\": \"mahdi\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAuthor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"name\": \"Mahdi Vajhi\",\n    \"penName\": \"M.V.\",\n    \"born\": \"1975-06-23\",\n    \"nationality\": \"American\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/author",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Shadow Ali\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2025,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook Copy",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"Who is Mahdi Vajhi?\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2024,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook Copy 2",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"Great Ali\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2025,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook Copy 3",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Secret Of Mahdi\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2024,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook Copy ali",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"The Secret Of Mahdi\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2024,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook Copy 4",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"Mahdi Vajhi, Good or Bad\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2024,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook Copy 5",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"Mahdi Vajhi, Good or Bad 2(his other side)\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2024,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook Copy 6",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mahdi\",\n    \"title\": \"JAVA\",\n    \"author\": \"Mahdi Vajhi\",\n    \"publisher\": \"Mystic Press\",\n    \"year\": 2024,\n    \"price\": 350,\n    \"synopsis\": \"A gripping thriller about a detective chasing shadows.\",\n    \"content\": \"Detective Carter follows a trail of cryptic messages left by an elusive killer. The closer he gets, the more his own past haunts him.\",\n    \"genres\": [\n        \"thriller\",\n        \"mystery\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "paginated book search",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/books/search?pageSize=2&order=rating&inverse=true&page=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"search"
+					],
+					"query": [
+						{
+							"key": "pageSize",
+							"value": "2"
+						},
+						{
+							"key": "order",
+							"value": "rating"
+						},
+						{
+							"key": "inverse",
+							"value": "true"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "paginated review search",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/reviews/search?title=The Shadow Hour",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"reviews",
+						"search"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "The Shadow Hour"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/users/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details user",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/ali",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"ali"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details author",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/author/Mahdi Vajhi",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"author",
+						"Mahdi Vajhi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details book",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCart",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "borrow",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali\",\n    \"days\" : 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/borrow",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"borrow"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCart",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeCart",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"title\" : \"The Shadow Ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cart",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCredit",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"credit\" : 10000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/credit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"credit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "purchase",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/purchase",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addReview",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"rate\" : 4,\n    \"comment\" : \"Good is a good\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBookContent",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/content",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"content"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBookReview",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/books/The Shadow Ali/review",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"The Shadow Ali",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details user Copy",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/ali",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"ali"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "localhost:8080/api",
+			"type": "default"
+		}
+	]
+}
