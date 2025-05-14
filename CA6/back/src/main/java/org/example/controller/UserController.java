@@ -35,13 +35,9 @@ public class UserController {
         if(Objects.equals(request.getPassword(), user.getPassword())) {
             AuthenticationUtils.login(user);
             
-            // Generate session token and store in Redis
             String token = sessionService.createSession(user.getUsername());
-            
-            // Create response with user data and token
             AuthResponse response = new AuthResponse(true, "Login successful", token, user.getUsername());
             
-            // Return token in both body and Authorization header
             return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .body(response);
