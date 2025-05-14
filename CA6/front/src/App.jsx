@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './Utils/AuthContext';
+import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -16,50 +18,89 @@ import AuthorPage from "./pages/AuthorPage.jsx";
 import BookPage from "./pages/BookPage.jsx";
 
 function ProtectedRoute({ children }) {
-  const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/user')
-      .then(res => res.json())
-      .then(data => {
-        setAuthenticated(data.success);
-        setLoading(false);
-      })
-      .catch(() => {
-        setAuthenticated(false);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return null; 
-  if (!authenticated) return <Navigate to="/signin" replace />;
-  return children;
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+  
+  return isAuthenticated ? children : <Navigate to="/signin" />;
 }
 
 function AdminRoute({ children }) {
-  const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const { isAuthenticated, loading, user } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/user')
-      .then(res => res.json())
-      .then(data => {
-        setIsAdmin(data.success && data.data && data.data.admin === true);
-        setLoading(false);
-      })
-      .catch(() => {
+    const checkAdminStatus = async () => {
+      // Reset admin status check
+      setIsLoading(true);
+      
+      // If not authenticated, we know the user isn't an admin
+      if (!isAuthenticated) {
         setIsAdmin(false);
-        setLoading(false);
-      });
-  }, []);
+        setIsLoading(false);
+        return;
+      }
 
-  if (loading) return null;
-  if (!isAdmin) return <Navigate to="/404" replace />;
+      try {
+        // If we already have user data with admin flag
+        if (user && typeof user.admin !== 'undefined') {
+          setIsAdmin(user.admin === true);
+          setIsLoading(false);
+          return;
+        }
+        
+        // Otherwise fetch user data
+        const response = await axios.get("/api/user");
+        
+        if (response.data && response.data.data) {
+          // Update user info in state
+          setIsAdmin(response.data.data.admin === true);
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+        setIsAdmin(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    if (!loading) {
+      checkAdminStatus();
+    }
+  }, [isAuthenticated, loading, user]);
+
+  // Show loading spinner while checking admin status
+  if (loading || isLoading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+  
+  // Redirect if not authenticated or not admin
+  if (!isAuthenticated || !isAdmin) {
+    return <Navigate to="/404" replace />;
+  }
+  
+  // Render children if admin
   return children;
 }
 
-function App() {
+function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
@@ -150,6 +191,14 @@ function App() {
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   );
 }
 

@@ -14,10 +14,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @EnableTransactionManagement
 public class DatabaseConfig {
 
-    /**
-     * This bean verifies database connectivity at application startup.
-     * If the connection fails, the application will not start.
-     */
     @Bean
     public CommandLineRunner checkDatabaseConnection(JdbcTemplate jdbcTemplate) {
         return args -> {

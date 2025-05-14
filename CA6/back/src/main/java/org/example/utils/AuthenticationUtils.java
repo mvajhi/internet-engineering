@@ -6,43 +6,48 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Component
 public class AuthenticationUtils {
-    public static User loggedInUser;
+    private static final ThreadLocal<User> currentUser = new ThreadLocal<>();
 
     public static void login(User user) {
-        loggedInUser = user.copy();
+        if (user != null) {
+            currentUser.set(user.copy());
+        }
     }
 
     public static void logout() {
-        loggedInUser = null;
+        currentUser.remove();
     }
 
     public static boolean loggedIn() {
-        return loggedInUser != null;
+        return currentUser.get() != null;
     }
 
     public static boolean loggedIn(User user) {
-        if(user != null && user == loggedInUser) {
+        User current = currentUser.get();
+        if (user != null && current != null && Objects.equals(user.getUsername(), current.getUsername())) {
             return true;
         }
         return false;
     }
 
-    public static String getUsername(){
-        if (loggedInUser == null)
+    public static String getUsername() {
+        User user = currentUser.get();
+        if (user == null)
             return null;
-        return loggedInUser.getUsername();
+        return user.getUsername();
     }
 
     public static boolean hasAccess(String username) {
-        if (loggedInUser == null) return false;
-        if(Objects.equals(username, loggedInUser.getUsername())
-                || loggedInUser.getRole() == Role.ADMIN)
+        User user = currentUser.get();
+        if (user == null) return false;
+        if (Objects.equals(username, user.getUsername()) || user.getRole() == Role.ADMIN)
             return true;
         return false;
     }
 
     public static User getLoggedInUser() {
-        return loggedInUser;
+        return currentUser.get();
     }
 }

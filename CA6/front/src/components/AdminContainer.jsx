@@ -47,17 +47,17 @@ const ProfileSection = () => {
 
   return (
     <div className="card p-4 pb-0 border-0 rounded-4 pb-3 mb-3">
-      <div class="row align-items-center">
-        <div class="col-md-10 py-2">
-          <div class="d-flex align-items-center mb-2">
+      <div className="row align-items-center">
+        <div className="col-md-10 py-2">
+          <div className="d-flex align-items-center mb-2">
             <img src="assets/person.svg" className="me-2" alt="Profile" /> {userData.username}
           </div>
-          <div class="d-flex align-items-center">
+          <div className="d-flex align-items-center">
             <img src="assets/mail.svg" className="me-2" alt="Email" /> {userData.email}
           </div>
         </div>
 
-        <div class="col-md-2 text-end">
+        <div className="col-md-2 text-end">
           <ul className="pagination m-2 justify-content-sm-end justify-content-start align-items-center">
             <li className="page-item active" aria-current="page">
               <Link to="/logout" className="page-link text-dark border-0 rounded-3">&nbsp; Logout &nbsp;</Link>

@@ -23,8 +23,8 @@ const RoleSelection = ({ role, setRole }) => {
                     id="manager"
                     name="role"
                     className="btn-check"
-                    checked={role === 'manager'}
-                    onChange={() => setRole('manager')}
+                    checked={role === 'admin'}
+                    onChange={() => setRole('admin')}
                 />
                 <label htmlFor="manager" className="btn flex-grow-1 radio-label text-start">
                     <img src={managerIcon} className="me-4" alt="" /> Manager

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import BookCard from './BookCard.jsx';
 import addParamToUri from "../Utils/utils.jsx";
+import axios from 'axios';
 
 
 const tempBooksData = [
@@ -47,30 +48,22 @@ const tempBooksData = [
 ];
 
 
-async function topRated() {
-
+export async function getTopRated() {
     try {
         const filter = {
             order: "rating",
             inverse: true
         };
 
-        const parameter = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
-        const response = await fetch(
-            addParamToUri('/api/books/search', filter),
-            parameter);
-        return await response.json()
+        const response = await axios.get(
+            addParamToUri('/api/books/search', filter));
+        return response.data;
     } catch (error) {
-        return []
-    } finally {
-
+        console.log("Error fetching top rated books:", error);
+        return [];
     }
 }
+
 const TopRatedBooks = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -80,7 +73,7 @@ const TopRatedBooks = () => {
         const fetchTopRatedBooks = async () => {
             try {
                 setLoading(true);
-                const topRatedBooks = await topRated();
+                const topRatedBooks = await getTopRated();
                 setBooks(topRatedBooks);
             } catch (err) {
                 setError(err.message);
@@ -99,8 +92,9 @@ const TopRatedBooks = () => {
         <section className="mt-4 px-1 bg-light">
             <h2 className="fw-light fs-3 lh-sm mb-3 px-5 bg-light">Top Rated</h2>
             <div className="d-flex flex-wrap justify-content-around gap-4">
-                {books.map((book) => (
+                {books.map((book, index) => (
                     <BookCard
+                        key={book.id || `top-rated-${index}`}
                         title={book.title}
                         author={book.author}
                         price={book.price}

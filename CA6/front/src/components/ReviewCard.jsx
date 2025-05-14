@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-/**
- * Component for displaying individual book reviews
- */
 const ReviewCard = ({ review }) => {
   const { username, content, rating, date } = review;
 

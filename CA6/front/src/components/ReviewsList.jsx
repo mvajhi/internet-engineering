@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReviewCard from './ReviewCard';
 
-/**
- * Component for displaying book reviews with pagination
- */
 const ReviewsList = ({ reviews, totalReviews, currentPage, onPageChange, onAddReview }) => {
 
     // Handle page click

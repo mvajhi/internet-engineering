@@ -45,7 +45,6 @@ const ProfileIcon = () => {
 
     return (
         <div className="dropdown">
-            {/* آیکون پروفایل */}
             <button
                 className="btn btn-success rounded-circle d-flex justify-content-center align-items-center px-3 py-2 user-select-none"
                 type="button"
@@ -56,7 +55,6 @@ const ProfileIcon = () => {
                 {firstLetter}
             </button>
 
-            {/* منوی کشویی */}
             <ul
                 className="dropdown-menu dropdown-menu-end bg-select-bar rounded-3 mt-1"
                 aria-labelledby="profileDropdown"
