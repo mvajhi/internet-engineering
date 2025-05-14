@@ -17,12 +17,6 @@ public class SessionService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    /**
-     * Creates a new session for a user and returns the session token
-     *
-     * @param username the username to create a session for
-     * @return the generated session token
-     */
     public String createSession(String username) {
         String token = generateToken();
         
@@ -45,12 +39,6 @@ public class SessionService {
         return token;
     }
 
-    /**
-     * Validates if a token is valid and refreshes its expiration time
-     *
-     * @param token the token to validate
-     * @return the username associated with the token, or null if invalid
-     */
     public String validateToken(String token) {
         if (token == null) {
             return null;
@@ -68,11 +56,6 @@ public class SessionService {
         return username;
     }
 
-    /**
-     * Invalidates a user's session
-     *
-     * @param username the username to invalidate the session for
-     */
     public void invalidateSession(String username) {
         String token = (String) redisTemplate.opsForValue().get(USER_PREFIX + username);
         
@@ -83,11 +66,6 @@ public class SessionService {
         redisTemplate.delete(USER_PREFIX + username);
     }
     
-    /**
-     * Generates a random UUID token
-     *
-     * @return a random UUID as string
-     */
     private String generateToken() {
         return UUID.randomUUID().toString();
     }

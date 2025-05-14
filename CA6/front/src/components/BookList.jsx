@@ -2,10 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BookCard from './BookCard';
 
-/**
- * کامپوننت BookList برای نمایش لیست کتاب‌ها
- * این کامپوننت آرایه‌ای از اطلاعات کتاب‌ها را می‌گیرد و آن‌ها را به صورت کارت نمایش می‌دهد
- */
 const BookList = ({ books, title, loading = false }) => {
   if (loading) {
     return (

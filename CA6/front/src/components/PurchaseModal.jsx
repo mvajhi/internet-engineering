@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
 import axios from 'axios';
 
-// تعریف رنگ‌های سفارشی با متغیر برای استفاده در موارد غیرقابل جایگزینی با بوت‌استرپ
 const customGreen = '#184C43';
 
 const PurchaseModal = ({ isOpen, onClose, book, onPurchaseComplete }) => {
@@ -56,7 +55,6 @@ const PurchaseModal = ({ isOpen, onClose, book, onPurchaseComplete }) => {
     }
   };
 
-  // کلاس سفارشی برای دکمه‌های انتخاب روز با رنگ سفارشی
   const dayButtonClass = (day) => {
     return `btn rounded-2 fw-medium fs-6 p-2 flex-grow-0 flex-shrink-0 ${
       borrowDays === day 

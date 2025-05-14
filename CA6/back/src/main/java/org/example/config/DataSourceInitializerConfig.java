@@ -15,10 +15,6 @@ public class DataSourceInitializerConfig {
     @Value("${spring.sql.init.mode}")
     private String initMode;
 
-    /**
-     * Configures a DataSourceInitializer to run SQL scripts for database initialization if needed.
-     * This is controlled by the spring.sql.init.mode property in application.properties.
-     */
     @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
         DataSourceInitializer initializer = new DataSourceInitializer();
