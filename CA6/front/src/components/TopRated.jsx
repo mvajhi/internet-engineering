@@ -92,8 +92,9 @@ const TopRatedBooks = () => {
         <section className="mt-4 px-1 bg-light">
             <h2 className="fw-light fs-3 lh-sm mb-3 px-5 bg-light">Top Rated</h2>
             <div className="d-flex flex-wrap justify-content-around gap-4">
-                {books.map((book) => (
+                {books.map((book, index) => (
                     <BookCard
+                        key={book.id || `top-rated-${index}`}
                         title={book.title}
                         author={book.author}
                         price={book.price}
