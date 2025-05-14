@@ -8,11 +8,11 @@ export default function NotFound() {
     return (
         <div className="bg-light d-flex flex-column vh-100">
             <Header />
-            <main class="d-flex flex-grow-1 align-items-center justify-content-center text-center">
+            <main className="d-flex flex-grow-1 align-items-center justify-content-center text-center">
                 <div>
-                    <h1 class="display-1">404</h1>
-                    <p class="lead">Page not found</p>
-                    <Link to="/homepage" class="btn btn-lg btn-green-custom text-white" >Back to
+                    <h1 className="display-1">404</h1>
+                    <p className="lead">Page not found</p>
+                    <Link to="/homepage" className="btn btn-lg btn-green-custom text-white" >Back to
                         homepage
                     </Link>
                 </div>
