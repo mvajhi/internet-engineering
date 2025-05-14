@@ -4,27 +4,19 @@ import { Footer } from '../components/Footer.jsx';
 import BookCard from '../components/BookCard.jsx';
 import addParamToUri from "../Utils/utils.jsx";
 import { useLocation } from 'react-router-dom';
-
+import axios from 'axios';
 
 async function getBookWithFilter(filters) {
     try {
-        const parameter = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
-        const response = await fetch(
-            addParamToUri('/api/books/search', filters),
-            parameter);
-        return await response.json()
+        // Using axios instead of fetch - token will be automatically included
+        const response = await axios.get(
+            addParamToUri('/api/books/search', filters));
+        return response.data;
     } catch (error) {
-        console.log("has an error")
-        return []
+        console.log("Error fetching books with filter:", error);
+        return [];
     }
 }
-
-
 
 const SearchPage = () => {
     const location = useLocation();

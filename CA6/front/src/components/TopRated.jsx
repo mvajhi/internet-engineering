@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import BookCard from './BookCard.jsx';
 import addParamToUri from "../Utils/utils.jsx";
+import axios from 'axios';
 
 
 const tempBooksData = [
@@ -47,30 +48,22 @@ const tempBooksData = [
 ];
 
 
-async function topRated() {
-
+export async function getTopRated() {
     try {
         const filter = {
             order: "rating",
             inverse: true
         };
 
-        const parameter = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
-        const response = await fetch(
-            addParamToUri('/api/books/search', filter),
-            parameter);
-        return await response.json()
+        const response = await axios.get(
+            addParamToUri('/api/books/search', filter));
+        return response.data;
     } catch (error) {
-        return []
-    } finally {
-
+        console.log("Error fetching top rated books:", error);
+        return [];
     }
 }
+
 const TopRatedBooks = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -80,7 +73,7 @@ const TopRatedBooks = () => {
         const fetchTopRatedBooks = async () => {
             try {
                 setLoading(true);
-                const topRatedBooks = await topRated();
+                const topRatedBooks = await getTopRated();
                 setBooks(topRatedBooks);
             } catch (err) {
                 setError(err.message);

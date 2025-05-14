@@ -2,42 +2,12 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import BookCard from '../components/BookCard';
 import TopRatedBooks from "../components/TopRated.jsx";
-import getTopRated from "../components/TopRated.jsx";
+import { getTopRated } from "../components/TopRated.jsx"; 
 import NewReleases from "../components/NewReleases.jsx";
+import { getNewReleases } from "../components/NewReleases.jsx";
 import { Footer } from "../components/Footer";
 
-function getNewReleases() {
-    return undefined;
-}
-
 const HomePage = () => {
-    const [newReleases, setNewReleases] = useState([]);
-    const [topRated, setTopRated] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchBooks = async () => {
-            try {
-                const [newReleasesData, topRatedData] = await Promise.all([
-                    getNewReleases(),
-                    getTopRated()
-                ]);
-                setNewReleases(newReleasesData);
-                setTopRated(topRatedData);
-            } catch (error) {
-                console.error('Error fetching books:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBooks();
-    }, []);
-
-    if (loading) {
-        return <div className="text-center py-5">Loading books...</div>;
-    }
-
     return (
         <div className="bg-light">
             <Header />
@@ -74,7 +44,6 @@ const HomePage = () => {
             </div>
 
             <div className="container py-5 bg-light">
-
                 <NewReleases />
                 <TopRatedBooks />
             </div>

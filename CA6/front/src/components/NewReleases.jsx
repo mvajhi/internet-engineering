@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BookCard from "./BookCard.jsx";
-import addParamToUri from "../Utils/utils.jsx"
+import addParamToUri from "../Utils/utils.jsx";
+import axios from 'axios';
 
 const tempBooksData = [
     {
@@ -45,36 +46,21 @@ const tempBooksData = [
     },
 ];
 
-async function getNewReleases() {
-
+export async function getNewReleases() {
     try {
         const filter = {
             order: "year",
             inverse: true
         };
 
-        const parameter = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
-        const response = await fetch(
-            addParamToUri('/api/books/search', filter),
-            parameter);
-        // if (response===undefined || response.length ===0){
-        //     return {}
-        // }
-        return await response.json()
+        const response = await axios.get(addParamToUri('/api/books/search', filter));
+        return response.data;
     } catch (error) {
-        console.log("has an error")
-        return []
-        // console.log(error)
-        return {}
-    } finally {
-
+        console.log("Error fetching new releases:", error);
+        return [];
     }
 }
+
 const NewReleases = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
