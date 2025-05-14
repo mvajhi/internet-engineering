@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from "axios";
-
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Utils/AuthContext';
 
 const Logout = () => {
   const navigate = useNavigate();
-  const handleLogout = async () => {
-    await axios.post("/api/users/logout");
-    navigate("/signin");
-  };
+  const { logout } = useAuth();
 
   useEffect(() => {
-    handleLogout();
-  }, []);
+    const performLogout = async () => {
+      await logout();
+      navigate('/signin');
+    };
+
+    performLogout();
+  }, [logout, navigate]);
 
   return (
     <div className="container">

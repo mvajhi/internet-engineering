@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Footer } from "../components/Footer";
 import FormInput from "../components/FormInput";
 import FormHeader from "../components/FormHeader";
 import { useNavigate, Link } from 'react-router-dom';
-
+import { useAuth } from '../Utils/AuthContext';
 
 const SignIn = () => {
+  const { login, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -17,6 +18,16 @@ const SignIn = () => {
   });
 
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState('');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,39 +62,22 @@ const SignIn = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [apiError, setApiError] = useState('');
-
-  const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isFormValid() || isSubmitting) return;
+
     setIsSubmitting(true);
     setApiError('');
 
-    try {
-      const response = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setApiError('');
-        navigate('/');
-      } else {
-        setApiError(data.message || 'Login failed');
-        console.log(apiError);
-      }
-    } catch (error) {
-      setApiError('Network error. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+    const result = await login(formData.username, formData.password);
+    
+    if (result.success) {
+      navigate('/');
+    } else {
+      setApiError(result.message);
     }
+    
+    setIsSubmitting(false);
   };
 
   return (
@@ -122,7 +116,7 @@ const SignIn = () => {
               <button
                 type="submit"
                 className={`btn w-100 rounded ${isFormValid() ? 'btn-green-custom text-white' : 'btn-secondary'}`}
-                disabled={!isFormValid()}
+                disabled={!isFormValid() || isSubmitting}
               >
                 <strong>Sign in</strong>
               </button>
