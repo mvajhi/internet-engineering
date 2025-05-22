@@ -33,7 +33,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(new AuthResponse(false, "Login failed", null, null));
         }
         
-        if(Objects.equals(request.getPassword(), user.getPassword())) {
+        if(userService.hasCorrectPassword(request.getPassword(), user.getPassword())) {
             AuthenticationUtils.login(user);
             
             String token = sessionService.createSession(user.getUsername());

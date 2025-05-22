@@ -7,6 +7,8 @@ import org.example.response.CartResponses;
 import org.example.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.time.LocalDateTime;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 
 @Service
 public class UserService {
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
     @Autowired
     BookShop bookShop;
@@ -37,6 +41,7 @@ public class UserService {
 
     public Response addUser(AddUserRequest request) {
         User newUser = createUser(request);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         Response validate = validateUser(newUser);
         if (!validate.isSuccess())
             return validate;
@@ -204,5 +209,9 @@ public class UserService {
 
     public User findUser(String username) {
         return bookShop.findUser(username);
+    }
+
+    public boolean hasCorrectPassword(String requestPassword, String userPassword) {
+        return passwordEncoder.matches(requestPassword, userPassword);
     }
 }
