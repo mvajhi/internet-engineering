@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: shop  # Add this to ensure your database exists
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./:/home/app
+      - ./mysql-config.cnf:/etc/mysql/conf.d/custom.cnf  # Add config file
+    command: --lower_case_table_names=1  # Force case insensitivity
