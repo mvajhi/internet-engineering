@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.entities.User;
 import org.example.request.AddUserRequest;
 import org.example.request.LoginRequest;
@@ -52,12 +53,10 @@ public class UserController {
         if (!AuthenticationUtils.loggedIn()) {
             return ResponseEntity.badRequest().body(Response.fail());
         }
-        
-        // Get current user from AuthenticationUtils
+
         String username = AuthenticationUtils.getUsername();
         
-        // Invalidate the session in Redis
-        sessionService.invalidateSession(username);
+//        sessionService.invalidateSession(username);
         
         // Logout from AuthenticationUtils
         AuthenticationUtils.logout();
@@ -75,7 +74,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public Response addUser(@RequestBody AddUserRequest addUserRequest) {
+    public Response addUser(@Valid @RequestBody AddUserRequest addUserRequest) {
         return userService.addUser(addUserRequest);
     }
 }
