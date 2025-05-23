@@ -86,7 +86,7 @@ const SignIn = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
-      const result = await googleLogin(decoded.email, decoded.name);
+      const result = await googleLogin(credentialResponse.credential , decoded.email, decoded.name);
 
       if (result.success) {
         navigate('/');
@@ -104,7 +104,7 @@ const SignIn = () => {
   };
 
   return (
-      <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_IDDDDD">
+      <GoogleOAuthProvider clientId="929128218918-3ebp3objv8i9qjrlif9tqntqlvui7et8.apps.googleusercontent.com">
     <div className="bg-light d-flex flex-column vh-100">
       <div className="bg-light d-flex align-items-center justify-content-center vh-100">
         <div className="bg-white rounded-4 w-100 main-box">
