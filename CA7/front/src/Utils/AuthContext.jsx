@@ -126,6 +126,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const googleLogin = async (email, name) => {
+    try {
+      const response = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, name }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        return { success: true };
+      } else {
+        return { success: false, message: data.message };
+      }
+    } catch (error) {
+      return { success: false, message: 'Network error' };
+    }
+  };
+
   // Check token validity on initial load - with improved error handling
   useEffect(() => {
     const verifyToken = async () => {
@@ -186,7 +209,8 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
-    isAuthenticated: !!token
+    isAuthenticated: !!token,
+    googleLogin
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
