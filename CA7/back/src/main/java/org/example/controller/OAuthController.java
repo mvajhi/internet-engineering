@@ -29,6 +29,7 @@ public class OAuthController {
     @Autowired
     private BookShop bookShop;
 
+//    http://localhost:5173/callback
     private final String clientId = "929128218918-3ebp3objv8i9qjrlif9tqntqlvui7et8.apps.googleusercontent.com"; //TODO Replace with your actual client ID
     private final String clientSecret = "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"; //TODO Replace with your actual client secret
 
