@@ -29,8 +29,8 @@ public class OAuthController {
     @Autowired
     private BookShop bookShop;
 
-    private final String clientId = "YOUR_GOOGLE_CLIENT_ID"; //TODO Replace with your actual client ID
-    private final String clientSecret = "YOUR_GOOGLE_CLIENT_SECRET"; //TODO Replace with your actual client secret
+    private final String clientId = "929128218918-3ebp3objv8i9qjrlif9tqntqlvui7et8.apps.googleusercontent.com"; //TODO Replace with your actual client ID
+    private final String clientSecret = "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"; //TODO Replace with your actual client secret
 
     @PostMapping("/google")
     public ResponseEntity<?> handleGoogleLogin(@RequestBody GoogleAuthRequest request) {
