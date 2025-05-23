@@ -244,16 +244,16 @@ public class BookShop {
         return authorRepository.findByName(name).orElse(null);
     }
 
+    // Load user with their wallet data
     public User findUser(String username) {
-        // Load user with their wallet data
         Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent() && user.get().getRole() == Role.CUSTOMER) {
-            // Ensure wallet data is loaded and reflected in balance field
-            walletRepository.findByUser(user.get()).ifPresent(wallet -> {
-                user.get().setWallet(wallet);
-                // The balance getter in User will use wallet's balance
-            });
-        }
+        setWalletIfExist(user);
+        return user.orElse(null);
+    }
+
+    public User findUserByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        setWalletIfExist(user);
         return user.orElse(null);
     }
 
@@ -265,5 +265,13 @@ public class BookShop {
     public List<Book> getBooksByAuthor(String authorName) {
         Optional<Author> author = authorRepository.findByName(authorName);
         return author.map(bookRepository::findByAuthor).orElse(List.of());
+    }
+
+    private void setWalletIfExist(Optional<User> user) {
+        if (user.isPresent() && user.get().getRole() == Role.CUSTOMER) {
+            walletRepository.findByUser(user.get()).ifPresent(wallet -> {
+                user.get().setWallet(wallet);
+            });
+        }
     }
 }

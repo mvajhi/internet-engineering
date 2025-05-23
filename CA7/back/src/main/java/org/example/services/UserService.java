@@ -211,6 +211,10 @@ public class UserService {
         return bookShop.findUser(username);
     }
 
+    public User findUserByEmail(String email) {
+        return bookShop.findUserByEmail(email);
+    }
+
     public boolean hasCorrectPassword(String requestPassword, String userPassword) {
         return passwordEncoder.matches(requestPassword, userPassword);
     }
