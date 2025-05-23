@@ -1,7 +1,5 @@
 package org.example.response;
 
-import java.util.Map;
-
 public class AuthResponse extends Response {
     private String token;
     private String username;

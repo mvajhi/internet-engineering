@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-
 @RestController
 @RequestMapping("/auth")
 public class OAuthController {
@@ -115,7 +113,6 @@ public class OAuthController {
         private String aud;
         private Long exp;
 
-        // Getters and Setters
         public String getEmail() {
             return email;
         }
