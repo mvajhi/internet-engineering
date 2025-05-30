@@ -126,14 +126,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const googleLogin = async (email, name) => {
+  const googleLogin = async (credential, email, name) => {
     try {
-      const response = await fetch('/api/auth/google', {
-        method: 'POST',
+      let body;
+      body = {
+        "credential" : credential,
+        "email" : email,
+        "name" : name
+      }
+      const response = await fetch("/api/auth/google", {
+        method:"POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify(body)
       });
 
       const data = await response.json();

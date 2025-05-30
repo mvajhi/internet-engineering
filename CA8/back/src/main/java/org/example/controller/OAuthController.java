@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
@@ -33,6 +30,10 @@ public class OAuthController {
     private final String clientId = "929128218918-3ebp3objv8i9qjrlif9tqntqlvui7et8.apps.googleusercontent.com"; //TODO Replace with your actual client ID
     private final String clientSecret = "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"; //TODO Replace with your actual client secret
 
+    @GetMapping("/live")
+    public ResponseEntity<?> getLive(){
+        return ResponseEntity.ok().build();
+    }
     @PostMapping("/google")
     public ResponseEntity<?> handleGoogleLogin(@RequestBody GoogleAuthRequest request) {
         try {
@@ -96,6 +97,10 @@ public class OAuthController {
 
     public static class GoogleAuthRequest {
         private String credential;
+
+        public String name;
+
+        public String email;
 
         public String getCredential() {
             return credential;
