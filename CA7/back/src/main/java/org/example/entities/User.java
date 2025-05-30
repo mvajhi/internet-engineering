@@ -25,7 +25,7 @@ public class User {
     private Role role;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id", nullable = false)
+    @JoinColumn(name = "address_id", nullable = true)
     private Address address;
     
     @JsonIgnore

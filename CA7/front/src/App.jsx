@@ -16,6 +16,7 @@ import HomePage from "./pages/HomePage.jsx";
 import Search from "./pages/Search.jsx";
 import AuthorPage from "./pages/AuthorPage.jsx";
 import BookPage from "./pages/BookPage.jsx";
+import GoogleCallback from "./pages/GoogleCallback.jsx"
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -105,6 +106,7 @@ function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/signin" element={<SignIn />} />
+          <Route path="/callback" element={<GoogleCallback />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/logout" element={<Logout />} />
         {/* Protected Routes */}

@@ -21,7 +21,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private static final List<String> PUBLIC_PATHS = Arrays.asList(
         "/api/users/login",
-        "/api/users/add"
+        "/api/users/add",
+        "/api/auth/google"
     );
 
     @Autowired
