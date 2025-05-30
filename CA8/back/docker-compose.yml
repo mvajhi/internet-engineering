@@ -1,13 +1,13 @@
 services:
-  frontend:
+  backend:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        - NODE_VERSION=${NODE_VERSION}
-        - NGINX_VERSION=${NGINX_VERSION}
+        - MAVEN_VERSION=3.9.9-eclipse-temurin-21
+        - JDK_VERSION=21
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./nginx_default.conf:/etc/nginx/conf.d/default.conf
     
