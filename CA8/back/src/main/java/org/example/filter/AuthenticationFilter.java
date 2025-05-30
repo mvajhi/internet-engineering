@@ -9,6 +9,10 @@ import org.example.services.SessionService;
 import org.example.services.UserService;
 import org.example.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -38,61 +42,38 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         
         try {
+            // For public paths, just continue without authentication
             if (isPublicPath(path)) {
                 filterChain.doFilter(request, response);
                 return;
             }
             
-            if (path.equals("/api/users/logout")) {
-                String token = extractToken(request);
-                if (token != null) {
-                    String username = sessionService.validateToken(token);
-                    if (username != null) {
-                        User user = userService.findUser(username);
-                        if (user != null) {
-                            AuthenticationUtils.login(user);
-                        }
+            String token = extractToken(request);
+            if (token != null) {
+                String username = sessionService.validateToken(token);
+                if (username != null) {
+                    User user = userService.findUser(username);
+                    if (user != null) {
+                        // Set user in AuthenticationUtils for backward compatibility
+                        AuthenticationUtils.login(user);
                         
-                        filterChain.doFilter(request, response);
-                        return;
+                        // Set Spring Security context
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            user.getUsername(), 
+                            null, 
+                            Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                        );
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 }
-                
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"status\":\"error\",\"message\":\"Invalid token for logout\"}");
-                return;
             }
-            
-            String token = extractToken(request);
-            if (token == null) {
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"status\":\"error\",\"message\":\"Authentication required\"}");
-                return;
-            }
-            
-            String username = sessionService.validateToken(token);
-            if (username == null) {
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"status\":\"error\",\"message\":\"Invalid or expired session\"}");
-                return;
-            }
-            
-            User user = userService.findUser(username);
-            if (user == null) {
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"status\":\"error\",\"message\":\"User not found\"}");
-                return;
-            }
-            
-            AuthenticationUtils.login(user);
             
             filterChain.doFilter(request, response);
         } finally {
-            AuthenticationUtils.logout();
+            // Clean up authentication context
+//            AuthenticationUtils.logout();
+//            SecurityContextHolder.clearContext();
         }
     }
     
