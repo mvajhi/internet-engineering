@@ -4,8 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - NODE_VERSION=${NODE_VERSION}
-        - NGINX_VERSION=${NGINX_VERSION}
+        - NODE_VERSION=24
+        - NGINX_VERSION=1.27.5
     ports:
       - "80:80"
     volumes:

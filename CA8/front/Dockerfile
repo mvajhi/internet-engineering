@@ -1,5 +1,5 @@
 # Stage 1: Build the React Application
-ARG NODE_VERSION=20 NGINX_VERSION=1.25.0
+ARG NODE_VERSION=24 NGINX_VERSION=1.27.5
 FROM node:${NODE_VERSION} AS build
 WORKDIR /app
 COPY package*.json ./

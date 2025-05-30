@@ -1,5 +1,5 @@
 # First stage: build the application
-ARG JDK_VERSION=25-jdk-nanoserver-ltsc2022 MAVEN_VERSION=11
+ARG JDK_VERSION=21 MAVEN_VERSION=3.9.9-eclipse-temurin-21
 FROM maven:${MAVEN_VERSION} AS build
 COPY . /app
 WORKDIR /app
