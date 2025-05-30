@@ -10,6 +10,7 @@ services:
       - "80:80"
     volumes:
       - ./front/nginx_default.conf:/etc/nginx/conf.d/default.conf
+    restart: on-failure
   backend:
     build:
       context: ./back
@@ -19,11 +20,13 @@ services:
         - JDK_VERSION=21
     depends_on:
       - db
+    secrets:
+      - mysql_root_password
   db:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
       MYSQL_DATABASE: shop  # Add this to ensure your database exists
     # ports:
       # - "3306:3306"
@@ -32,6 +35,12 @@ services:
       # - ./:/home/app
       # - ./mysql-config.cnf:/etc/mysql/conf.d/custom.cnf  # Add config file
     command: --lower_case_table_names=1  # Force case insensitivity
+    secrets:
+      - mysql_root_password
+
+secrets:
+  mysql_root_password:
+    file: ./mysql_root_password.txt
 
 volumes:
   db_data:

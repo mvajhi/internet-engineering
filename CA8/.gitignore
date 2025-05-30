@@ -1,0 +1,14 @@
+# Secrets
+mysql_root_password.txt
+*.secret
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore

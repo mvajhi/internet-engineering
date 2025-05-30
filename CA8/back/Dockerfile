@@ -10,4 +10,6 @@ RUN mvn package -DskipTests
 # Second stage: create a slim image
 FROM openjdk:${JDK_VERSION}
 COPY --from=build /app/target/*.jar /app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+ENTRYPOINT ["/start.sh"]
