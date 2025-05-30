@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_VERSION=${NODE_VERSION}
+        - NGINX_VERSION=${NGINX_VERSION}
+    ports:
+      - "8080:80"
+    
